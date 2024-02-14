@@ -17,11 +17,3 @@ My code looks laughable, but it usually works.
 <li> 🤝 Always happy to collaborate  </li>
 </ul>
 
- Skills
-<p>
-![](https://img.shields.io/badge/Code-R-informational?style=flat&logo=R&logoColor=white&color=65aec9)
-![](https://img.shields.io/badge/Code-Python-informational?style=flat&logo=Python&logoColor=white&color=65aec9)
-![](https://img.shields.io/badge/Code-Matlab-informational?style=flat&logo=Matlab&logoColor=white&color=65aec9)
-![](https://img.shields.io/badge/Code-HTML-informational?style=flat&logo=HTML&logoColor=white&color=65aec9)
-![](https://img.shields.io/badge/Code-Markdown-informational?style=flat&logo=Markdown&logoColor=white&color=65aec9)
-</p>
