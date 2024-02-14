@@ -157,8 +157,8 @@ yat:
 # Page default value
 # defaults:
 #   home:
-#     heading: "Your awesome heading"
-#     subheading: "Your awesome subheading"
+#     heading: "Julian Ockelmann"
+#     subheading: "PhD Student, Cognitive Neuroscience"
 #     banner: "Your image url"
 
 # Banner default settings
