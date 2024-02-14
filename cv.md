@@ -7,7 +7,7 @@ categories: markdown
 ## Education
 ---
 
-### PhD/Doctorate Degree - Cognitive Neuroscience, University of Zurich  
+#### PhD/Doctorate Degree - Cognitive Neuroscience, University of Zurich  
 February 2023 - Today  
 <ul>  
 <li> Conceptualization and Implementation of Neuroscientific Experiments  </li>
@@ -16,7 +16,7 @@ February 2023 - Today
 <li> Analysis of Cortical and Subcortical speech-related Brain Signals  </li>
 </ul>
 
-### Master of Science - Psychology, University of Zurich  
+#### Master of Science - Psychology, University of Zurich  
 September 2020 - December 2022  
 <ul>
 <li> Major 120 ECTS: Psychology  </li>
@@ -25,13 +25,13 @@ September 2020 - December 2022
 <li> Extracurricular: Member of Language & Medicine Competence Center  </li>
 </ul>
 
-### Supplementary Studies - Computational Science, Goethe University Frankfurt  
+#### Supplementary Studies - Computational Science, Goethe University Frankfurt  
 March 2020 - August 2020  
 <ul>
 <li> Focus: Data Science & Database Management  </li>
 </ul>
 
-### Bachelor of Science - Psychology, HS Fresenius Frankfurt  
+#### Bachelor of Science - Psychology, HS Fresenius Frankfurt  
 March 2017 - January 2020  
 <ul>
 <li> Major 180 ECTS: Psychology  </li>
@@ -41,7 +41,7 @@ March 2017 - January 2020
 ## Work experience
 ---
 
-### Research Doctorate (100%), University of Zurich  
+#### Research Doctorate (100%), University of Zurich  
 February 2023 - Today  
 <ul>
 <li> Conceptualization and Implementation of Neuroscientific Experiments  </li>
@@ -50,7 +50,7 @@ February 2023 - Today
 <li> Analysis of Cortical and Subcortical speech-related Brain Signals  </li>
 </ul>
 
-### Teaching Assistant (20%), University of Zurich  
+#### Teaching Assistant (20%), University of Zurich  
 February 2023 - July 2023  
 The Neural Foundation of Speech  
 <ul>
@@ -59,7 +59,7 @@ The Neural Foundation of Speech
 <li> Grading final Examination  </li>
 </ul>
 
-### Research Assistant (20-50%), University of Zurich  
+#### Research Assistant (20-50%), University of Zurich  
 October 2021 - February 2023  
 Computational Neuroscience of Speech & Hearing (50%)  
 July 2022 - December 2022  
@@ -69,7 +69,7 @@ July 2022 - December 2022
 <li> In-Depth Literature Review  </li>
 </ul>
 
-### Plasticity and Learning (25%)  
+#### Plasticity and Learning (25%)  
 September 2020 - September 2021  
 <ul>
 <li> Data Analysis in R  </li>
@@ -77,7 +77,7 @@ September 2020 - September 2021
 <li> Research Database Maintenance  </li>
 </ul>
 
-### Methods of Plasticity Research (40%)  
+#### Methods of Plasticity Research (40%)  
 September 2021 - May 2022  
 <ul>
 <li> EEG Measurements  </li>
@@ -86,7 +86,7 @@ September 2021 - May 2022
 <li> Recruitment  </li>
 </ul>
 
-### Clinical Assistant (100%), Various Institutions  
+#### Clinical Assistant (100%), Various Institutions  
 January 2019 - Octobre 2019  
 <ul>
 <li> Hospital zum Heiligen Geist - Clinic of Psychosomatic Medicine  </li>
@@ -96,7 +96,7 @@ January 2019 - Octobre 2019
 ## Skills
 ---
 
-### Technical
+#### Technical
 <ul>
 <li> R - advanced  </li>
 <li> PsychoPy - advanced  </li>
@@ -108,7 +108,7 @@ January 2019 - Octobre 2019
 <li> Git - basic  </li>
 </ul>
 
-### Languages 
+#### Languages 
 <ul>
 <li> German - native proficiency  </li>
 <li> English - native proficiency  </li>
