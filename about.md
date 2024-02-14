@@ -5,7 +5,7 @@ categories: markdown
 ---
 
 <h2>About Me</h2>
-<h3>Heya, I'm Julian <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="25px"> </h3>
+Heya, I'm Julian!
 
 I’m a PhD student in Cognitive Neuroscience at the University of Zurich.  
 I aim to provide open-access tools for behavioural and neuroscientific research.  
