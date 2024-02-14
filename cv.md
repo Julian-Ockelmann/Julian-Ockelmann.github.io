@@ -9,89 +9,112 @@ categories: markdown
 
 ### PhD/Doctorate Degree - Cognitive Neuroscience, University of Zurich  
 February 2023 - Today  
-● Conceptualization and Implementation of Neuroscientific Experiments  
-● Co-Development of health-related Mobile Applications  
-● Development of an Open-Access Cognitive Test Battery  
-● Analysis of Cortical and Subcortical speech-related Brain Signals  
+<ul>  
+<li> Conceptualization and Implementation of Neuroscientific Experiments  </li>
+<li> Co-Development of health-related Mobile Applications  </li>
+<li> Development of an Open-Access Cognitive Test Battery  </li>
+<li> Analysis of Cortical and Subcortical speech-related Brain Signals  </li>
+</ul>
 
 ### Master of Science - Psychology, University of Zurich  
 September 2020 - December 2022  
-● Major 120 ECTS: Psychology  
-● Additional 36 ECTS: Psychology  
-● Focus: Clinical Neuropsychology & Health Psychology  
-● Extracurricular: Member of Language & Medicine Competence Center  
+<ul>
+<li> Major 120 ECTS: Psychology  </li>
+<li> Additional 36 ECTS: Psychology  </li>
+<li> Focus: Clinical Neuropsychology & Health Psychology  </li>
+<li> Extracurricular: Member of Language & Medicine Competence Center  </li>
+</ul>
 
 ### Supplementary Studies - Computational Science, Goethe University Frankfurt  
 March 2020 - August 2020  
-● Focus: Data Science & Database Management    
+<ul>
+<li> Focus: Data Science & Database Management  </li>
+</ul>
 
 ### Bachelor of Science - Psychology, HS Fresenius Frankfurt  
 March 2017 - January 2020  
-● Major 180 ECTS: Psychology  
-● Focus: Health Psychology & Clinical Psychology  
-● Extracurricular: Student Representative, Voluntary Tutor (Biopsychology)  
-
+<ul>
+<li> Major 180 ECTS: Psychology  </li>
+<li> Focus: Health Psychology & Clinical Psychology  </li>
+<li> Extracurricular: Student Representative, Voluntary Tutor (Biopsychology)  </li>
+</ul>
 ## Work experience
 ---
 
 ### Research Doctorate (100%), University of Zurich  
 February 2023 - Today  
-● Conceptualization and Implementation of Neuroscientific Experiments  
-● Co-Development of health-related Mobile Applications  
-● Development of an Open-Access Cognitive Test Battery  
-● Analysis of Cortical and Subcortical speech-related Brain Signals  
+<ul>
+<li> Conceptualization and Implementation of Neuroscientific Experiments  </li>
+<li> Co-Development of health-related Mobile Applications  </li>
+<li> Development of an Open-Access Cognitive Test Battery  </li>
+<li> Analysis of Cortical and Subcortical speech-related Brain Signals  </li>
+</ul>
 
 ### Teaching Assistant (20%), University of Zurich  
 February 2023 - July 2023  
 The Neural Foundation of Speech  
-● Teaching & Preparing Lectures  
-● Course Administration  
-● Grading final Examination  
+<ul>
+<li> Teaching & Preparing Lectures  </li>
+<li> Course Administration  </li>
+<li> Grading final Examination  </li>
+</ul>
 
 ### Research Assistant (20-50%), University of Zurich  
 October 2021 - February 2023  
 Computational Neuroscience of Speech & Hearing (50%)  
 July 2022 - December 2022  
-● Co-Development of mHealth App  
-● Data analysis in R  
-● In-Depth Literature Review  
+<ul>
+<li> Co-Development of mHealth App  </li>
+<li> Data analysis in R  </li>
+<li> In-Depth Literature Review  </li>
+</ul>
 
 ### Plasticity and Learning (25%)  
 September 2020 - September 2021  
-● Data Analysis in R  
-● Data Analysis in Matlab  
-● Research Database Maintenance  
+<ul>
+<li> Data Analysis in R  </li>
+<li> Data Analysis in Matlab  </li>
+<li> Research Database Maintenance  </li>
+</ul>
 
 ### Methods of Plasticity Research (40%)  
 September 2021 - May 2022  
-● EEG Measurements  
-● Data Analysis in R  
-● Application Construction in R  
-● Recruitment  
+<ul>
+<li> EEG Measurements  </li>
+<li> Data Analysis in R  </li>
+<li> Application Construction in R  </li>
+<li> Recruitment  </li>
+</ul>
 
 ### Clinical Assistant (100%), Various Institutions  
 January 2019 - Octobre 2019  
-● Hospital zum Heiligen Geist - Clinic of Psychosomatic Medicine  
-● Kinderzentrum KidZ - Child and Adolescent Psychiatry  
+<ul>
+<li> Hospital zum Heiligen Geist - Clinic of Psychosomatic Medicine  </li>
+<li> Kinderzentrum KidZ - Child and Adolescent Psychiatry  </li>
+</ul>
 
 ## Skills
 ---
 
 ### Technical
-● R - advanced  
-● PsychoPy - advanced  
-● Python - intermediate  
-● Matlab - intermediate  
-● Markdown - intermediate  
-● HTML - basic  
-● LaTeX - basic  
-● Git - basic  
+<ul>
+<li> R - advanced  </li>
+<li> PsychoPy - advanced  </li>
+<li> Python - intermediate  </li>
+<li> Matlab - intermediate  </li>
+<li> Markdown - intermediate  </li>
+<li> HTML - basic  </li>
+<li> LaTeX - basic  </li>
+<li> Git - basic  </li>
+</ul>
 
 ### Languages 
-● German - native proficiency  
-● English - native proficiency  
-● French - basic proficiency  
-● Japanese - basic proficiency  
+<ul>
+<li> German - native proficiency  </li>
+<li> English - native proficiency  </li>
+<li> French - basic proficiency  </li>
+<li> Japanese - basic proficiency  </li>
+</ul>
 
 ## Talks
 
