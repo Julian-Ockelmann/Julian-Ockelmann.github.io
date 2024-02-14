@@ -53,22 +53,22 @@
       var beginIndex = index;
       var endIndex = index + 1;
       while (beginIndex >= 0
-        && !items[beginIndex].classList.contains('h-h2')) {
+        && !items[beginIndex].classList.contains('h2')) {
         beginIndex -= 1;
       }
       while (endIndex < items.length
-        && !items[endIndex].classList.contains('h-h2')) {
+        && !items[endIndex].classList.contains('h2')) {
         endIndex += 1;
       }
       for (var i = 0; i < beginIndex; i++) {
         item = items[i]
-        if (!item.classList.contains('h-h2')) {
+        if (!item.classList.contains('h2')) {
           item.style.display = 'none';
         }
       }
       for (var i = beginIndex + 1; i < endIndex; i++) {
         item = items[i]
-        // if (!item.classList.contains('h-h2')) {
+        // if (!item.classList.contains('h2')) {
           item.style.display = '';
         // }
       }
