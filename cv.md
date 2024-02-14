@@ -1,11 +1,10 @@
 ---
-layout: archives
+layout: cv
 title: CV
 categories: markdown
 ---
 
 ## Education
-
 ---
 
 ### PhD/Doctorate Degree - Cognitive Neuroscience, University of Zurich  
@@ -33,7 +32,6 @@ March 2017 - January 2020
 ● Extracurricular: Student Representative, Voluntary Tutor (Biopsychology)  
 
 ## Work experience
-
 ---
 
 ### Research Doctorate (100%), University of Zurich  
@@ -77,7 +75,6 @@ January 2019 - Octobre 2019
 ● Kinderzentrum KidZ - Child and Adolescent Psychiatry  
 
 ## Skills
-
 ---
 
 ### Technical
@@ -100,11 +97,9 @@ January 2019 - Octobre 2019
 
 ---
 
-
 ## Teaching
 
 ---
-
   
 ## Service & Leadership
 
