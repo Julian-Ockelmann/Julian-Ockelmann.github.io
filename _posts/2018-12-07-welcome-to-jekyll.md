@@ -22,12 +22,12 @@ sidebar: []
 
 ## Sakura Blossoms
 
-<img src="/assets/images/pictures/IMG_1214.png" alt="">  
-<img src="/assets/images/pictures/IMG_1218-min.png" alt=""> 
-<img src="/assets/images/pictures/IMG_1216-min.png" alt="">  
+![]<img src="/assets/images/pictures/IMG_1214.png" alt="">  
+![]<img src="/assets/images/pictures/IMG_1218-min.png" alt=""> 
+![]<img src="/assets/images/pictures/IMG_1216-min.png" alt="">  
 
-<img src="/assets/images/pictures/IMG_1224-min.png" alt=""> 
-<img src="/assets/images/pictures/IMG_1228-min.png" alt="">  
-<img src="/assets/images/pictures/IMG_1225-min.png" alt="">  
+![]<img src="/assets/images/pictures/IMG_1224-min.png" alt=""> 
+![]<img src="/assets/images/pictures/IMG_1228-min.png" alt="">  
+![]<img src="/assets/images/pictures/IMG_1225-min.png" alt="">  
 
 ## Snow in April
