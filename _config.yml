@@ -158,7 +158,7 @@ yat:
 #   home:
 #     heading: "Julian Ockelmann"
 #     subheading: "PhD Student, Cognitive Neuroscience"
-#     banner: "https://i.imgur.com/NhfQwOS.jpeg"
+#     banner: "\assets\images\banners\home.jpg"
 
 # Banner default settings
 # These banner settings are for global banner default, but you can also
