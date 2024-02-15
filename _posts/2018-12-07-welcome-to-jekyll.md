@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Welcome to Bongus!
-subtitle: Massive Bingus.
+title: Tokyo 2020.
+subtitle: Photography.
 author: Jeffrey
 categories: jekyll
 banner:
@@ -20,51 +20,14 @@ tags: jekyll theme yat
 sidebar: []
 ---
 
-## section 1
+## Sakura Blossoms
 
-Jekyll also offers powerful support for code snippets:
+<br/><img src='/images/IMG_1214.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/1000, ISO-3200, 55mm    
+<br/><img src='/images/IMG_1218-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm     
+<br/><img src='/images/IMG_1216-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
 
-{% highlight ruby %}
-def print_hi(name)
-puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+<br/><img src='/images/IMG_1224-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
+<br/><img src='/images/IMG_1228-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
+<br/><img src='/images/IMG_1225-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
 
-## section 2
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]: https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
-
-$ a \* b = c ^ b $
-
-$ 2^{\frac{n-1}{3}} $
-
-$ \int_a^b f(x)\,dx. $
-
-```cpp
-#include <iostream>
-using namespace std;
-
-int main() {
-  cout << "Hello World!";
-  return 0;
-}
-// prints 'Hi, Tom' to STDOUT.
-```
-
-```python
-class Person:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
-
-p1 = Person("John", 36)
-
-print(p1.name)
-print(p1.age)
-```
+## Snow in April
