@@ -22,12 +22,12 @@ sidebar: []
 
 ## Sakura Blossoms
 
-<br/><img src='/images/IMG_1214.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/1000, ISO-3200, 55mm    
-<br/><img src='/images/IMG_1218-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm     
-<br/><img src='/images/IMG_1216-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
+<br/><img src='/assets/images/pictures/IMG_1214.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/1000, ISO-3200, 55mm    
+<br/><img src='/assets/images/pictures/IMG_1218-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm     
+<br/><img src='/assets/images/pictures/IMG_1216-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
 
-<br/><img src='/images/IMG_1224-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
-<br/><img src='/images/IMG_1228-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
-<br/><img src='/images/IMG_1225-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
+<br/><img src='/assets/images/pictures/IMG_1224-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
+<br/><img src='/assets/images/pictures/IMG_1228-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
+<br/><img src='/assets/images/pictures/IMG_1225-min.png' width='1920' height='1080'> Canon EOS 2000D, f/9, 1/800, ISO-400, 32mm   
 
 ## Snow in April
