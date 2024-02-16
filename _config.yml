@@ -158,7 +158,7 @@ yat:
 #   home:
 #     heading: "Julian Ockelmann"
 #     subheading: "PhD Student, Cognitive Neuroscience"
-#     banner: "https://julian-ockelmann.github.io/assets/images/pictures/IMG_1214.jpg"
+#     banner: "default"
 
 # Banner default settings
 # These banner settings are for global banner default, but you can also
