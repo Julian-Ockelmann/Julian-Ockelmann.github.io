@@ -150,9 +150,8 @@ yat:
 # header_pages:
 #   - about.md
 #   - cv.md
-#   - contact.md
 #   - projects.md
-#   - extra.md
+#   - contact.md
 
 # Page default value
 # defaults:
