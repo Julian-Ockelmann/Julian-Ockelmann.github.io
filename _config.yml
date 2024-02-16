@@ -147,12 +147,12 @@ yat:
 
 # If you want to link only specific pages in your header, uncomment
 # this and add the path to the pages in order as they should show up
- header_pages:
-   - /about.md
-   - /cv.md
-   - /contact.md
-   - /projects.md
-   - /extra.md
+# header_pages:
+#   - about.md
+#   - cv.md
+#   - contact.md
+#   - projects.md
+#   - extra.md
 
 # Page default value
 # defaults:
