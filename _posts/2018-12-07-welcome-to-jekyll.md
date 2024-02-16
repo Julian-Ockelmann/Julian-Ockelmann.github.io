@@ -2,7 +2,7 @@
 layout: post
 title: Tokyo 2020.
 subtitle: Photography.
-author: Jeffrey
+author: Julian
 categories: jekyll
 banner:
   video: https://vjs.zencdn.net/v/oceans.mp4
@@ -15,8 +15,8 @@ banner:
   height: "100vh"
   min_height: "38vh"
   heading_style: "font-size: 4.25em; font-weight: bold; text-decoration: underline"
-  subheading_style: "color: gold"
-tags: jekyll theme yat
+  subheading_style: "color: red"
+tags: photography travel
 sidebar: []
 ---
 
