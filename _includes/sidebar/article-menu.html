@@ -1,122 +1,113 @@
-<style type="text/css" media="screen">
-.post-menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+{%- comment -%}
+  _includes/article-menu.html
+  - Renders a TOC only when desired.
+  - Honors page front matter: `toc: false`
+  - Skips on layouts: home, cv
+  - Also skips if the page has category "cv"
+{%- endcomment -%}
+
+{%- assign hide_toc = false -%}
+{%- if page.toc == false -%}{% assign hide_toc = true %}{%- endif -%}
+{%- if page.layout == 'home' or page.layout == 'cv' -%}{% assign hide_toc = true %}{%- endif -%}
+{%- if page.categories and page.categories contains 'cv' -%}{% assign hide_toc = true %}{%- endif -%}
+
+{%- unless hide_toc -%}
+<style>
+  .post-menu { position: sticky; top: 6rem; max-height: calc(100vh - 6rem); overflow: auto; }
+  .post-menu-title { font-weight: 600; margin-bottom: .5rem; opacity: .8; }
+  .post-menu ul { list-style: none; padding: 0; margin: 0; }
+  .post-menu li { margin: .25rem 0; }
+  .post-menu li.active > a { text-decoration: underline; }
+  .post-menu .h-h3 { padding-left: .75rem; }
+  .post-menu .h-h4 { padding-left: 1.25rem; }
 </style>
 
-<div class="post-menu">
+<div class="post-menu" data-autohide="true" aria-label="Table of contents">
   <div class="post-menu-title">TOC</div>
   <div class="post-menu-content"></div>
 </div>
 
 <script>
-  function generateContent() {
-    var menu = document.querySelector(".post-menu");
-    var menuContent =  menu.querySelector(".post-menu-content");
-    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+(function(){
+  // Container?
+  const menu = document.querySelector(".post-menu");
+  if (!menu) return;
 
-    // Hide menu when no headings
-    if (headings.length === 0) {
-      return menu.style.display = "none";
+  // Content area with headings?
+  const content = document.querySelector(".post-content");
+  if (!content) { menu.remove(); return; }
+
+  const headings = content.querySelectorAll("h2, h3, h4, h5, h6");
+  if (!headings.length) { menu.remove(); return; }
+
+  // Build IDs if missing (kramdown usually sets them, but be safe)
+  headings.forEach((h, i) => { if (!h.id) h.id = "sec-" + (i+1); });
+
+  // Build list
+  const items = Array.from(headings).map(h => {
+    const tag = h.tagName.toLowerCase();
+    return `<li class="h-${tag}"><a href="#${h.id}">${h.textContent}</a></li>`;
+  }).join("");
+
+  const listHTML = `<ul>${items}</ul>`;
+  const menuContent = menu.querySelector(".post-menu-content");
+  menuContent.innerHTML = listHTML;
+
+  // Active highlight on scroll (passive listener, no preventDefault)
+  const headerEl = document.querySelector("header.site-header");
+  const headerOffset = () => {
+    if (!headerEl) return 80;
+    const r = headerEl.getBoundingClientRect();
+    return Math.max(0, Math.floor(r.top + r.height + 20));
+  };
+
+  function setActive() {
+    let activeIndex = -1;
+    for (let i = headings.length - 1; i >= 0; i--) {
+      const h = headings[i];
+      const top = h.getBoundingClientRect().top;
+      if (top <= headerOffset()) { activeIndex = i; break; }
     }
-
-    // Generate post menu
-    var menuHTML = '';
-    for (var i = 0; i < headings.length; i++) {
-      var h = headings[i];
-      menuHTML += (
-        '<li class="h-' + h.tagName.toLowerCase() + '">'
-        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    const current = menuContent.querySelector("li.active");
+    if (current) current.classList.remove("active");
+    if (activeIndex >= 0) {
+      const id = headings[activeIndex].id;
+      const a = menuContent.querySelector(`a[href="#${id}"]`);
+      if (a && a.parentElement) a.parentElement.classList.add("active");
     }
-
-    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
-
-    // The header element
-    var header = document.querySelector('header.site-header');
-
-    function doMenuCollapse(index, over_items) {
-      var items = menuContent.firstChild.children;
-
-      if (over_items == undefined) {
-        over_items = 20;
-      }
-
-      if (items.length < over_items) {
-        return;
-      }
-
-      var activeItem = items[index];
-      var beginItem = activeItem
-      var endItem = activeItem
-      var beginIndex = index;
-      var endIndex = index + 1;
-      while (beginIndex >= 0
-        && !items[beginIndex].classList.contains('h-h2')) {
-        beginIndex -= 1;
-      }
-      while (endIndex < items.length
-        && !items[endIndex].classList.contains('h-h2')) {
-        endIndex += 1;
-      }
-      for (var i = 0; i < beginIndex; i++) {
-        item = items[i]
-        if (!item.classList.contains('h-h2')) {
-          item.style.display = 'none';
-        }
-      }
-      for (var i = beginIndex + 1; i < endIndex; i++) {
-        item = items[i]
-        // if (!item.classList.contains('h-h2')) {
-          item.style.display = '';
-        // }
-      }
-      for (var i = endIndex; i < items.length; i++) {
-        item = items[i]
-        if (!item.classList.contains('h-h2')) {
-          item.style.display = 'none';
-        }
-      }
-    }
-
-    // Init menu collapsed
-    doMenuCollapse(-1);
-
-    // Active the menu item
-    window.addEventListener('scroll', function (event) {
-      var lastActive = menuContent.querySelector('.active');
-      var changed = true;
-      var activeIndex = -1;
-      for (var i = headings.length - 1; i >= 0; i--) {
-        var h = headings[i];
-        var headingRect = h.getBoundingClientRect();
-        var headerRect = header.getBoundingClientRect();
-        var headerTop = Math.floor(headerRect.top);
-        var headerHeight = Math.floor(headerRect.height);
-        var headerHeight = headerTop + headerHeight + 20;
-        if (headingRect.top <= headerHeight) {
-          var id = 'h-' + h.getAttribute('id');
-          var a = menuContent.querySelector('a[href="#' + id  + '"]');
-          var curActive = a.parentNode;
-          if (curActive) {
-            curActive.classList.add('active');
-            activeIndex = i;
-          }
-          if (lastActive == curActive) {
-            changed = false;
-          }
-          break;
-        }
-      }
-      if (changed) {
-        if (lastActive) {
-          lastActive.classList.remove('active');
-        }
-        doMenuCollapse(activeIndex);
-      }
-      event.preventDefault();
-    });
   }
-  generateContent();
+
+  window.addEventListener("scroll", setActive, { passive: true });
+  setActive();
+
+  // Collapse long TOCs around current H2 group (optional)
+  function collapseAround(index, over = 20) {
+    const list = menuContent.firstElementChild;
+    if (!list) return;
+    const li = list.children;
+    if (!li || li.length < over || index < 0) return;
+
+    // find nearest H2 block
+    let begin = index, end = index + 1;
+    while (begin >= 0 && !li[begin].classList.contains('h-h2')) begin--;
+    while (end < li.length && !li[end].classList.contains('h-h2')) end++;
+
+    for (let i = 0; i < li.length; i++) {
+      const isWithin = i >= begin && i < end;
+      if (!li[i].classList.contains('h-h2')) {
+        li[i].style.display = isWithin ? '' : 'none';
+      }
+    }
+  }
+
+  // Re-run collapse on scroll after setting active
+  window.addEventListener("scroll", () => {
+    const active = menuContent.querySelector("li.active");
+    if (!active) return;
+    const all = Array.from(menuContent.querySelectorAll("li"));
+    collapseAround(all.indexOf(active));
+  }, { passive: true });
+
+})();
 </script>
+{%- endunless -%}
