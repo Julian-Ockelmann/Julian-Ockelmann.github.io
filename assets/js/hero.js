@@ -1,8 +1,31 @@
 (function(){
-  // Try common header-band selectors used by Yat-like themes
-  const header =
-    document.querySelector('.page-cover, .page-header, .banner, .post-cover');
-  if(!header) return;
+  // Candidate selectors for the header band used by various Yat/minima forks
+  const selectors = [
+    '.page-cover', '.page-header', '.banner', '.post-cover',
+    '.home-cover', '.cover', '.page-banner', '.site-cover', '.page-hero'
+  ];
+  let header = null;
+  for (const s of selectors) { header = document.querySelector(s); if (header) break; }
+
+  // Heuristic fallback: pick the first large element near top that contains an H1
+  if (!header) {
+    const h1 = document.querySelector('main h1, .page h1, h1');
+    if (h1) {
+      let el = h1.parentElement;
+      while (el && el.getBoundingClientRect && el.getBoundingClientRect().top > 120) el = el.parentElement;
+      header = el || null;
+    }
+  }
+
+  // Ultimate fallback: create a header band after the site header/nav
+  if (!header) {
+    const after = document.querySelector('.site-header, header') || document.body.firstElementChild;
+    const fake = document.createElement('section');
+    fake.className = 'page-header';
+    after && after.parentNode && after.parentNode.insertBefore(fake, after.nextSibling);
+    header = fake;
+  }
+  if (!header) return;
 
   // Path to your banner image
   const img = '/assets/images/banners/moon_banner.png';
