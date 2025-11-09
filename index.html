@@ -4,8 +4,26 @@ title: Home
 toc: false
 ---
 
-<!-- Shader hero assets (home page only) -->
-<link rel="stylesheet" href="{{ '/assets/css/hero_shader.css' | relative_url }}">
-<script src="{{ '/assets/js/hero_shader.js' | relative_url }}" defer></script>
+<style>
+  /* Hide the homepage TOC/sidebar (Yat variants) */
+  .home #toc, .home .toc, .home .post-toc, .home .toc-wrap,
+  .home .toc-container, .home .toc-aside, .home .home-sidebar,
+  .home .home-categories { display: none !important; }
+
+  /* Stable hero banner ONLY on the homepage (no JS needed) */
+  .site-header + main::before {
+    content: "";
+    display: block;
+    height: 45vh; /* tweak as you like */
+    background: #000 url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}')
+                center / cover no-repeat;
+    transform: translateZ(0);
+  }
+
+  /* Make the transition to content clean */
+  @media (max-width: 720px) {
+    .site-header + main::before { height: 34vh; }
+  }
+</style>
 
 {{ content }}
