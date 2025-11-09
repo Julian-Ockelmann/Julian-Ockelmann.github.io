@@ -4,30 +4,4 @@ title: Home
 toc: false
 ---
 
-<style>
-  /* Hide the homepage TOC/sidebar (Yat variants) */
-  .home #toc, .home .toc, .home .post-toc, .home .toc-wrap,
-  .home .toc-container, .home .toc-aside, .home .home-sidebar,
-  .home .home-categories { display: none !important; }
-
-  /* Base header background (static) */
-  .site-header + main::before {
-    content: "";
-    display: block;
-    height: 45vh; /* adjust to taste */
-    background: #000 url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}')
-                center/cover no-repeat;
-    transform: translateZ(0);
-    will-change: transform;
-  }
-
-  /* Optional: very subtle drift ONLY on hover, respects reduced-motion */
-  @media (prefers-reduced-motion: no-preference) {
-    .site-header + main:hover::before {
-      transition: transform 6s ease;
-      transform: translate3d(0, -1%, 0);
-    }
-  }
-</style>
-
 {{ content }}
