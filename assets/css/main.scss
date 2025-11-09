@@ -82,7 +82,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .post-preview,
 .home .archive-list,
 .home .tag-list,
-.home .home-sidebar,   /* <-- fixed (no leading slash) */
+.home .home-sidebar,   /* fixed (no leading slash) */
 .home .page-sidebar,
 .home .sidebar,
 .home .pagination { display: none !important; }
@@ -127,6 +127,7 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
 /* ==========================================================
    6) LANDING OVERLAY (centered text + CTAs)
+   (kept for compatibility, but hidden below)
    ========================================================== */
 .home .home-landing { position: relative; min-height: 100vh; }
 
@@ -184,7 +185,7 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
 }
 
 /* ==========================================================
-   7) Circular link panels (fleshpng-inspired)
+   7) Circular link panels (FLAT style)
    ========================================================== */
 .link-circles {
   max-width: 1200px;
@@ -206,37 +207,39 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   gap: 1rem;
 }
 
+/* FLAT fill (no gradient/inner shadows) */
 .circle-card .circle {
   width: clamp(180px, 24vw, 260px);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,.10), rgba(255,255,255,.04) 45%, rgba(0,0,0,.55) 65%),
-    #262626;
-  border: 3px solid rgba(255,255,255,.08);
-  box-shadow:
-    inset 0 16px 50px rgba(0,0,0,.35),
-    0 14px 40px rgba(0,0,0,.28);
+  background: #2a2a2a;                 /* flat */
+  border: 2px solid rgba(255,255,255,.10);
+  box-shadow: 0 14px 30px rgba(0,0,0,.25); /* optional soft outer only */
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+
+[data-theme="light"] .circle-card .circle {
+  background: #efefef;
+  border-color: rgba(0,0,0,.08);
+  box-shadow: 0 12px 28px rgba(0,0,0,.10);
 }
 
 .circle-card .circle svg {
   width: 50%;
   height: 50%;
-  opacity: .9;
-  color: #f7f7f7;
+  opacity: .95;
+  color: #ffffff;
 }
 
 .circle-card:hover .circle {
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-2px);
   border-color: rgba(255,255,255,.22);
-  box-shadow:
-    inset 0 24px 60px rgba(0,0,0,.45),
-    0 20px 60px rgba(0,0,0,.4);
+  box-shadow: 0 20px 44px rgba(0,0,0,.35);
 }
 
+/* Pills use the site's brand accent color (same as link color) */
 .circle-card .label-btn {
   display: inline-block;
   padding: .5rem 1.15rem;
@@ -246,13 +249,24 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   text-transform: uppercase;
   font-size: .86rem;
   color: #fff;
-  background: #c14c88; /* accent pill */
-  border: 1px solid rgba(255,255,255,.2);
+  background: $brand-color;             /* <- accent color */
+  border: 0;
   box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  transition: filter .15s ease, transform .15s ease;
 }
 
-/* optional: lighter pills in light mode */
-[data-theme="light"] .circle-card .label-btn { background: #7a3aa6; }
+.circle-card .label-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .circle-card .label-btn {
+  background: $brand-color;
+  color: #fff;
+}
+
+/* Optional: hide the old overlay, if any markup remains */
+.home .landing-hero { display: none !important; }
 
 /* keep hero full-screen on small screens too */
 @media (max-width: 720px) {
