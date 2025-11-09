@@ -1,20 +1,29 @@
 ---
 layout: home
 title: Home
-toc: false          # turn off table-of-contents on the homepage
-# no banner: here   # don't add a 'banner:' key so the theme doesn't inject its own cover image
+toc: false
 ---
 
-<!-- Load effect assets just for the homepage -->
-<link rel="stylesheet" href="{{ '/assets/css/hero.css' | relative_url }}">
-<script src="{{ '/assets/js/hero.js' | relative_url }}" defer></script>
-
-<!-- Hide any theme-injected TOC on this page, just in case -->
 <style>
-  #toc, .toc, .post-toc, .toc-wrap, .toc-container, .toc-aside { display: none !important; }
+  /* Hide the TOC/sidebar on the homepage */
+  .home #toc, .home .toc, .home .post-toc, .home .toc-wrap,
+  .home .toc-container, .home .toc-aside, .home .home-sidebar,
+  .home .home-categories { display: none !important; }
+
+  /* Stable header background (no animation) */
+  .site-header + main::before {
+    content: "";
+    display: block;
+    height: 45vh;                       /* adjust if you want it taller/shorter */
+    background: #000 url('{{ "/assets/images/banners/moon_banner.png" | relative_url }}')
+                center/cover no-repeat;
+    transform: translateZ(0);            /* promote to its own layer to avoid repaint jitter */
+    will-change: transform;
+  }
 </style>
 
 {{ content }}
+
 
 <noscript>
   <style>
