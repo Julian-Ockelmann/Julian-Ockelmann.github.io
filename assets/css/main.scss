@@ -1,14 +1,19 @@
 ---
-# Only the main Sass file needs front matter
+# Only the main Sass file needs front matter (the dashes are enough)
 ---
 
-/* -------- Original variables you had -------- */
+/* =====================
+   Theme variables (yours)
+   ===================== */
+
+/* Default theme colors */
 $theme-colors: (
   "coolblack": #090a0b,
   "spacegrey": #353535,
   "snowwhite": #ffffff,
 );
 
+/* Default brand colors */
 $brand-colors: (
   "orangered": #ff5100,
   "greatgold": #f2cb05,
@@ -34,24 +39,36 @@ $brand-color: map-get($brand-colors, "greenblue");
 
 $content-width: {{ site.content_width | default: '920px' }};
 
-/* Import theme base */
+/* Load base Yat styles */
 @import "yat";
 
-/* --------- Overrides (after import) --------- */
+/* =====================
+   Site overrides (ours)
+   ===================== */
 
-/* Header banner: stable background (no animation) */
+/* ---- Controls ---- */
 :root { --header-banner-height: 45vh; }
 
-.site-header + main::before {
+/* 1) Header banner: OFF by default, ON only for the homepage
+   ----------------------------------------------------------- */
+.site-header + main::before {             /* default = off (all pages) */
+  display: none !important;
   content: "";
-  display: block;
+}
+
+.home .site-header + main::before {       /* home only */
+  display: block !important;
+  content: "";
   height: var(--header-banner-height);
-  background: #000 url('{{ "/assets/images/banners/moon_banner.png" | relative_url }}') center / cover no-repeat;
-  transform: translateZ(0);
+  background: #000
+    url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}')
+    center / cover no-repeat;
+  transform: translateZ(0);               /* prevent repaint jitter */
   will-change: transform;
 }
 
-/* Hide TOC on HOME */
+/* 2) Hide TOC / category sidebar on the HOME page
+   ----------------------------------------------- */
 .home #toc,
 .home .toc,
 .home .post-toc,
@@ -63,7 +80,25 @@ $content-width: {{ site.content_width | default: '920px' }};
   display: none !important;
 }
 
-/* Hide TOC on CV (H1 id strategy) */
+/* 3) Hide TOC on the CV page
+   -------------------------- */
+
+/* A) Common layout/body classes in Yat/minima forks */
+.layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
+.layout-cv .toc-container, .layout-cv .toc-aside,
+.page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
+.page-cv   .toc-container, .page-cv   .toc-aside {
+  display: none !important;
+}
+
+/* B) Fallback: any body class containing "cv" */
+body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
+body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside {
+  display: none !important;
+}
+
+/* C) Last-resort fallback: give your CV page a first-level title with id="cv-title"
+      (i.e., in cv.md:  `# CV {#cv-title}` ) */
 body:has(main h1#cv-title) #toc,
 body:has(main h1#cv-title) .toc,
 body:has(main h1#cv-title) .post-toc,
@@ -73,16 +108,11 @@ body:has(main h1#cv-title) .toc-aside {
   display: none !important;
 }
 
-/* Hide TOC on CV (layout marker fallback) */
-.layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap, .layout-cv .toc-container, .layout-cv .toc-aside,
-.page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap, .page-cv   .toc-container, .page-cv   .toc-aside {
-  display: none !important;
-}
-
-/* Optional (commented out): gentle hover drift without flicker */
+/* 4) (Optional) Gentle hover drift for the home banner (no flicker)
+   ----------------------------------------------------------------- */
 /*
 @media (prefers-reduced-motion: no-preference) {
-  .site-header + main:hover::before {
+  .home .site-header + main:hover::before {
     transition: transform 6s ease;
     transform: translate3d(0, -1%, 0);
   }
