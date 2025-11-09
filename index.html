@@ -10,15 +10,23 @@ toc: false
   .home .toc-container, .home .toc-aside, .home .home-sidebar,
   .home .home-categories { display: none !important; }
 
-  /* Stable header background (no animation) */
+  /* Base header background (static) */
   .site-header + main::before {
     content: "";
     display: block;
     height: 45vh; /* adjust to taste */
     background: #000 url('{{ "/assets/images/banners/moon_banner.png" | relative_url }}')
                 center/cover no-repeat;
-    transform: translateZ(0); /* prevent repaint jitter */
+    transform: translateZ(0);
     will-change: transform;
+  }
+
+  /* Optional: very subtle drift ONLY on hover, respects reduced-motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header + main:hover::before {
+      transition: transform 6s ease;
+      transform: translate3d(0, -1%, 0);
+    }
   }
 </style>
 
