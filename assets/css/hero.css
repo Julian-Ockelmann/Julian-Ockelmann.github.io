@@ -1,17 +1,38 @@
 :root{
-  --fx-height: min(70vh, 720px);
   --fx-tilt: 10;
   --fx-rgb-shift: 10px;
   --fx-glow: 1.05;
 }
-.fx-hero{
+
+/* Ensure the theme's header band can host absolute children */
+.page-cover,
+.page-header,
+.banner,
+.post-cover {
   position: relative;
-  height: var(--fx-height);
   overflow: hidden;
-  isolation: isolate;
-  --mx: .5; --my: .5;
-  background: #0c0c0c;
 }
+
+/* Keep header text above the effect */
+.page-cover > *:not(.fx-hero),
+.page-header > *:not(.fx-hero),
+.banner > *:not(.fx-hero),
+.post-cover > *:not(.fx-hero){
+  position: relative;
+  z-index: 1;
+}
+
+/* Our injected FX background fills the header band */
+.fx-hero.fx-hero--mounted {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate;
+  --mx: .5;
+  --my: .5;
+  pointer-events: none; /* allow header to receive mouse events */
+}
+
 .fx-hero__layer{
   position: absolute; inset: 0;
   background-size: cover; background-position: 50% 50%;
@@ -19,13 +40,19 @@
   will-change: transform, filter;
   filter: contrast(1.05) saturate(1.05) brightness(var(--fx-glow));
 }
-.fx-hero__base{ z-index: 1; }
-.fx-hero__r, .fx-hero__g, .fx-hero__b{ z-index: 2; mix-blend-mode: screen; opacity: .65; }
+.fx-hero__base{ z-index: 0; }
+.fx-hero__r, .fx-hero__g, .fx-hero__b{ z-index: 0; mix-blend-mode: screen; opacity: .65; }
+
+/* Channel tints for pseudo RGB split */
 .fx-hero__r{ filter: brightness(1.1) sepia(1) saturate(6) hue-rotate(-20deg); }
 .fx-hero__g{ filter: brightness(1.1) sepia(1) saturate(6) hue-rotate(90deg); }
 .fx-hero__b{ filter: brightness(1.1) sepia(1) saturate(6) hue-rotate(200deg); }
 
-.fx-hero:hover .fx-hero__layer{
+/* Parallax tilt on hover/move */
+.page-cover:hover .fx-hero__layer,
+.page-header:hover .fx-hero__layer,
+.banner:hover .fx-hero__layer,
+.post-cover:hover .fx-hero__layer{
   transform:
     translate3d(calc((var(--mx) - .5) * -12px), calc((var(--my) - .5) * -12px), 0)
     scale(1.06)
@@ -37,6 +64,7 @@
 .fx-hero .fx-hero__g{ transform: translateX(calc(var(--rgb-x, 0px) * -1)) translateY(calc(var(--rgb-y, 0px) * .6)) scale(1.06); }
 .fx-hero .fx-hero__b{ transform: translateX(calc(var(--rgb-x, 0px) * .8)) translateY(calc(var(--rgb-y, 0px) * -0.5)) scale(1.06); }
 
+/* Glitch pulse */
 .fx-hero.is-glitching .fx-hero__r,
 .fx-hero.is-glitching .fx-hero__g,
 .fx-hero.is-glitching .fx-hero__b{
@@ -48,30 +76,21 @@
   100%{ opacity: .65; }
 }
 
+/* Grain overlay */
 .fx-hero__grain{
-  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
   mix-blend-mode: overlay;
 }
 
-.fx-hero__inner{
-  position: absolute; inset: 0; z-index: 4;
-  display: grid; place-content: center;
-  text-align: center; padding: 2rem; color: #fff;
-  text-shadow: 0 1px 0 rgba(0,0,0,.3);
-}
-.fx-hero__title{
-  font-size: clamp(2rem, 6vw, 4.2rem);
-  letter-spacing: .02em; font-weight: 800; margin: 0 0 .3em;
-}
-.fx-hero__kicker{
-  margin: 0; opacity: .9; font-size: clamp(1rem, 2.2vw, 1.25rem);
-}
-
-.content-wrap{ max-width: 1100px; margin: 2.5rem auto; padding: 0 1rem; }
+/* Optional: make the header band taller */
+/* .page-cover, .page-header, .banner, .post-cover { min-height: 45vh; } */
 
 @media (prefers-reduced-motion: reduce){
   .fx-hero__layer,
-  .fx-hero:hover .fx-hero__layer{ transform: none !important; }
+  .page-cover:hover .fx-hero__layer,
+  .page-header:hover .fx-hero__layer,
+  .banner:hover .fx-hero__layer,
+  .post-cover:hover .fx-hero__layer { transform: none !important; }
   .fx-hero.is-glitching .fx-hero__r,
   .fx-hero.is-glitching .fx-hero__g,
   .fx-hero.is-glitching .fx-hero__b{ animation: none !important; }
