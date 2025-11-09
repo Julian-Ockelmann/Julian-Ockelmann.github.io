@@ -10,14 +10,14 @@
 $theme-colors: (
   "coolblack": #090a0b,
   "spacegrey": #353535,
-  "snowwhite": #ffffff,
+  "snowwhite": #ffffff
 );
 
 /* Default brand colors */
 $brand-colors: (
   "orangered": #ff5100,
   "greatgold": #f2cb05,
-  "greenblue": #389092,
+  "greenblue": #389092
 );
 
 $theme-name: "{{ site.theme_color }}";
@@ -59,7 +59,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .site-header + main::before {
   display: block !important;
   content: "";
-  height: 100vh; /* full-screen landing like fleshpng */
+  height: 100vh; /* full-screen landing */
   background: #000
     url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}')
     center / cover no-repeat;
@@ -84,7 +84,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .post-preview,
 .home .archive-list,
 .home .tag-list,
-.home .home-sidebar,
+/home .home-sidebar,
 .home .page-sidebar,
 .home .sidebar,
 .home .pagination { display: none !important; }
@@ -129,3 +129,84 @@ body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap,
 body:has(main h1#cv-title) .toc-container,
 body:has(main h1#cv-title) .toc-aside { display: none !important; }
+
+/* ==========================================================
+   6) LANDING OVERLAY (like fleshpng): centered text + CTAs
+   ========================================================== */
+
+/* container that sits on top of the full-screen hero */
+.home .home-landing {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* centered overlay */
+.home .landing-hero {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0 1.25rem;
+  color: #fff;
+}
+
+/* typography */
+.home .landing-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+  margin: 0 0 .5rem 0;
+  text-shadow: 0 2px 18px rgba(0,0,0,.35);
+}
+
+.home .landing-hero p {
+  max-width: 840px;
+  margin: 0 auto 1.25rem;
+  opacity: .9;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  text-shadow: 0 1px 12px rgba(0,0,0,.25);
+}
+
+/* buttons */
+.home .landing-hero .cta-row {
+  display: inline-flex;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+.home .landing-hero .btn {
+  display: inline-block;
+  padding: .6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.4);
+  color: #fff;
+  text-decoration: none;
+  background: rgba(15,15,15,.25);
+  backdrop-filter: blur(2px);
+  transition: transform .15s ease, border-color .2s ease, background .2s ease;
+}
+
+.home .landing-hero .btn.primary {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.6);
+}
+
+.home .landing-hero .btn:hover {
+  transform: translateY(-1px);
+  border-color: #fff;
+}
+
+/* quicklinks under CTAs */
+.home .landing-hero .quicklinks {
+  margin-top: .5rem;
+  opacity: .85;
+  font-size: .95rem;
+}
+
+.home .landing-hero .quicklinks a { color: #dbeafe; text-decoration: none; }
+.home .landing-hero .quicklinks a:hover { text-decoration: underline; }
+
+/* keep hero full-screen on small screens too */
+@media (max-width: 720px) {
+  .home .site-header + main::before { height: 100vh; }
+}
