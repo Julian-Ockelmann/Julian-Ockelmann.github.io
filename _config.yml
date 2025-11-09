@@ -1,65 +1,29 @@
-# Welcome to Jekyll!
-# (Theme: jekyll-theme-yat)
-
+# --- Site ---
 title: Julian Ockelmann
 email: julian.ockelmann@gmail.com
 author: Julian Ockelmann
 
-# ⇣⇣ NEW — profile links used by the home panels ⇣⇣
+# Profile links used on the home panels
 scholar_url: "https://scholar.google.com/citations?user=HSduCL0AAAAJ&hl=en"
-orcid_id:    "0000-0002-4780-8993"
-osf_url:     "https://osf.io/92fa4/"
-linkedin_url:"https://www.linkedin.com/in/julian-ockelmann-977208170/"
-# ⇡⇡ NEW — profile links used by the home panels ⇡⇡
+orcid_id: "0000-0002-4780-8993"
+osf_url: "https://osf.io/92fa4/"
+linkedin_url: "https://www.linkedin.com/in/julian-ockelmann-977208170/"
 
-# Copyright setting
-# You can use any html code; placeholders: {currentYear}, {author}
+# Footer copyright (placeholders: {currentYear}, {author})
 copyright: "Unpublished Work (cleft) 2017-{currentYear} {author}"
 
-description: >-
-  Ad Astra Per Aspera.
+description: "Ad Astra Per Aspera."
+baseurl: ""         # e.g., /blog
+url: ""             # e.g., https://example.com
+favicon: ""         # /assets/images/favicon.png if you add one
 
-baseurl: ""   # the subpath of your site, e.g. /blog
-url: ""       # the base hostname & protocol for your site
-favicon: ""   # the favicon for your site
-
-# Yat date format
+# Theme (Yat) options
 yat:
   date_format: "%b %d, %Y"
 
-# # header_transparent: true
-# # content_width: "920px"
-
-# # Google analytics - GA4
-# # google_analytics: [Measurement ID]
-# # enableDNT: "false"
-
-# # sitemap: false
-# # lang: "en"
-
-# # header_pages:
-# #   - about.md
-# #   - cv.md
-# #   - projects.md
-# #   - contact.md
-
-# Banner defaults (unused when we drive hero via CSS)
-# banner:
-#   video: null
-#   loop: true
-#   volume: 0
-#   start_at: 0
-#   image: null
-#   opacity: 1.0
-#   background: "rgba(0, 0, 0, 0.8)"
-#   height: "640px"
-#   min_height: null
-#   heading_style: null
-#   subheading_style: null
-
 # Build settings
 markdown: kramdown
-kmarkdown:
+kramdown:
   input: GFM
 
 plugins:
