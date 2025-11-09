@@ -4,7 +4,7 @@
   --fx-glow: 1.05;
 }
 
-/* Ensure the theme's header band can host absolute children */
+/* Make the theme's header band a positioned container we can mount into */
 .page-cover,
 .page-header,
 .banner,
@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 
-/* Keep header text above the effect */
+/* Keep header text above the injected effect */
 .page-cover > *:not(.fx-hero),
 .page-header > *:not(.fx-hero),
 .banner > *:not(.fx-hero),
@@ -30,7 +30,7 @@
   isolation: isolate;
   --mx: .5;
   --my: .5;
-  pointer-events: none; /* allow header to receive mouse events */
+  pointer-events: none; /* header remains interactive */
 }
 
 .fx-hero__layer{
