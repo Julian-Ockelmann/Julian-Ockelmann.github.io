@@ -1,8 +1,7 @@
----
----
 (function(){
-  // Find the theme's header band container
-  const header = document.querySelector('.page-cover, .page-header, .banner, .post-cover');
+  // Try common header-band selectors used by Yat-like themes
+  const header =
+    document.querySelector('.page-cover, .page-header, .banner, .post-cover');
   if(!header) return;
 
   // Path to your banner image
@@ -26,23 +25,23 @@
       <rect width="100%" height="100%" filter="url(#fx-noise)" opacity="0.08"></rect>
     </svg>
   `;
-
-  // Insert behind the header text
   header.prepend(fx);
 
   // Assign backgrounds to layers
-  fx.querySelectorAll('.fx-hero__layer').forEach(el => el.style.backgroundImage = `url('${img}')`);
+  fx.querySelectorAll('.fx-hero__layer')
+    .forEach(el => el.style.backgroundImage = `url('${img}')`);
 
-  // Motion controls
+  // Respect reduced motion
   const pr = window.matchMedia('(prefers-reduced-motion: reduce)');
   let reduced = pr.matches;
   pr.addEventListener?.('change', e => reduced = e.matches);
 
+  // Parallax variables live on the header node
   function setVars(x, y){
     header.style.setProperty('--mx', x);
     header.style.setProperty('--my', y);
     const dx = (x - 0.5), dy = (y - 0.5);
-    const base = 10; // matches --fx-rgb-shift
+    const base = 10; // mirrors --fx-rgb-shift
     header.style.setProperty('--rgb-x', (dx * base * 2).toFixed(2) + 'px');
     header.style.setProperty('--rgb-y', (dy * base * 2).toFixed(2) + 'px');
   }
@@ -60,12 +59,12 @@
   header.addEventListener('mouseleave', () => setVars(0.5, 0.5));
   setVars(0.5, 0.5);
 
-  // Random glitch tick
+  // Random glitch tick after load
   function tick(){
     if(reduced) return;
     fx.classList.add('is-glitching');
     setTimeout(() => fx.classList.remove('is-glitching'), 140);
     setTimeout(tick, 1200 + Math.random()*2600);
   }
-  setTimeout(tick, 1600);
+  window.addEventListener('load', () => setTimeout(tick, 1600));
 })();
