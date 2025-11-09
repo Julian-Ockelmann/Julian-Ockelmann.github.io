@@ -1,9 +1,23 @@
-{%- include functions.html func='log' level='debug' msg='Get tags value' -%}
+{%- comment -%}
+  Tags disabled site-wide by default.
 
-{%- include functions.html func='get_tags' -%}
-{% assign tags = return %}
+  To re-enable on a specific page:
+    - put `show_tags: true` in that page’s front matter, OR
+    - set `show_tags: true` in _config.yml to enable globally.
 
-{% assign keys = tags %}
-{% assign field = 'tags' %}
-{% assign url = '/tags.html' | relative_url %}
-{%- include sidebar/common-list.html -%}
+  Keeps the include callable from layouts without rendering anything unless allowed.
+{%- endcomment -%}
+
+{%- assign allow_tags = false -%}
+{%- if site.show_tags == true or page.show_tags == true -%}
+  {%- assign allow_tags = true -%}
+{%- endif -%}
+
+{%- if allow_tags -%}
+  {%- include functions.html func='get_tags' -%}
+  {%- assign tags  = return -%}
+  {%- assign keys  = tags -%}
+  {%- assign field = 'tags' -%}
+  {%- assign url   = '/tags.html' | relative_url -%}
+  {%- include sidebar/common-list.html -%}
+{%- endif -%}
