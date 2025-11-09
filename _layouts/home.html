@@ -2,6 +2,22 @@
 layout: default
 ---
 
-<!-- Minimal landing page layout: no feed, no lists -->
-<!-- The full-viewport hero is provided via CSS on .site-header + main::before -->
-<div class="home-landing" aria-hidden="true"></div>
+<div class="home-landing">
+  <div class="landing-hero">
+    <h1>Julian Ockelmann</h1>
+    <p>Data-driven markers of listening effort & speech-in-noise comprehension in aging and hearing loss (EEG · fMRI · pupillometry).</p>
+    <div class="cta-row">
+      <a class="btn primary" href="{{ '/projects/' | relative_url }}">See research</a>
+      <a class="btn" href="{{ '/cv.html' | relative_url }}">Curriculum Vitae</a>
+    </div>
+    <nav class="quicklinks">
+      <a href="https://scholar.google.com/" rel="me">Google Scholar</a>
+      <span>·</span>
+      <a href="https://orcid.org/" rel="me">ORCID</a>
+      <span>·</span>
+      <a href="https://osf.io/" rel="me">OSF</a>
+      <span>·</span>
+      <a href="https://github.com/" rel="me">GitHub</a>
+    </nav>
+  </div>
+</div>
