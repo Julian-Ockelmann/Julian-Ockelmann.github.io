@@ -1,44 +1,7 @@
 ---
 layout: home
 title: Home
-# intentionally no "banner:" here to prevent the theme's default banner
+# no banner: here (prevents theme’s built-in cover image)
 ---
 
-<!-- HERO BANNER -->
-<div class="fx-hero" data-img="{{ '/assets/images/banners/moon_banner.png' | relative_url }}">
-  <div class="fx-hero__layer fx-hero__base"></div>
-  <div class="fx-hero__layer fx-hero__r" aria-hidden="true"></div>
-  <div class="fx-hero__layer fx-hero__g" aria-hidden="true"></div>
-  <div class="fx-hero__layer fx-hero__b" aria-hidden="true"></div>
-
-  <svg class="fx-hero__grain" aria-hidden="true" focusable="false">
-    <filter id="fx-noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="2">
-        <animate attributeName="seed" from="0" to="100" dur="8s" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feColorMatrix type="saturate" values="0"/>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#fx-noise)" opacity="0.08"></rect>
-  </svg>
-
-  <div class="fx-hero__inner">
-    <h1 class="fx-hero__title">Listening Between the Lines</h1>
-    <p class="fx-hero__kicker">Physiological markers of cognitive demand in speech-in-noise</p>
-  </div>
-</div>
-
-<!-- Your normal homepage content will still render here -->
-<section class="content-wrap">
-  {{ content }}
-</section>
-
-<!-- Load the assets -->
-<link rel="stylesheet" href="{{ '/assets/css/hero.css' | relative_url }}">
-<script src="{{ '/assets/js/hero.js' | relative_url }}" defer></script>
-
-<noscript>
-  <style>
-    .fx-hero{ background: #0c0c0c url('{{ "/assets/images/banners/moon_banner.png" | relative_url }}') 50% 50%/cover no-repeat; }
-    .fx-hero__grain{ display:none; }
-  </style>
-</noscript>
+{{ content }}
