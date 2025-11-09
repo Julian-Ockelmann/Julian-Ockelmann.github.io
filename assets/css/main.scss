@@ -47,27 +47,49 @@ $content-width: {{ site.content_width | default: '920px' }};
    ===================== */
 
 /* ---- Controls ---- */
-:root { --header-banner-height: 45vh; }
+:root { --header-banner-height: 45vh; } /* used elsewhere if needed */
 
-/* 1) Header banner: OFF by default, ON only for the homepage
-   ----------------------------------------------------------- */
-.site-header + main::before {             /* default = off (all pages) */
-  display: none !important;
+/* 1) Hero banner: OFF by default (all pages), ON only on the homepage
+   ------------------------------------------------------------------- */
+.site-header + main::before {
+  display: none !important;  /* default = off */
   content: "";
 }
 
-.home .site-header + main::before {       /* home only */
+.home .site-header + main::before {
   display: block !important;
   content: "";
-  height: var(--header-banner-height);
+  height: 100vh; /* full-screen landing like fleshpng */
   background: #000
     url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}')
     center / cover no-repeat;
-  transform: translateZ(0);               /* prevent repaint jitter */
+  transform: translateZ(0);  /* prevent repaint jitter */
   will-change: transform;
 }
 
-/* 2) Hide TOC / category sidebar on the HOME page
+/* Remove default padding/margins under the hero on home */
+.home .page-content {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+}
+
+/* 2) Hide ALL home feed widgets (chips, lists, archives, sidebars)
+   ---------------------------------------------------------------- */
+.home .home-categories,
+.home .post-list,
+.home .index-panel,
+.home .list,
+.home .post-item,
+.home .post-preview,
+.home .archive-list,
+.home .tag-list,
+.home .home-sidebar,
+.home .page-sidebar,
+.home .sidebar,
+.home .pagination { display: none !important; }
+
+/* 3) Hide TOC / category sidebar on the HOME page
    ----------------------------------------------- */
 .home #toc,
 .home .toc,
@@ -75,46 +97,35 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .toc-wrap,
 .home .toc-container,
 .home .toc-aside,
-.home .home-sidebar,
-.home .home-categories {
-  display: none !important;
-}
+.home .home-categories { display: none !important; }
 
-/* 3) Hide TOC on the CV page
-   -------------------------- */
+/* 4) Hide tags widget anywhere (belt & suspenders; include already gated)
+   ---------------------------------------------------------------------- */
+.sidebar .tag-list,
+.sidebar .tags,
+.sidebar .post-tags,
+.sidebar .common-list.tags { display: none !important; }
 
+/* 5) Hide TOC on the CV page (multiple robust selectors)
+   ------------------------------------------------------ */
 /* A) Common layout/body classes in Yat/minima forks */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
-.page-cv   .toc-container, .page-cv   .toc-aside {
-  display: none !important;
-}
+.page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
 
 /* B) Fallback: any body class containing "cv" */
-body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
-body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside {
-  display: none !important;
-}
+body[class*="cv"] #toc,
+body[class*="cv"] .toc,
+body[class*="cv"] .post-toc,
+body[class*="cv"] .toc-wrap,
+body[class*="cv"] .toc-container,
+body[class*="cv"] .toc-aside { display: none !important; }
 
-/* C) Last-resort fallback: give your CV page a first-level title with id="cv-title"
-      (i.e., in cv.md:  `# CV {#cv-title}` ) */
+/* C) Last resort: if your CV page title is '# CV {#cv-title}' */
 body:has(main h1#cv-title) #toc,
 body:has(main h1#cv-title) .toc,
 body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap,
 body:has(main h1#cv-title) .toc-container,
-body:has(main h1#cv-title) .toc-aside {
-  display: none !important;
-}
-
-/* 4) (Optional) Gentle hover drift for the home banner (no flicker)
-   ----------------------------------------------------------------- */
-/*
-@media (prefers-reduced-motion: no-preference) {
-  .home .site-header + main:hover::before {
-    transition: transform 6s ease;
-    transform: translate3d(0, -1%, 0);
-  }
-}
-*/
+body:has(main h1#cv-title) .toc-aside { display: none !important; }
