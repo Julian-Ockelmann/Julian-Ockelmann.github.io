@@ -20,10 +20,9 @@ show_tags: false  # belt & suspenders: never show tags here
 ---
 
 ## Contact
-- **Phone:** +41 78 975 00 38  
-- **Email:** [julian.ockelmann@gmail.com](mailto:julian.ockelmann@gmail.com), [julian.ockelmann@uzh.ch](mailto:julian.ockelmann@uzh.ch)  
-- **Address:** Ueberlandstrasse 375, 8051 Zürich, Switzerland  
-- **Nationality / Birth:** German; 18 May 1998, Frankfurt am Main
+- **Email:** [julian.ockelmann@uzh.ch](mailto:julian.ockelmann@uzh.ch)  
+- **Address:** Zürich, Switzerland  
+- **Nationality / Birth:** German; 1998, Frankfurt
 
 ## Language Skills
 - **German:** native proficiency  
