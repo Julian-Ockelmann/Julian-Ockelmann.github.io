@@ -1,8 +1,17 @@
 ---
 layout: cv
 title: CV
-categories: markdown
+categories: cv
+toc: false        # tell the theme: no table of contents
+sidebar: false    # some forks use this flag for the TOC/aside
 ---
+
+<!-- Page-local kill switch in case the layout still injects a TOC -->
+<style>
+  #toc, .toc, .post-toc, .toc-wrap, .toc-container, .toc-aside { 
+    display: none !important; 
+  }
+</style>
 
 ## Education
 ---
@@ -38,6 +47,7 @@ March 2017 - January 2020
 <li> Focus: Health Psychology & Clinical Psychology  </li>
 <li> Extracurricular: Student Representative, Voluntary Tutor (Biopsychology)  </li>
 </ul>
+
 ## Work experience
 ---
 
@@ -117,15 +127,12 @@ January 2019 - Octobre 2019
 </ul>
 
 ## Talks
-
 ---
 
 ## Teaching
-
 ---
-  
-## Service & Leadership
 
+## Service & Leadership
 ---
 
 * Currently signed in to 43 different slack teams
