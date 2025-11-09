@@ -96,3 +96,13 @@
   .fx-hero.is-glitching .fx-hero__b{ animation: none !important; }
   .fx-hero__grain{ display: none; }
 }
+
+/* Hide the TOC / category sidebar only on the homepage */
+.home #toc,
+.home .toc,
+.home .post-toc,
+.home .toc-wrap,
+.home .toc-container,
+.home .toc-aside,
+.home .home-sidebar,
+.home .home-categories { display: none !important; }
