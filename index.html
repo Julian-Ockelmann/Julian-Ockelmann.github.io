@@ -5,7 +5,7 @@ toc: false
 ---
 
 <style>
-  /* Hide the TOC/sidebar on the homepage */
+  /* Hide the homepage TOC/sidebar (Yat variants) */
   .home #toc, .home .toc, .home .post-toc, .home .toc-wrap,
   .home .toc-container, .home .toc-aside, .home .home-sidebar,
   .home .home-categories { display: none !important; }
@@ -14,22 +14,12 @@ toc: false
   .site-header + main::before {
     content: "";
     display: block;
-    height: 45vh;                       /* adjust if you want it taller/shorter */
+    height: 45vh; /* adjust to taste */
     background: #000 url('{{ "/assets/images/banners/moon_banner.png" | relative_url }}')
                 center/cover no-repeat;
-    transform: translateZ(0);            /* promote to its own layer to avoid repaint jitter */
+    transform: translateZ(0); /* prevent repaint jitter */
     will-change: transform;
   }
 </style>
 
 {{ content }}
-
-
-<noscript>
-  <style>
-    /* Fallback: show a static banner image in the header band if JS is off */
-    .page-cover, .page-header, .banner, .post-cover {
-      background: #111 url('{{ "/assets/images/banners/moon_banner.png" | relative_url }}') center/cover no-repeat;
-    }
-  </style>
-</noscript>
