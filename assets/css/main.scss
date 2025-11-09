@@ -49,8 +49,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 /* ---- Controls ---- */
 :root { --header-banner-height: 45vh; } /* used elsewhere if needed */
 
-/* 1) Hero banner: OFF by default (all pages), ON only on the homepage
-   ------------------------------------------------------------------- */
+/* 1) Hero banner: OFF by default (all pages), ON only on the homepage */
 .site-header + main::before {
   display: none !important;  /* default = off */
   content: "";
@@ -74,8 +73,7 @@ $content-width: {{ site.content_width | default: '920px' }};
   margin: 0 !important;
 }
 
-/* 2) Hide ALL home feed widgets (chips, lists, archives, sidebars)
-   ---------------------------------------------------------------- */
+/* 2) Hide ALL home feed widgets (chips, lists, archives, sidebars) */
 .home .home-categories,
 .home .post-list,
 .home .index-panel,
@@ -84,13 +82,12 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .post-preview,
 .home .archive-list,
 .home .tag-list,
-/home .home-sidebar,
+.home .home-sidebar,   /* <-- fixed (no leading slash) */
 .home .page-sidebar,
 .home .sidebar,
 .home .pagination { display: none !important; }
 
-/* 3) Hide TOC / category sidebar on the HOME page
-   ----------------------------------------------- */
+/* 3) Hide TOC / category sidebar on the HOME page */
 .home #toc,
 .home .toc,
 .home .post-toc,
@@ -99,15 +96,13 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .toc-aside,
 .home .home-categories { display: none !important; }
 
-/* 4) Hide tags widget anywhere (belt & suspenders; include already gated)
-   ---------------------------------------------------------------------- */
+/* 4) Hide tags widget anywhere (belt & suspenders; include already gated) */
 .sidebar .tag-list,
 .sidebar .tags,
 .sidebar .post-tags,
 .sidebar .common-list.tags { display: none !important; }
 
-/* 5) Hide TOC on the CV page (multiple robust selectors)
-   ------------------------------------------------------ */
+/* 5) Hide TOC on the CV page (multiple robust selectors) */
 /* A) Common layout/body classes in Yat/minima forks */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
@@ -131,16 +126,10 @@ body:has(main h1#cv-title) .toc-container,
 body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
 /* ==========================================================
-   6) LANDING OVERLAY (like fleshpng): centered text + CTAs
+   6) LANDING OVERLAY (centered text + CTAs)
    ========================================================== */
+.home .home-landing { position: relative; min-height: 100vh; }
 
-/* container that sits on top of the full-screen hero */
-.home .home-landing {
-  position: relative;
-  min-height: 100vh;
-}
-
-/* centered overlay */
 .home .landing-hero {
   position: absolute;
   inset: 0;
@@ -151,7 +140,6 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   color: #fff;
 }
 
-/* typography */
 .home .landing-hero h1 {
   font-size: clamp(2rem, 5vw, 3.25rem);
   line-height: 1.1;
@@ -167,7 +155,6 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   text-shadow: 0 1px 12px rgba(0,0,0,.25);
 }
 
-/* buttons */
 .home .landing-hero .cta-row {
   display: inline-flex;
   gap: .75rem;
@@ -196,22 +183,9 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   border-color: #fff;
 }
 
-/* quicklinks under CTAs */
-.home .landing-hero .quicklinks {
-  margin-top: .5rem;
-  opacity: .85;
-  font-size: .95rem;
-}
-
-.home .landing-hero .quicklinks a { color: #dbeafe; text-decoration: none; }
-.home .landing-hero .quicklinks a:hover { text-decoration: underline; }
-
-/* keep hero full-screen on small screens too */
-@media (max-width: 720px) {
-  .home .site-header + main::before { height: 100vh; }
-}
-
-/* === Circular link panels (fleshpng-inspired) === */
+/* ==========================================================
+   7) Circular link panels (fleshpng-inspired)
+   ========================================================== */
 .link-circles {
   max-width: 1200px;
   margin: 0 auto;
@@ -279,3 +253,8 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
 /* optional: lighter pills in light mode */
 [data-theme="light"] .circle-card .label-btn { background: #7a3aa6; }
+
+/* keep hero full-screen on small screens too */
+@media (max-width: 720px) {
+  .home .site-header + main::before { height: 100vh; }
+}
