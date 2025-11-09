@@ -11,6 +11,7 @@
 .post-cover {
   position: relative;
   overflow: hidden;
+  min-height: 45vh; /* ensure visible band height */
 }
 
 /* Keep header text above the injected effect */
@@ -31,6 +32,7 @@
   --mx: .5;
   --my: .5;
   pointer-events: none; /* header remains interactive */
+  background: #111; /* base color behind image */
 }
 
 .fx-hero__layer{
@@ -82,8 +84,15 @@
   mix-blend-mode: overlay;
 }
 
-/* Optional: make the header band taller */
-/* .page-cover, .page-header, .banner, .post-cover { min-height: 45vh; } */
+/* Hide the TOC / category sidebar only on the homepage */
+.home #toc,
+.home .toc,
+.home .post-toc,
+.home .toc-wrap,
+.home .toc-container,
+.home .toc-aside,
+.home .home-sidebar,
+.home .home-categories { display: none !important; }
 
 @media (prefers-reduced-motion: reduce){
   .fx-hero__layer,
@@ -96,13 +105,3 @@
   .fx-hero.is-glitching .fx-hero__b{ animation: none !important; }
   .fx-hero__grain{ display: none; }
 }
-
-/* Hide the TOC / category sidebar only on the homepage */
-.home #toc,
-.home .toc,
-.home .post-toc,
-.home .toc-wrap,
-.home .toc-container,
-.home .toc-aside,
-.home .home-sidebar,
-.home .home-categories { display: none !important; }
