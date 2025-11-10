@@ -1,21 +1,36 @@
 {% comment %}
-Home banner with shader inside the banner area (proportional sizing).
-This is the stable version that worked before.
+Banner with home-only shader. Non-home pages can still show a normal banner image
+if configured via `page.banner.image` in front matter.
 {% endcomment %}
 
-{% if page.url == '/' or page.layout == 'home' %}
-<section class="page-banner" role="img" aria-label="Shader hero">
-  <!-- Shader canvas fills the banner box -->
-  <div class="shader-fill" id="shader-banner" aria-hidden="true">
-    <canvas id="webgl-canvas"></canvas>
-  </div>
+<section class="page-banner" role="img" aria-label="Page banner">
+  {% if page.url == '/' or page.layout == 'home' %}
+    <!-- Shader canvas fills the banner box on HOME -->
+    <div class="shader-fill" id="shader-banner" aria-hidden="true">
+      <canvas id="webgl-canvas"></canvas>
+    </div>
+  {% else %}
+    {% if page.banner and page.banner.image %}
+      <div class="page-banner-img"
+           style="background-image: url('{{ page.banner.image | relative_url }}');"></div>
+      <img class="img-placeholder" src="{{ page.banner.image | relative_url }}" alt="" />
+    {% endif %}
+  {% endif %}
 
-  <!-- Banner text (left-aligned, same grid width as content) -->
+  <!-- Banner text (left-aligned; width controlled by your SCSS) -->
   <div class="page-banner-inner">
-    <h1 class="page-title">{{ site.title | default: page.title }}</h1>
-    {% if site.description %}
-      <p class="page-subtitle">{{ site.description }}</p>
+    <h1 class="page-title">
+      {{ page.title | default: site.title }}
+    </h1>
+
+    {% if page.url == '/' or page.layout == 'home' %}
+      {% if site.description %}
+        <p class="page-subtitle">{{ site.description }}</p>
+      {% endif %}
+    {% else %}
+      {% if page.subtitle %}
+        <p class="page-subtitle">{{ page.subtitle }}</p>
+      {% endif %}
     {% endif %}
   </div>
 </section>
-{% endif %}
