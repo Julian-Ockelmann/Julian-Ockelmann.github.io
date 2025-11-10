@@ -2,7 +2,9 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 
-/* =====================  Theme variables  ===================== */
+/* =====================
+   Theme variables (yours)
+   ===================== */
 $theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
 $brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
 
@@ -17,47 +19,62 @@ $brand-color: map-get($brand-colors, "greenblue");
 @if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
 } @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
 
+/* Site content width (used by Yat's .wrapper too) */
 $content-width: {{ site.content_width | default: '920px' }};
 
 /* Load base Yat styles */
 @import "yat";
 
-/* =====================  Site overrides  ===================== */
+/* =====================
+   Site overrides (ours)
+   ===================== */
 
-/* 0) Never draw the pseudo-banner; shader handles the hero */
+/* 0) Never draw the theme's pseudo-banner; shader handles the hero */
 .site-header + main::before { display: none !important; content: ""; }
 
 /* Keep homepage content band flush */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* Make sure header stays above the shader */
+/* Header must sit above the shader */
 .site-header { position: relative; z-index: 10; }
 .home .site-header { background: transparent !important; }
 
-/* ---------- Banner (shader in banner) ---------- */
-.page-banner { position: relative; }
+/* ==========================================================
+   PAGE BANNER (shader confined to the banner on HOME)
+   ========================================================== */
 
-/* Left align banner text and keep same width as site content */
-.page-banner .wrapper { max-width: $content-width; margin: 0 auto; }
+/* The banner wrapper aligns to site content width */
+.page-banner .wrapper {
+  max-width: $content-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Left align the heading/subheading to match link panels */
 .page-banner .page-banner-inner,
 .page-banner .page-banner-default { text-align: left; }
 
-/* Banner image container */
+/* Banner image container: we host the shader inside it */
+.page-banner { position: relative; }
 .page-banner .page-banner-img {
   position: relative;
-  height: 38vh;              /* banner height; adjust to taste */
+  height: 38vh;        /* banner height; adjust to taste */
+  min-height: 240px;
   overflow: hidden;
 }
 
-/* Hide the theme's background block on the home page so shader stays visible */
+/* On HOME, hide any static background image so the shader is visible */
 .home .page-banner .page-banner-img > div:not(.shader-fill) { display: none !important; }
 .home .page-banner .page-banner-img > img.img-placeholder { display: none !important; }
 
-/* Shader layer inside the banner */
+/* Shader layer (inserted by _includes/shader-hero.html via banner include) */
 .page-banner .page-banner-img .shader-fill {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 0;              /* behind text */
+  pointer-events: none;
 }
 .page-banner .page-banner-img .shader-fill canvas {
   width: 100%;
@@ -65,7 +82,12 @@ $content-width: {{ site.content_width | default: '920px' }};
   display: block;
 }
 
-/* ---------- Hide extras on home ---------- */
+/* Keep the text above the shader */
+.page-banner .page-banner-inner { position: relative; z-index: 1; }
+
+/* ==========================================================
+   HOME: hide feed widgets/TOC and unify widths
+   ========================================================== */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
@@ -73,7 +95,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
 .home .toc-aside, .home .home-categories { display: none !important; }
 
-/* Hide TOC on CV pages */
+/* CV pages: hide any TOC */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
@@ -83,17 +105,25 @@ body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"]
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* ---------- Circular link panels (flat + wrapper width) ---------- */
+/* Hide tag widgets anywhere */
+.sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
+
+/* ==========================================================
+   Circular link panels (flat + aligned to site width)
+   ========================================================== */
 .link-circles {
-  max-width: $content-width;   /* same width as site .wrapper for perfect alignment */
-  margin: 0 auto;
+  max-width: $content-width;           /* same width as the site .wrapper */
+  margin-left: auto;
+  margin-right: auto;
   padding: 3.25rem 1rem 5rem;
+
   display: grid;
-  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, minmax(200px, 1fr)); /* 4-up if space allows */
   gap: clamp(1rem, 2.5vw, 3rem);
   justify-items: center;
   align-items: start;
 }
+
 @media (max-width: 1100px) { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
 @media (max-width: 560px)  { .link-circles { grid-template-columns: 1fr; } }
 
@@ -106,9 +136,11 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   align-content: start;
   gap: 0.85rem;
 }
+
+/* Flat circle (same in light & dark) */
 .circle-card .circle {
   width: min(260px, 100%);
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -117,17 +149,50 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   box-shadow: 0 14px 30px rgba(0,0,0,.25);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-/* keep the same look in light mode */
 [data-theme="light"] .circle-card .circle {
-  background: #2a2a2a; border-color: rgba(255,255,255,.10); box-shadow: 0 14px 30px rgba(0,0,0,.25);
+  background: #2a2a2a;                /* keep identical look in light mode */
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 14px 30px rgba(0,0,0,.25);
 }
-.circle-card .circle svg { width: 50%; height: 50%; opacity: .95; color: #fff; }
-.circle-card:hover .circle { transform: translateY(-2px); border-color: rgba(255,255,255,.22); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
 
+.circle-card .circle svg {
+  width: 50%;
+  height: 50%;
+  opacity: .95;
+  color: #fff;
+}
+.circle-card:hover .circle {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 20px 44px rgba(0,0,0,.35);
+}
+
+/* Accent pill uses the site's brand color */
 .circle-card .label-btn {
-  display: inline-block; padding: .5rem 1.15rem; border-radius: 999px; font-weight: 700;
-  letter-spacing: .02em; text-transform: uppercase; font-size: .86rem; color: #fff;
-  background: $brand-color; border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease; margin-top: .1rem;
+  display: inline-block;
+  padding: .5rem 1.15rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  font-size: .86rem;
+  color: #fff;
+  background: $brand-color;
+  border: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  transition: filter .15s ease, transform .15s ease;
+  margin-top: .1rem;
 }
 .circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+/* ==========================================================
+   Optional: make the footer rule use the same width
+   ========================================================== */
+.home .page-content > hr {
+  max-width: $content-width;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+[data-theme="light"] .home .page-content > hr { border-top-color: rgba(0,0,0,.12); }
