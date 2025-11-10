@@ -28,63 +28,71 @@ $content-width: {{ site.content_width | default: '920px' }};
    Site overrides (ours)
    ===================== */
 
-/* 0) Never draw the pseudo-banner; the shader fills the real banner */
+/* Shared container width so banner, body, footer all match the buttons */
+:root {
+  --container-max: min(94vw, 1440px);
+  --gutter: 1rem;
+}
+
+/* 0) Never draw the pseudo-banner; shader handles the hero */
 .site-header + main::before { display: none !important; content: ""; }
 
 /* Keep homepage content band flush */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* Header always above the shader */
+/* --- PAGE BANNER + SHADER ------------------------------------------------- */
+
+/* Do NOT hide the banner anymore — we use it to host the shader */
+.home .page-banner-img { display: none !important; } /* hide any theme-provided image only */
+
+.page-banner { position: relative; overflow: hidden; }
+.home .shader-fill { position: absolute; inset: 0; z-index: 0; }
+.home .shader-fill canvas { width: 100%; height: 100%; display: block; }
+
+/* Make sure banner text sits above the shader and is left-aligned */
+.home .page-banner,
+.home .page-cover,
+.home .page-header { text-align: left !important; }
+
+.home .page-banner > *,
+.home .page-cover  > *,
+.home .page-header > * {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.home .page-banner .page-title,
+.home .page-banner .page-subtitle,
+.home .page-header .page-title,
+.home .page-header .page-subtitle,
+.home .page-cover .page-title,
+.home .page-cover .page-subtitle {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+/* Header above shader */
 .site-header { position: relative; z-index: 10; }
 .home .site-header { background: transparent !important; }
 
-/* ==========================================================
-   5) Banner-scoped shader (confined to the header/banner band)
-   - Works with common Yat/minima variants: .page-banner / .page-cover / .page-header
-   ========================================================== */
+/* --- MATCH CONTAINER WIDTHS SITE-WIDE ------------------------------------ */
 
-/* The banner box on the HOME page behaves as the shader container */
-.home .page-banner,
-.home .page-cover,
-.home .page-header {
-  position: relative;
-  height: var(--hero-h, 48vh);   /* tweak height here */
-  min-height: 260px;
-  overflow: hidden;
-  background: transparent !important;  /* let the shader show through */
-  border: 0;
-}
-
-/* The shader canvas layer (injected as .shader-fill) fills that box */
-.home .page-banner .shader-fill,
-.home .page-cover  .shader-fill,
-.home .page-header .shader-fill {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;          /* don’t block menu clicks */
-}
-
-/* Keep title/subtitle centered and above the shader */
-.home .page-banner .page-title,
-.home .page-banner .page-subtitle,
-.home .page-cover  .page-title,
-.home .page-cover  .page-subtitle,
-.home .page-header .page-title,
-.home .page-header .page-subtitle,
-.home .page-banner .page-cover-content,
-.home .page-cover  .page-cover-content,
-.home .page-header .page-cover-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
+/* Make main content and footer use the same max width as the buttons */
+.home .page-content > *,
+.home footer > * {
+  max-width: var(--container-max);
   margin-left: auto;
   margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
 }
 
-/* ==========================================================
-   Home housekeeping (hide feed widgets/TOC)
-   ========================================================== */
+/* --- Hide TOCs/Widgets we don't want on home/CV -------------------------- */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
@@ -105,11 +113,9 @@ body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"]
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* ==========================================================
-   Circular link panels (flat + responsive)
-   ========================================================== */
+/* --- Circular link panels (flat + responsive) ---------------------------- */
 .link-circles {
-  max-width: min(94vw, 1440px);
+  max-width: var(--container-max);
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
   display: grid;
