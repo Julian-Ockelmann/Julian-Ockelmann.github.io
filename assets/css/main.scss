@@ -28,44 +28,48 @@ $content-width: {{ site.content_width | default: '920px' }};
    Site overrides (ours)
    ===================== */
 
-/* ---- Controls ---- */
-:root { --header-banner-height: 45vh; }
+/* 0) Never draw the pseudo-banner; shader handles the hero */
+.site-header + main::before { display: none !important; content: ""; }
 
-/* --- Shader hero spacer (keeps first fold full screen) --- */
-.home .shader-spacer { height: 100vh; }
-
-/* Optional: keep nav transparent over the shader on home */
-.home .site-header { background: transparent !important; }
-
-/* Remove default padding/margins under the hero on home */
+/* Keep homepage content band flush */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* 2) Hide ALL home feed widgets (chips, lists, archives, sidebars) */
+/* Kill the theme's 'page-banner' on the home page (band that blocks view) */
+.home .page-banner,
+.home .page-banner-img,
+.home .page-banner-inner { display: none !important; }
+/* Fallback: hide banner if the home has the link-circles */
+.page-banner:has(+ main .link-circles) { display: none !important; }
+
+/* Make sure header stays above the shader */
+.site-header { position: relative; z-index: 10; }
+.home .site-header { background: transparent !important; }
+
+/* Spacer: keep first fold reserved for hero */
+.home .shader-spacer { height: 100vh; }
+
+/* Hide TOC / widgets on home */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
 
-/* 3) Hide TOC / category sidebar on the HOME page */
 .home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
 .home .toc-aside, .home .home-categories { display: none !important; }
 
-/* 4) Hide tags widget anywhere */
+/* Hide tag widget anywhere */
 .sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
 
-/* 5) Replace the theme’s default cover with the shader hero on HOME.
-      This hides any built-in cover blocks the theme injects. */
-.home .page-cover, .home .banner, .home .post-cover, .home .page-header { display: none !important; }
+/* Hide TOC on CV pages */
+.layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
+.layout-cv .toc-container, .layout-cv .toc-aside,
+.page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
+.page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
+body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
+body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside { display: none !important; }
+body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
+body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* 6) CENTER the banner title/subtitle on the HOME hero band (failsafe) */
-.home .page-cover, .home .page-header, .home .banner, .home .post-cover { text-align: center; }
-.home .page-cover .page-title, .home .page-cover .page-subtitle,
-.home .page-header .page-title, .home .page-header .page-subtitle { margin-left: auto; margin-right: auto; }
-
-/* Keep compatibility if some markup still renders (but we hide it anyway) */
-.home .home-landing { position: relative; min-height: 100vh; }
-.home .landing-hero { display: none !important; }
-
-/* 7) Circular link panels (FLAT + responsive) */
+/* Circular link panels (flat + responsive) */
 .link-circles {
   max-width: min(94vw, 1440px);
   margin: 0 auto;
@@ -73,24 +77,34 @@ $content-width: {{ site.content_width | default: '920px' }};
   display: grid;
   grid-template-columns: repeat(4, minmax(240px, 1fr));
   gap: clamp(1rem, 2.5vw, 3rem);
-  justify-items: center; align-items: start;
+  justify-items: center;
+  align-items: start;
 }
 @media (max-width: 1200px) { .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); } }
 @media (max-width: 900px)  { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
 @media (max-width: 520px)  { .link-circles { grid-template-columns: 1fr; } }
 
 .circle-card {
-  width: 100%; text-decoration: none; color: inherit;
-  display: grid; justify-items: center; align-content: start; gap: 0.85rem;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.85rem;
 }
 .circle-card .circle {
-  width: min(260px, 100%); aspect-ratio: 1/1; border-radius: 50%;
-  display: grid; place-items: center; background: #2a2a2a;
+  width: min(260px, 100%);
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #2a2a2a;
   border: 2px solid rgba(255,255,255,.10);
   box-shadow: 0 14px 30px rgba(0,0,0,.25);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-/* Force same look in light mode */
+/* keep the same look in light mode */
 [data-theme="light"] .circle-card .circle {
   background: #2a2a2a; border-color: rgba(255,255,255,.10); box-shadow: 0 14px 30px rgba(0,0,0,.25);
 }
@@ -104,5 +118,3 @@ $content-width: {{ site.content_width | default: '920px' }};
   transition: filter .15s ease, transform .15s ease; margin-top: .1rem;
 }
 .circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-
-@media (max-width: 720px) { .home .site-header + main::before { height: 100vh; } }
