@@ -26,7 +26,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: '3.3'     # <-- fixes your error
           bundler-cache: true
+
+      - name: Normalize lockfile platform (optional but helpful)
+        run: bundle lock --add-platform x86_64-linux
 
       - name: Install gems
         run: bundle install --jobs 4 --retry 3
