@@ -123,28 +123,48 @@ body:has(main h1#cv-title) .toc-container,
 body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
 /* ==========================================================
-   6) LANDING OVERLAY (kept for compatibility, hidden below)
+   6) CENTER the banner title/subtitle on the HOME hero band
+   (covers most Yat/minima variants)
    ========================================================== */
+.home .page-cover,
+.home .page-header,
+.home .banner,
+.home .post-cover { text-align: center; }
+.home .page-cover .page-title,
+.home .page-cover .page-subtitle,
+.home .page-header .page-title,
+.home .page-header .page-subtitle { margin-left: auto; margin-right: auto; }
+
+/* Keep compatibility if some markup still renders (but we hide it anyway) */
 .home .home-landing { position: relative; min-height: 100vh; }
 .home .landing-hero { display: none !important; }
 
 /* ==========================================================
-   7) Circular link panels (FLAT + responsive like fleshpng)
+   7) Circular link panels (FLAT + responsive)
+   - 4 columns on wide screens, collapsing to 3 / 2 / 1
    ========================================================== */
 .link-circles {
   /* Wider canvas like the reference site */
-  max-width: min(92vw, 1440px);
+  max-width: min(94vw, 1440px);
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
 
-  /* Responsive grid: as many columns as fit, never below 240px each */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: clamp(1rem, 2.5vw, 2.5rem);
+  grid-template-columns: repeat(4, minmax(240px, 1fr)); /* 4-up by default */
+  gap: clamp(1rem, 2.5vw, 3rem);
 
-  /* Center items within their cells */
   justify-items: center;
   align-items: start;
+}
+
+@media (max-width: 1200px) { /* 3-up */
+  .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); }
+}
+@media (max-width: 900px) {  /* 2-up */
+  .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+}
+@media (max-width: 520px) {  /* 1-up */
+  .link-circles { grid-template-columns: 1fr; }
 }
 
 .circle-card {
@@ -152,7 +172,6 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   text-decoration: none;
   color: inherit;
 
-  /* Stack circle above the pill and keep them centered */
   display: grid;
   justify-items: center;
   align-content: start;
@@ -161,7 +180,7 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
 /* FLAT circle (no gradient/inner shadows) sized to column width */
 .circle-card .circle {
-  width: min(260px, 90%);         /* never exceed the column */
+  width: min(260px, 100%);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: grid;
@@ -172,10 +191,11 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
 
+/* Force the SAME look in light mode (no color flip) */
 [data-theme="light"] .circle-card .circle {
-  background: #efefef;
-  border-color: rgba(0,0,0,.08);
-  box-shadow: 0 12px 28px rgba(0,0,0,.10);
+  background: #2a2a2a;
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 14px 30px rgba(0,0,0,.25);
 }
 
 .circle-card .circle svg {
@@ -211,11 +231,6 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
 .circle-card .label-btn:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
-}
-
-[data-theme="light"] .circle-card .label-btn {
-  background: $brand-color;
-  color: #fff;
 }
 
 /* keep hero full-screen on small screens too */
