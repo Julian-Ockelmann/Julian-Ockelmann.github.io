@@ -2,9 +2,7 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 
-/* =====================
-   Theme variables (yours)
-   ===================== */
+/* =====================  Theme variables  ===================== */
 $theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
 $brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
 
@@ -24,15 +22,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 /* Load base Yat styles */
 @import "yat";
 
-/* =====================
-   Site overrides (ours)
-   ===================== */
-
-/* Shared container width so banner, body, footer all match the buttons */
-:root {
-  --container-max: min(94vw, 1440px);
-  --gutter: 1rem;
-}
+/* =====================  Site overrides  ===================== */
 
 /* 0) Never draw the pseudo-banner; shader handles the hero */
 .site-header + main::before { display: none !important; content: ""; }
@@ -40,68 +30,48 @@ $content-width: {{ site.content_width | default: '920px' }};
 /* Keep homepage content band flush */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* --- PAGE BANNER + SHADER ------------------------------------------------- */
-
-/* Do NOT hide the banner anymore — we use it to host the shader */
-.home .page-banner-img { display: none !important; } /* hide any theme-provided image only */
-
-.page-banner { position: relative; overflow: hidden; }
-.home .shader-fill { position: absolute; inset: 0; z-index: 0; }
-.home .shader-fill canvas { width: 100%; height: 100%; display: block; }
-
-/* Make sure banner text sits above the shader and is left-aligned */
-.home .page-banner,
-.home .page-cover,
-.home .page-header { text-align: left !important; }
-
-.home .page-banner > *,
-.home .page-cover  > *,
-.home .page-header > * {
-  position: relative;
-  z-index: 1;
-  max-width: var(--container-max);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
-}
-
-.home .page-banner .page-title,
-.home .page-banner .page-subtitle,
-.home .page-header .page-title,
-.home .page-header .page-subtitle,
-.home .page-cover .page-title,
-.home .page-cover .page-subtitle {
-  margin-left: 0 !important;
-  margin-right: auto !important;
-}
-
-/* Header above shader */
+/* Make sure header stays above the shader */
 .site-header { position: relative; z-index: 10; }
 .home .site-header { background: transparent !important; }
 
-/* --- MATCH CONTAINER WIDTHS SITE-WIDE ------------------------------------ */
+/* ---------- Banner (shader in banner) ---------- */
+.page-banner { position: relative; }
 
-/* Make main content and footer use the same max width as the buttons */
-.home .page-content > *,
-.home footer > * {
-  max-width: var(--container-max);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
+/* Left align banner text and keep same width as site content */
+.page-banner .wrapper { max-width: $content-width; margin: 0 auto; }
+.page-banner .page-banner-inner,
+.page-banner .page-banner-default { text-align: left; }
+
+/* Banner image container */
+.page-banner .page-banner-img {
+  position: relative;
+  height: 38vh;              /* banner height; adjust to taste */
+  overflow: hidden;
 }
 
-/* --- Hide TOCs/Widgets we don't want on home/CV -------------------------- */
+/* Hide the theme's background block on the home page so shader stays visible */
+.home .page-banner .page-banner-img > div:not(.shader-fill) { display: none !important; }
+.home .page-banner .page-banner-img > img.img-placeholder { display: none !important; }
+
+/* Shader layer inside the banner */
+.page-banner .page-banner-img .shader-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.page-banner .page-banner-img .shader-fill canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Hide extras on home ---------- */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
 
 .home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
 .home .toc-aside, .home .home-categories { display: none !important; }
-
-/* Hide tag widget anywhere */
-.sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
 
 /* Hide TOC on CV pages */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
@@ -113,20 +83,19 @@ body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"]
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* --- Circular link panels (flat + responsive) ---------------------------- */
+/* ---------- Circular link panels (flat + wrapper width) ---------- */
 .link-circles {
-  max-width: var(--container-max);
+  max-width: $content-width;   /* same width as site .wrapper for perfect alignment */
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
   display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
   gap: clamp(1rem, 2.5vw, 3rem);
   justify-items: center;
   align-items: start;
 }
-@media (max-width: 1200px) { .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); } }
-@media (max-width: 900px)  { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
-@media (max-width: 520px)  { .link-circles { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
+@media (max-width: 560px)  { .link-circles { grid-template-columns: 1fr; } }
 
 .circle-card {
   width: 100%;
