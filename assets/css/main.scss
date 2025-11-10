@@ -31,13 +31,11 @@ $content-width: {{ site.content_width | default: '920px' }};
 /* ---- Controls ---- */
 :root { --header-banner-height: 45vh; }
 
-/* 1) Hero banner: OFF by default (all pages), ON only on the homepage */
-.site-header + main::before { display: none !important; content: ""; }
-.home .site-header + main::before {
-  display: block !important; content: ""; height: 100vh;
-  background: #000 url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}') center/cover no-repeat;
-  transform: translateZ(0); will-change: transform;
-}
+/* --- Shader hero spacer (keeps first fold full screen) --- */
+.home .shader-spacer { height: 100vh; }
+
+/* Optional: keep nav transparent over the shader on home */
+.home .site-header { background: transparent !important; }
 
 /* Remove default padding/margins under the hero on home */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
