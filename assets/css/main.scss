@@ -82,7 +82,7 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .post-preview,
 .home .archive-list,
 .home .tag-list,
-.home .home-sidebar,   /* fixed (no leading slash) */
+.home .home-sidebar,
 .home .page-sidebar,
 .home .sidebar,
 .home .pagination { display: none !important; }
@@ -96,20 +96,18 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .toc-aside,
 .home .home-categories { display: none !important; }
 
-/* 4) Hide tags widget anywhere (belt & suspenders; include already gated) */
+/* 4) Hide tags widget anywhere */
 .sidebar .tag-list,
 .sidebar .tags,
 .sidebar .post-tags,
 .sidebar .common-list.tags { display: none !important; }
 
-/* 5) Hide TOC on the CV page (multiple robust selectors) */
-/* A) Common layout/body classes in Yat/minima forks */
+/* 5) Hide TOC on the CV page (robust selectors) */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
 .page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
 
-/* B) Fallback: any body class containing "cv" */
 body[class*="cv"] #toc,
 body[class*="cv"] .toc,
 body[class*="cv"] .post-toc,
@@ -117,7 +115,6 @@ body[class*="cv"] .toc-wrap,
 body[class*="cv"] .toc-container,
 body[class*="cv"] .toc-aside { display: none !important; }
 
-/* C) Last resort: if your CV page title is '# CV {#cv-title}' */
 body:has(main h1#cv-title) #toc,
 body:has(main h1#cv-title) .toc,
 body:has(main h1#cv-title) .post-toc,
@@ -126,97 +123,52 @@ body:has(main h1#cv-title) .toc-container,
 body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
 /* ==========================================================
-   6) LANDING OVERLAY (centered text + CTAs)
-   (kept for compatibility, but hidden below)
+   6) LANDING OVERLAY (kept for compatibility, hidden below)
    ========================================================== */
 .home .home-landing { position: relative; min-height: 100vh; }
-
-.home .landing-hero {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: 0 1.25rem;
-  color: #fff;
-}
-
-.home .landing-hero h1 {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: 1.1;
-  margin: 0 0 .5rem 0;
-  text-shadow: 0 2px 18px rgba(0,0,0,.35);
-}
-
-.home .landing-hero p {
-  max-width: 840px;
-  margin: 0 auto 1.25rem;
-  opacity: .9;
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
-  text-shadow: 0 1px 12px rgba(0,0,0,.25);
-}
-
-.home .landing-hero .cta-row {
-  display: inline-flex;
-  gap: .75rem;
-  margin-bottom: .75rem;
-}
-
-.home .landing-hero .btn {
-  display: inline-block;
-  padding: .6rem 1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.4);
-  color: #fff;
-  text-decoration: none;
-  background: rgba(15,15,15,.25);
-  backdrop-filter: blur(2px);
-  transition: transform .15s ease, border-color .2s ease, background .2s ease;
-}
-
-.home .landing-hero .btn.primary {
-  background: rgba(255,255,255,.14);
-  border-color: rgba(255,255,255,.6);
-}
-
-.home .landing-hero .btn:hover {
-  transform: translateY(-1px);
-  border-color: #fff;
-}
+.home .landing-hero { display: none !important; }
 
 /* ==========================================================
-   7) Circular link panels (FLAT style)
+   7) Circular link panels (FLAT + responsive like fleshpng)
    ========================================================== */
 .link-circles {
-  max-width: 1200px;
+  /* Wider canvas like the reference site */
+  max-width: min(92vw, 1440px);
   margin: 0 auto;
-  padding: 3rem 1rem 5rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1rem, 2vw, 2rem);
-}
+  padding: 3.25rem 1rem 5rem;
 
-@media (max-width: 1100px) { .link-circles { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 560px)  { .link-circles { grid-template-columns: 1fr; } }
+  /* Responsive grid: as many columns as fit, never below 240px each */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+
+  /* Center items within their cells */
+  justify-items: center;
+  align-items: start;
+}
 
 .circle-card {
+  width: 100%;
   text-decoration: none;
   color: inherit;
+
+  /* Stack circle above the pill and keep them centered */
   display: grid;
   justify-items: center;
-  gap: 1rem;
+  align-content: start;
+  gap: 0.85rem;
 }
 
-/* FLAT fill (no gradient/inner shadows) */
+/* FLAT circle (no gradient/inner shadows) sized to column width */
 .circle-card .circle {
-  width: clamp(180px, 24vw, 260px);
+  width: min(260px, 90%);         /* never exceed the column */
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #2a2a2a;                 /* flat */
+  background: #2a2a2a;           /* flat */
   border: 2px solid rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25); /* optional soft outer only */
+  box-shadow: 0 14px 30px rgba(0,0,0,.25); /* soft outer only */
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
 
@@ -253,6 +205,7 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   border: 0;
   box-shadow: 0 8px 20px rgba(0,0,0,.25);
   transition: filter .15s ease, transform .15s ease;
+  margin-top: .1rem;
 }
 
 .circle-card .label-btn:hover {
@@ -264,9 +217,6 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   background: $brand-color;
   color: #fff;
 }
-
-/* Optional: hide the old overlay, if any markup remains */
-.home .landing-hero { display: none !important; }
 
 /* keep hero full-screen on small screens too */
 @media (max-width: 720px) {
