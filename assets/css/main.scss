@@ -149,3 +149,18 @@ html[data-theme="light"], body[data-theme="light"]{ background:#0e0e0f; color:#e
 .page-cv   .toc-container, .page-cv   .toc-aside{ display:none !important; }
 body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
 body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside{ display:none !important; }
+
+/* Match banner text width/left edge to the circle panels */
+.page-banner-inner {
+  max-width: min(94vw, 1440px);
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2rem) 1rem;
+}
+
+/* Make the bottom separator use the same width as the content grid */
+.page hr {
+  max-width: min(94vw, 1440px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
