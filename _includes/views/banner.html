@@ -1,6 +1,6 @@
 {% comment %}
-Home banner with the shader inside the banner area (proportional sizing).
-Uses site.title / site.description (so it won't read "Home").
+Home banner with shader confined to the banner box.
+Left-aligned title/subtitle using the same content width as the rest of the page.
 {% endcomment %}
 
 {% if page.url == '/' or page.layout == 'home' %}
@@ -10,12 +10,11 @@ Uses site.title / site.description (so it won't read "Home").
     <canvas id="webgl-canvas"></canvas>
   </div>
 
-  <!-- Banner text: left-aligned, same max width as content/panels -->
+  <!-- Banner text -->
   <div class="page-banner-inner">
     <h1 class="page-title">{{ site.title | default: page.title }}</h1>
-    {% assign sub = site.description | default: page.subtitle %}
-    {% if sub %}
-      <p class="page-subtitle">{{ sub }}</p>
+    {% if site.description %}
+      <p class="page-subtitle">{{ site.description }}</p>
     {% endif %}
   </div>
 </section>
