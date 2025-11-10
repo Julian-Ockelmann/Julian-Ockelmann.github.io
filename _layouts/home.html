@@ -4,11 +4,13 @@ title: Home
 ---
 
 {%- comment -%}
-  Shader hero is injected from _includes/views/page-cover.html (before <main>).
-  This layout only renders the circular link panels.
+Render the shader hero at the very top of the page body.
+We also hide the theme’s default cover via SCSS (see main.scss step 5).
 {%- endcomment -%}
+{% include shader-hero.html %}
 
 <section class="link-circles" aria-label="Profile links">
+
   <!-- Google Scholar -->
   <a class="circle-card"
      href="{{ site.scholar_url | default: 'https://scholar.google.com/' }}"
