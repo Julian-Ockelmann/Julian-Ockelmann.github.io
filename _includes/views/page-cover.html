@@ -1,7 +1,10 @@
 {%- comment -%}
-Use the custom banner (with shader) only on the home page.
-On other pages, let the theme render its normal cover (no output here).
+The theme will call views/banner.html for the home cover.
+Do nothing here on home to avoid injecting a second hero.
 {%- endcomment -%}
-{% if page.url == '/' or page.layout == 'home' %}
-  {% include views/banner.html %}
-{% endif %}
+
+{%- if page.url == '/' or page.layout == 'home' -%}
+  {# handled by views/banner.html #}
+{%- else -%}
+  {# fall through to the theme’s normal cover #}
+{%- endif -%}
