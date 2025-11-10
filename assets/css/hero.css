@@ -1,0 +1,46 @@
+/* =======================
+   Shader banner + alignment (home only)
+   ======================= */
+:root {
+  --page-max: min(94vw, 1440px);
+}
+
+/* Hide the theme's static banner image on the home page, so the shader is visible */
+html[data-scroll-status] body.home .page-banner {
+  position: relative;
+  overflow: hidden;
+  background: transparent !important;
+}
+html[data-scroll-status] body.home .page-banner-img,
+html[data-scroll-status] body.home .page-banner-inner .page-banner-img {
+  display: none !important;
+}
+
+/* Place the shader canvas INSIDE the page banner area */
+body.home .page-banner .page-banner-inner { position: relative; z-index: 1; }
+body.home .page-banner .shader-banner { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+body.home .page-banner .shader-banner canvas { width: 100%; height: 100%; display: block; }
+
+/* Unify max-width so banner text, circles and footer align */
+body.home .page-banner .wrapper,
+body.home .page-content > .wrapper,
+body.home .site-footer .wrapper {
+  max-width: var(--page-max);
+}
+
+/* Also widen the link grid to match */
+body.home .link-circles {
+  max-width: var(--page-max);
+  margin: 0 auto;
+}
+
+/* OPTIONAL: nudge the banner heading block down a touch */
+body.home .page-banner .page-banner-default { padding: 4.25rem 0 3rem; }
+
+/* If the theme paints a separator line after the link section, align it as well */
+body.home .page-content > .wrapper hr,
+body.home .page-content > .wrapper .section-divider {
+  max-width: var(--page-max);
+  margin-left: auto;
+  margin-right: auto;
+}
