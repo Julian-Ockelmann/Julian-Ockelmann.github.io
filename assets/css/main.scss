@@ -3,265 +3,131 @@
 ---
 
 /* =====================
-   Theme variables (yours)
+   Theme variables
    ===================== */
-$theme-colors: (
-  "coolblack": #090a0b,
-  "spacegrey": #353535,
-  "snowwhite": #ffffff
-);
-
-$brand-colors: (
-  "orangered": #ff5100,
-  "greatgold": #f2cb05,
-  "greenblue": #389092
-);
+$theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
+$brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
 
 $theme-name: "{{ site.theme_color }}";
 $brand-name: "{{ site.brand_color }}";
 $theme-color: map-get($theme-colors, "snowwhite");
 $brand-color: map-get($brand-colors, "greenblue");
 
-@if map-has-key($theme-colors, $theme-name) {
-  $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 {
-  $theme-color: {{ site.theme_color | default: '#ffffff' }};
-}
+@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
+} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
 
-@if map-has-key($brand-colors, $brand-name) {
-  $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 {
-  $brand-color: {{ site.brand_color | default: '#69b7aa' }};
-}
+@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
+} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
 
-/* Site-wide content width (also used for hero/panels/footer alignment) */
-:root { --content-width: {{ site.content_width | default: '1120px' }}; }
+$content-width: {{ site.content_width | default: '920px' }};
 
-/* Load base Yat styles */
+/* load base theme */
 @import "yat";
 
 /* =====================
-   Global / dark-only UX
+   Site overrides
    ===================== */
 
-/* Hide any light/dark mode toggle UI (dark-only site) */
-.mode-toggle,
-.theme-toggle,
-.color-mode,
-.night-mode,
-.night-toggle,
-.header .mode-toggle,
-.header .theme-toggle { display: none !important; }
+/* Grid */
+:root{
+  --grid-max: 1440px;
+  --grid-pad: clamp(16px, 3.2vw, 48px);
+  --hero-h: 45vh;   /* banner/shader height */
+}
 
-/* Prefer dark color scheme for supported UAs */
-:root { color-scheme: dark; }
+/* Always-dark site (remove any light toggles already in _config) */
+html, body { background:#0e0e0f; color:#e9e9e9; }
+html[data-theme="light"], body[data-theme="light"]{ background:#0e0e0f; color:#e9e9e9; }
 
-/* =====================
-   Header / Hero (shader)
-   ===================== */
+/* Header above everything */
+.site-header{ position:relative; z-index: 20; background:rgba(10,10,10,.92); }
 
-/* Never draw the theme’s pseudo banner; shader handles the hero */
-.site-header + main::before { display: none !important; content: ""; }
+/* DO NOT draw the theme’s ::before pseudo banner */
+.site-header + main::before{ display:none !important; content:""; }
 
-/* Keep header on top of the hero */
-.site-header { position: relative; z-index: 3; background: transparent !important; }
+/* ---- PAGE BANNER / SHADER STACK ---------------------------------------- */
+/* Put the banner band at the very top, full viewport width, behind shader+header */
+.home .page-banner{
+  position:fixed; top:0; left:0; width:100vw; height:var(--hero-h);
+  margin:0; padding:0; z-index: 10;      /* below header(20), below shader(15) */
+  background:transparent !important; box-shadow:none !important; border:0;
+  pointer-events:none;                    /* never block clicks */
+}
 
-/* Constrain, left-align, and layer the banner text above the shader */
+/* The shader container (from shader-hero.html) sits above the banner band */
+.home .shader-fill{
+  position:fixed; top:0; left:0; width:100vw; height:var(--hero-h);
+  z-index:15; pointer-events:none;       /* header remains clickable */
+}
+.home .shader-fill canvas{ width:100%; height:100%; display:block; }
+
+/* Push the rest of the page down so it doesn’t sit under the fixed hero */
+.home main, .home .page-content{ margin-top:var(--hero-h); }
+
+/* Align banner text block with the main grid and left-align it */
+.home .page-banner,
+.home .page-header,
 .home .page-cover,
-.home .page-banner { position: relative; overflow: hidden; min-height: 44vh; }
+.home .banner,
+.home .post-cover{
+  padding-left: calc((100vw - min(94vw, var(--grid-max)))/2);
+  padding-right: calc((100vw - min(94vw, var(--grid-max)))/2);
+  text-align:left;
+}
+.home .page-banner *{ pointer-events:auto; } /* if you keep any text/callouts */
 
-.home .page-cover .wrap,
-.home .page-banner .wrap,
-.home .page-header .wrap {
-  max-width: var(--content-width);
+/* Hide theme’s banner image/overlay layers if they exist */
+.home .page-banner-img,
+.home .page-banner-inner{ background:transparent !important; box-shadow:none !important; }
+
+/* ---- HOME LINK PANELS --------------------------------------------------- */
+.link-circles{
+  max-width: min(94vw, var(--grid-max));
   margin: 0 auto;
-  padding: 0 1rem;
-  position: relative; /* stacking context for text */
-  z-index: 2;         /* text above the shader */
-  text-align: left !important;
+  padding: 3rem var(--grid-pad) 5rem;
+  display:grid; grid-template-columns:repeat(4, minmax(240px,1fr));
+  gap: clamp(1rem, 2.5vw, 3rem);
+  justify-items:center; align-items:start;
 }
+@media (max-width:1200px){ .link-circles{ grid-template-columns:repeat(3, minmax(240px,1fr)); } }
+@media (max-width:900px){  .link-circles{ grid-template-columns:repeat(2, minmax(220px,1fr)); } }
+@media (max-width:520px){  .link-circles{ grid-template-columns:1fr; } }
 
-/* Shader container lives behind the text */
-.shader-fill {
-  position: absolute;
-  inset: 0;
-  z-index: 1;           /* below text (z-index:2) */
-  pointer-events: none; /* never block clicks */
+.circle-card{ width:100%; text-decoration:none; color:inherit; display:grid; justify-items:center; align-content:start; gap:.85rem; }
+.circle-card .circle{
+  width:min(260px, 100%);
+  aspect-ratio:1/1; border-radius:50%;
+  display:grid; place-items:center;
+  background:#2a2a2a;
+  border: 0;                               /* transparent border as requested */
+  box-shadow: 0 14px 30px rgba(0,0,0,.25);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
+[data-theme="light"] .circle-card .circle{ background:#2a2a2a; } /* force same look */
+.circle-card .circle svg{ width:50%; height:50%; opacity:.95; color:#fff; }
+.circle-card:hover .circle{ transform: translateY(-2px); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
 
-/* =====================
-   Home content band
-   ===================== */
-
-/* Remove extra spacing so content starts right after the hero */
-.home .page-content {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin: 0 !important;
+.circle-card .label-btn{
+  display:inline-block; padding:.5rem 1.15rem; border-radius:999px;
+  font-weight:700; letter-spacing:.02em; text-transform:uppercase; font-size:.86rem;
+  color:#fff; background:$brand-color; border:0; box-shadow:0 8px 20px rgba(0,0,0,.25);
+  transition: filter .15s ease, transform .15s ease; margin-top:.1rem;
 }
+.circle-card .label-btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
 
-/* Make the content and footer share the same width as the hero text */
-.page-content > .wrap,
-.site-footer .wrap {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 0 1rem;
-}
+/* Footer rule uses same content width as body */
+.home .page-content hr{ max-width:min(94vw, var(--grid-max)); margin: 3rem auto; border-color: rgba(255,255,255,.08); }
 
-/* Normalize any lines/dividers to span the wrap width cleanly */
-.site-footer hr,
-.site-footer .divider,
-.page-content hr { width: 100%; max-width: none; }
+/* Hide home widgets/TOC etc. */
+.home .home-categories, .home .post-list, .home .index-panel, .home .list,
+.home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
+.home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination{ display:none !important; }
+.home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container, .home .toc-aside{ display:none !important; }
 
-/* =====================
-   Kill home widgets & TOCs
-   ===================== */
-.home .home-categories,
-.home .post-list,
-.home .index-panel,
-.home .list,
-.home .post-item,
-.home .post-preview,
-.home .archive-list,
-.home .tag-list,
-.home .home-sidebar,
-.home .page-sidebar,
-.home .sidebar,
-.home .pagination { display: none !important; }
-
-.home #toc,
-.home .toc,
-.home .post-toc,
-.home .toc-wrap,
-.home .toc-container,
-.home .toc-aside,
-.home .home-categories { display: none !important; }
-
-/* Global tag widgets off */
-.sidebar .tag-list,
-.sidebar .tags,
-.sidebar .post-tags,
-.sidebar .common-list.tags { display: none !important; }
-
-/* =====================
-   CV pages: no TOC
-   ===================== */
+/* Hide TOC on CV pages */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
-.page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
-
-body[class*="cv"] #toc,
-body[class*="cv"] .toc,
-body[class*="cv"] .post-toc,
-body[class*="cv"] .toc-wrap,
-body[class*="cv"] .toc-container,
-body[class*="cv"] .toc-aside { display: none !important; }
-
-body:has(main h1#cv-title) #toc,
-body:has(main h1#cv-title) .toc,
-body:has(main h1#cv-title) .post-toc,
-body:has(main h1#cv-title) .toc-wrap,
-body:has(main h1#cv-title) .toc-container,
-body:has(main h1#cv-title) .toc-aside { display: none !important; }
-
-/* =====================
-   Home link circles (panels)
-   ===================== */
-
-.link-circles {
-  max-width: min(94vw, var(--content-width));
-  margin: 0 auto;
-  padding: 3.25rem 1rem 5rem;
-
-  display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
-  gap: clamp(1rem, 2.5vw, 3rem);
-  justify-items: center;
-  align-items: start;
-}
-
-@media (max-width: 1200px) { /* 3-up */
-  .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); }
-}
-@media (max-width: 900px)  { /* 2-up */
-  .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
-}
-@media (max-width: 520px)  { /* 1-up */
-  .link-circles { grid-template-columns: 1fr; }
-}
-
-.circle-card {
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 0.85rem;
-}
-
-/* Icon-only look: no fill, no border, no shadow on the circles */
-.circle-card .circle {
-  width: min(260px, 100%);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  transition: transform .2s ease, filter .2s ease;
-}
-
-/* Keep the same look in light mode (even though dark-only UI) */
-[data-theme="light"] .circle-card .circle {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-.circle-card .circle svg {
-  width: 50%;
-  height: 50%;
-  color: #ffffff;
-  opacity: .95;
-}
-
-/* Subtle hover cue */
-.circle-card:hover .circle svg {
-  filter: drop-shadow(0 0 8px rgba(255,255,255,.25));
-  transform: translateZ(0);
-}
-
-/* Label pills keep the brand accent color */
-.circle-card .label-btn {
-  display: inline-block;
-  padding: .5rem 1.15rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: uppercase;
-  font-size: .86rem;
-  color: #fff;
-  background: $brand-color;
-  border: 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease;
-  margin-top: .1rem;
-}
-
-.circle-card .label-btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-}
-
-/* =====================
-   Small-screen hero height keep
-   ===================== */
-@media (max-width: 720px) {
-  .home .page-cover,
-  .home .page-banner { min-height: 42vh; }
-}
+.page-cv   .toc-container, .page-cv   .toc-aside{ display:none !important; }
+body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
+body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside{ display:none !important; }
