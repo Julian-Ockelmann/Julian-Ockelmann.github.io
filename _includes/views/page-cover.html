@@ -1,10 +1,10 @@
 {%- comment -%}
-The theme will call views/banner.html for the home cover.
-Do nothing here on home to avoid injecting a second hero.
+On the home page the cover is handled by views/banner.html.
+Do nothing here so we don’t inject a second hero or stray text.
 {%- endcomment -%}
 
 {%- if page.url == '/' or page.layout == 'home' -%}
   {# handled by views/banner.html #}
 {%- else -%}
-  {# fall through to the theme’s normal cover #}
+  {# fall back to theme cover (no-op here) #}
 {%- endif -%}
