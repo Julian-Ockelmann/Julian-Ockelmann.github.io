@@ -1,95 +1,14 @@
+{% comment %}
+Shader hero: confined to the page banner area (home page only).
+Assumes _includes/views/banner.html (and/or page-cover.html) includes this file.
+{% endcomment %}
+
 <div class="shader-fill" id="shader-banner" aria-hidden="true">
-  <canvas class="shader-canvas"></canvas>
+  <canvas id="webgl-canvas"></canvas>
 </div>
 
-<!-- Three.js (tiny, cached) -->
-<script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+<!-- Three.js (small CDN) -->
+<script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
 
-<script>
-(function () {
-  // Respect reduced motion
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  // Banner-scoped elements
-  var container = document.getElementById('shader-banner');
-  if (!container) return;
-  var canvas = container.querySelector('.shader-canvas');
-
-  // Renderer
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
-
-  // Scene + camera
-  var scene = new THREE.Scene();
-  var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-  // Shader uniforms
-  var uniforms = {
-    resolution: { value: new THREE.Vector2() },
-    time:       { value: 0.0 },
-    xScale:     { value: 1.0 },
-    yScale:     { value: 0.55 },
-    distortion: { value: 0.050 }
-  };
-
-  // Minimal shaders
-  var vs = 'attribute vec3 position; void main(){ gl_Position = vec4(position,1.0); }';
-  var fs =
-  'precision highp float;' +
-  'uniform vec2 resolution;uniform float time;uniform float xScale;uniform float yScale;uniform float distortion;' +
-  'void main(){' +
-  '  vec2 p=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);' +
-  '  float d=length(p)*distortion;' +
-  '  float rx=p.x*(1.0+d); float gx=p.x; float bx=p.x*(1.0-d);' +
-  '  float r=0.05/abs(p.y+sin((rx+time)*xScale)*yScale);' +
-  '  float g=0.05/abs(p.y+sin((gx+time)*xScale)*yScale);' +
-  '  float b=0.05/abs(p.y+sin((bx+time)*xScale)*yScale);' +
-  '  gl_FragColor=vec4(r,g,b,1.0);' +
-  '}';
-
-  // Fullscreen quad
-  var geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
-    -1,-1,0,  1,-1,0,  -1, 1,0,
-     1,-1,0, -1, 1,0,   1, 1,0
-  ]), 3));
-
-  var material = new THREE.RawShaderMaterial({
-    vertexShader: vs,
-    fragmentShader: fs,
-    uniforms: uniforms,
-    transparent: true
-  });
-
-  scene.add(new THREE.Mesh(geometry, material));
-
-  // Fit to the banner container
-  function resize() {
-    var w = container.clientWidth  || 1;
-    var h = container.clientHeight || 1;
-    renderer.setSize(w, h, false);
-    uniforms.resolution.value.set(w, h);
-  }
-  resize();
-  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(container);
-  window.addEventListener('resize', resize);
-
-  // Animate
-  var clock = new THREE.Clock();
-  var running = true;
-
-  function tick() {
-    if (!running) return;
-    uniforms.time.value += clock.getDelta();
-    renderer.render(scene, camera);
-    requestAnimationFrame(tick);
-  }
-  tick();
-
-  // Pause when tab is hidden
-  document.addEventListener('visibilitychange', function () {
-    running = (document.visibilityState === 'visible');
-    if (running) { clock.getDelta(); tick(); }
-  }, { passive: true });
-})();
-</script>
+<!-- Your shader runtime -->
+<script src="{{ '/assets/js/hero-shader.js' | relative_url }}" defer></script>
