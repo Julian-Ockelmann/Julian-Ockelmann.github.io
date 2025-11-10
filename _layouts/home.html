@@ -4,12 +4,11 @@ title: Home
 ---
 
 {%- comment -%}
-  Shader hero is injected from _includes/views/page-cover.html BEFORE <main>.
+  Shader hero is injected from _includes/views/page-cover.html (before <main>).
   This layout only renders the circular link panels.
 {%- endcomment -%}
 
 <section class="link-circles" aria-label="Profile links">
-
   <!-- Google Scholar -->
   <a class="circle-card"
      href="{{ site.scholar_url | default: 'https://scholar.google.com/' }}"
