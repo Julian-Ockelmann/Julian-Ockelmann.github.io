@@ -1,13 +1,12 @@
-/* === Variables for shared widths/heights === */
 :root {
   --banner-height: 46vh;
   --content-max: min(94vw, 1440px);
 }
 
-/* Kill any theme pseudo-banner so our real banner shows */
+/* Don’t draw the theme’s pseudo-banner; we’re using a real banner section */
 .site-header + main::before { display: none !important; }
 
-/* ----- Banner box (HOME only) ----- */
+/* Banner box (HOME only) */
 .home .page-banner {
   position: relative;
   height: var(--banner-height);
@@ -19,9 +18,11 @@
 
 /* Shader fills the banner box */
 .home .page-banner .shader-fill { position: absolute; inset: 0; }
-.home .page-banner .shader-fill canvas { display: block; width: 100%; height: 100%; }
+.home .page-banner .shader-fill canvas {
+  display: block; width: 100%; height: 100%;
+}
 
-/* Banner text: left-aligned, same width as content/buttons/footer */
+/* Banner text aligned with content/buttons/footer */
 .home .page-banner-inner {
   position: relative;
   z-index: 2;
@@ -36,12 +37,9 @@
   line-height: 1.15;
   margin: 0 0 0.4rem 0;
 }
-.home .page-banner-inner .page-subtitle {
-  opacity: .9;
-  margin: 0;
-}
+.home .page-banner-inner .page-subtitle { opacity: .9; margin: 0; }
 
 /* Ensure the rest of the page uses the same width */
 .link-circles { max-width: var(--content-max); margin: 0 auto; }
-.page-content { max-width: var(--content-max); margin: 0 auto; }
+.page-content  { max-width: var(--content-max); margin: 0 auto; }
 .site-footer .wrapper { max-width: var(--content-max); margin: 0 auto; }
