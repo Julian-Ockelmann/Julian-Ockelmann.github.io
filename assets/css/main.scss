@@ -13,97 +13,118 @@ $brand-name: "{{ site.brand_color }}";
 $theme-color: map-get($theme-colors, "snowwhite");
 $brand-color: map-get($brand-colors, "greenblue");
 
-@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
+@if map-has-key($theme-colors, $theme-name) {
+  $theme-color: map-get($theme-colors, $theme-name);
+} @else if str-index($theme-name, "#") == 1 {
+  $theme-color: {{ site.theme_color | default: '#ffffff' }};
+}
 
-@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
+@if map-has-key($brand-colors, $brand-name) {
+  $brand-color: map-get($brand-colors, $brand-name);
+} @else if str-index($brand-name, "#") == 1 {
+  $brand-color: {{ site.brand_color | default: '#69b7aa' }};
+}
 
 $content-width: {{ site.content_width | default: '920px' }};
 
-/* load base theme */
+/* Base theme */
 @import "yat";
 
 /* =====================
-   Site overrides
+   Stable banner + layout
    ===================== */
 
-/* Grid */
 :root{
+  --hero-h: 45vh;                 /* banner height */
   --grid-max: 1440px;
   --grid-pad: clamp(16px, 3.2vw, 48px);
-  --hero-h: 45vh;   /* banner/shader height */
 }
 
-/* Always-dark site (remove any light toggles already in _config) */
+/* Always-dark site */
 html, body { background:#0e0e0f; color:#e9e9e9; }
 html[data-theme="light"], body[data-theme="light"]{ background:#0e0e0f; color:#e9e9e9; }
 
-/* Header above everything */
-.site-header{ position:relative; z-index: 20; background:rgba(10,10,10,.92); }
+/* Don’t draw the theme’s pseudo-hero */
+.site-header + main::before { display:none !important; content:""; }
 
-/* DO NOT draw the theme’s ::before pseudo banner */
-.site-header + main::before{ display:none !important; content:""; }
+/* Header sits above normal flow (no fixed positioning needed) */
+.site-header{ position:relative; z-index:10; background:rgba(10,10,10,.92); }
 
-/* ---- PAGE BANNER / SHADER STACK ---------------------------------------- */
-/* Put the banner band at the very top, full viewport width, behind shader+header */
+/* ----- Banner that contains the shader (proportional) ----- */
 .home .page-banner{
-  position:fixed; top:0; left:0; width:100vw; height:var(--hero-h);
-  margin:0; padding:0; z-index: 10;      /* below header(20), below shader(15) */
-  background:transparent !important; box-shadow:none !important; border:0;
-  pointer-events:none;                    /* never block clicks */
+  position: relative;
+  min-height: var(--hero-h);
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0;
 }
 
-/* The shader container (from shader-hero.html) sits above the banner band */
-.home .shader-fill{
-  position:fixed; top:0; left:0; width:100vw; height:var(--hero-h);
-  z-index:15; pointer-events:none;       /* header remains clickable */
+/* Shader fills the banner box */
+.home .page-banner .shader-fill{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
-.home .shader-fill canvas{ width:100%; height:100%; display:block; }
-
-/* Push the rest of the page down so it doesn’t sit under the fixed hero */
-.home main, .home .page-content{ margin-top:var(--hero-h); }
-
-/* Align banner text block with the main grid and left-align it */
-.home .page-banner,
-.home .page-header,
-.home .page-cover,
-.home .banner,
-.home .post-cover{
-  padding-left: calc((100vw - min(94vw, var(--grid-max)))/2);
-  padding-right: calc((100vw - min(94vw, var(--grid-max)))/2);
-  text-align:left;
+.home .page-banner .shader-fill canvas{
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.home .page-banner *{ pointer-events:auto; } /* if you keep any text/callouts */
 
-/* Hide theme’s banner image/overlay layers if they exist */
-.home .page-banner-img,
-.home .page-banner-inner{ background:transparent !important; box-shadow:none !important; }
+/* Banner text aligns with the main grid, left-aligned, above shader */
+.home .page-banner .page-banner-inner{
+  position: relative;
+  z-index: 1;
+  max-width: min(94vw, var(--grid-max));
+  margin: 0 auto;
+  padding: 12vh var(--grid-pad) 0;     /* comfortable top offset */
+  text-align: left;
+}
+.home .page-title{ margin: 0 0 .5rem 0; }
+.home .page-subtitle{ margin: 0; opacity:.9; }
 
-/* ---- HOME LINK PANELS --------------------------------------------------- */
+/* No extra offsets on main content */
+.home main, .home .page-content{ margin-top: 0; }
+
+/* ----- Link panels (same as the good version) ----- */
 .link-circles{
   max-width: min(94vw, var(--grid-max));
   margin: 0 auto;
-  padding: 3rem var(--grid-pad) 5rem;
-  display:grid; grid-template-columns:repeat(4, minmax(240px,1fr));
+  padding: 3.25rem var(--grid-pad) 5rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
   gap: clamp(1rem, 2.5vw, 3rem);
-  justify-items:center; align-items:start;
+  justify-items: center;
+  align-items: start;
 }
 @media (max-width:1200px){ .link-circles{ grid-template-columns:repeat(3, minmax(240px,1fr)); } }
 @media (max-width:900px){  .link-circles{ grid-template-columns:repeat(2, minmax(220px,1fr)); } }
 @media (max-width:520px){  .link-circles{ grid-template-columns:1fr; } }
 
-.circle-card{ width:100%; text-decoration:none; color:inherit; display:grid; justify-items:center; align-content:start; gap:.85rem; }
+.circle-card{
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: .85rem;
+}
 .circle-card .circle{
-  width:min(260px, 100%);
-  aspect-ratio:1/1; border-radius:50%;
-  display:grid; place-items:center;
-  background:#2a2a2a;
-  border: 0;                               /* transparent border as requested */
+  width: min(260px, 100%);
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #2a2a2a;                /* flat */
+  border: 0;                          /* transparent border */
   box-shadow: 0 14px 30px rgba(0,0,0,.25);
   transition: transform .2s ease, box-shadow .2s ease;
 }
-[data-theme="light"] .circle-card .circle{ background:#2a2a2a; } /* force same look */
+[data-theme="light"] .circle-card .circle{ background:#2a2a2a; }
 .circle-card .circle svg{ width:50%; height:50%; opacity:.95; color:#fff; }
 .circle-card:hover .circle{ transform: translateY(-2px); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
 
@@ -115,10 +136,7 @@ html[data-theme="light"], body[data-theme="light"]{ background:#0e0e0f; color:#e
 }
 .circle-card .label-btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
 
-/* Footer rule uses same content width as body */
-.home .page-content hr{ max-width:min(94vw, var(--grid-max)); margin: 3rem auto; border-color: rgba(255,255,255,.08); }
-
-/* Hide home widgets/TOC etc. */
+/* Hide home feed/widgets/TOC */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination{ display:none !important; }
