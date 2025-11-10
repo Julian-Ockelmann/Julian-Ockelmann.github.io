@@ -1,91 +1,68 @@
-/* Hero shader confined to the page banner */
-(function () {
-  function ready(fn){ if(document.readyState!=='loading'){fn();}else{document.addEventListener('DOMContentLoaded',fn);} }
+/* ==========================================================
+   Shader Hero — confined to banner, text aligned to wrapper
+   ========================================================== */
 
-  ready(function () {
-    var container =
-      document.getElementById('shader-banner') ||
-      document.querySelector('.shader-fill');
-    if (!container) return;
+/* Reuse the theme’s content width for perfect left alignment */
+:root {
+  --content-width:  var(--yat-content-width, 920px); /* theme fallback */
+  --banner-height:  clamp(320px, 48vh, 560px);
+}
 
-    var canvas = container.querySelector('#webgl-canvas');
-    if (!canvas) return;
+/* The banner box that holds both the shader and the text */
+.page-banner {
+  position: relative;
+  display: block;
+  height: var(--banner-height);
+  background: transparent;                 /* no solid color behind */
+  overflow: hidden;                         /* clip shader to band */
+  isolation: isolate;                       /* be safe with z-index */
+}
 
-    // Bail out if WebGL is missing
-    try {
-      var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      if (!gl) return;
-    } catch (e) { return; }
+/* The WebGL canvas fills the banner area only */
+.page-banner .shader-fill {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;                     /* don’t steal mouse */
+  z-index: 0;
+}
+.page-banner .shader-fill canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
-    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+/* Text block inside the banner:
+   - same max width and horizontal centering as .wrapper
+   - left-aligned text, docked near the bottom for the hero feel
+*/
+.page-banner .page-banner-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--content-width);
+  margin: 0 auto;                           /* centers block */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;                /* sit near bottom */
+  align-items: flex-start;                  /* LEFT align */
+  padding: 2.25rem 1rem;                    /* match wrapper gutter */
+  text-align: left;
+}
 
-    var scene = new THREE.Scene();
-    var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+.page-banner .page-title {
+  margin: 0 0 .3rem 0;
+  line-height: 1.15;
+}
 
-    var uniforms = {
-      resolution: { value: new THREE.Vector2(1,1) },
-      time:       { value: 0.0 },
-      xScale:     { value: 1.0 },
-      yScale:     { value: 0.55 },
-      distortion: { value: 0.050 }
-    };
+.page-banner .page-subtitle {
+  margin: 0;
+  opacity: .9;
+}
 
-    var vs = 'attribute vec3 position; void main(){ gl_Position = vec4(position,1.0); }';
-    var fs = [
-      'precision highp float;',
-      'uniform vec2 resolution;',
-      'uniform float time;',
-      'uniform float xScale;',
-      'uniform float yScale;',
-      'uniform float distortion;',
-      'void main(){',
-      '  vec2 p=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);',
-      '  float d=length(p)*distortion;',
-      '  float rx=p.x*(1.0+d);',
-      '  float gx=p.x;',
-      '  float bx=p.x*(1.0-d);',
-      '  float r=0.05/abs(p.y+sin((rx+time)*xScale)*yScale);',
-      '  float g=0.05/abs(p.y+sin((gx+time)*xScale)*yScale);',
-      '  float b=0.05/abs(p.y+sin((bx+time)*xScale)*yScale);',
-      '  gl_FragColor=vec4(r,g,b,1.0);',
-      '}'
-    ].join('\n');
+/* Keep header above the banner visuals */
+.site-header { position: relative; z-index: 5; }
 
-    var geometry = new THREE.BufferGeometry();
-    geometry.setAttribute(
-      'position',
-      new THREE.BufferAttribute(new Float32Array([
-        -1,-1,0,  1,-1,0, -1, 1,0,
-         1,-1,0, -1, 1,0,  1, 1,0
-      ]), 3)
-    );
-
-    var material = new THREE.RawShaderMaterial({
-      vertexShader: vs,
-      fragmentShader: fs,
-      uniforms: uniforms,
-      transparent: true
-    });
-
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-
-    function resize() {
-      var w = container.clientWidth  || 1;
-      var h = container.clientHeight || 1;
-      renderer.setSize(w, h, false);
-      uniforms.resolution.value.set(w, h);
-    }
-    resize();
-    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(container);
-    window.addEventListener('resize', resize);
-
-    var clock = new THREE.Clock();
-    (function raf(){
-      uniforms.time.value += clock.getDelta();
-      renderer.render(scene, camera);
-      requestAnimationFrame(raf);
-    })();
-  });
-})();
+/* Small screens: slightly shorter banner */
+@media (max-width: 720px) {
+  :root { --banner-height: clamp(240px, 40vh, 420px); }
+}
