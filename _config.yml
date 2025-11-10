@@ -1,38 +1,52 @@
-title: Julian Ockelmann
-email: julian.ockelmann@gmail.com
-author: Julian Ockelmann
+# Minimal, safe config for a custom theme/local layouts (no gem theme override)
+title: "Julian Ockelmann"
+description: "Personal site"
+timezone: Europe/Zurich
+encoding: "utf-8"
 
-# --- Display / theme ---
-night_mode: "on"           # force dark mode
-header_transparent: true   # keep transparent header over the hero
-content_width: "1120px"    # widen site content (used by main.scss)
-theme_color: coolblack
-brand_color: greenblue
+# IMPORTANT: remove theme override so gem themes don't shadow your layouts/includes
+# theme: jekyll-theme-primer
+# remote_theme:   # use only if you truly need a remote theme
 
-# Profile links used by the home panels
-scholar_url: "https://scholar.google.com/citations?user=HSduCL0AAAAJ&hl=en"
-orcid_id: "0000-0002-4780-8993"
-osf_url: "https://osf.io/92fa4/"
-linkedin_url: "https://www.linkedin.com/in/julian-ockelmann-977208170/"
-
-copyright: "Unpublished Work (cleft) 2017-{currentYear} {author}"
-description: "PhD Candidate, Cognitive Neuroscience"
-
-# Site URLs
-baseurl: ""   # keep empty for user/organization GitHub Pages
-url: "https://julian-ockelmann.github.io"
-favicon: ""
-
-yat:
-  date_format: "%b %d, %Y"
+permalink: pretty
 
 markdown: kramdown
 kramdown:
   input: GFM
+  hard_wrap: false
 
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-paginate
-  - jekyll-spaceship
+  # - jekyll-spaceship     # enable only if you added it to Gemfile
+
+paginate: 10
+paginate_path: "/page:num/"
+
+# SASS/SCSS (your assets/css/*.scss pipelines)
+sass:
+  style: compressed
+
+# GitHub Pages will set your final URL at deploy; you can keep these blank locally.
+# url: "https://<user>.github.io"
+# baseurl: ""               # e.g., "/repo" if publishing to a project site
+
+# Keep the build clean
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .bundle
+  - README*
+  - LICENSE*
+  - .gitignore
+  - .github
+
+# Optional Liquid tweaks (less surprising defaults)
+liquid:
+  error_mode: warn
+  strict_filters: false
+  strict_variables: false
