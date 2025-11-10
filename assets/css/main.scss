@@ -5,186 +5,238 @@
 /* =====================
    Theme variables (yours)
    ===================== */
-$theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
-$brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
+$theme-colors: (
+  "coolblack": #090a0b,
+  "spacegrey": #353535,
+  "snowwhite": #ffffff
+);
+
+$brand-colors: (
+  "orangered": #ff5100,
+  "greatgold": #f2cb05,
+  "greenblue": #389092
+);
 
 $theme-name: "{{ site.theme_color }}";
 $brand-name: "{{ site.brand_color }}";
 $theme-color: map-get($theme-colors, "snowwhite");
 $brand-color: map-get($brand-colors, "greenblue");
 
-@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
+@if map-has-key($theme-colors, $theme-name) {
+  $theme-color: map-get($theme-colors, $theme-name);
+} @else if str-index($theme-name, "#") == 1 {
+  $theme-color: {{ site.theme_color | default: '#ffffff' }};
+}
 
-@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
+@if map-has-key($brand-colors, $brand-name) {
+  $brand-color: map-get($brand-colors, $brand-name);
+} @else if str-index($brand-name, "#") == 1 {
+  $brand-color: {{ site.brand_color | default: '#69b7aa' }};
+}
 
-/* Site content width (used by Yat's .wrapper too) */
-$content-width: {{ site.content_width | default: '920px' }};
+/* Site-wide content width (also used for hero/panels/footer alignment) */
+:root { --content-width: {{ site.content_width | default: '1120px' }}; }
 
 /* Load base Yat styles */
 @import "yat";
 
 /* =====================
-   Dark-only overrides
+   Global / dark-only UX
    ===================== */
 
-/* Tell browsers to render controls in dark */
-:root { color-scheme: dark; }
-
-/* Hide any theme toggles the header might show */
+/* Hide any light/dark mode toggle UI (dark-only site) */
 .mode-toggle,
 .theme-toggle,
-.color-theme-toggle,
+.color-mode,
+.night-mode,
 .night-toggle,
-.switch-night-mode { display: none !important; }
+.header .mode-toggle,
+.header .theme-toggle { display: none !important; }
 
-/* Ensure body uses the dark palette */
-html[data-theme="dark"] body,
-html.dark body,
-body { background: #0b0c0e; color: #e9e9ea; }
-
-/* Links */
-a { color: $brand-color; }
-a:hover { filter: brightness(1.1); }
+/* Prefer dark color scheme for supported UAs */
+:root { color-scheme: dark; }
 
 /* =====================
-   Site layout overrides
+   Header / Hero (shader)
    ===================== */
 
-/* 0) Never draw the theme's pseudo-banner; shader handles the hero */
+/* Never draw the theme’s pseudo banner; shader handles the hero */
 .site-header + main::before { display: none !important; content: ""; }
 
-/* Keep homepage content band flush */
-.home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
+/* Keep header on top of the hero */
+.site-header { position: relative; z-index: 3; background: transparent !important; }
 
-/* Header must sit above the shader */
-.site-header { position: relative; z-index: 10; }
-.home .site-header { background: transparent !important; }
+/* Constrain, left-align, and layer the banner text above the shader */
+.home .page-cover,
+.home .page-banner { position: relative; overflow: hidden; min-height: 44vh; }
 
-/* ----------------------------------------------------------
-   PAGE BANNER (shader confined to the banner on HOME)
-   ---------------------------------------------------------- */
-.page-banner { position: relative; }
-
-/* The banner wrapper aligns to site content width */
-.page-banner .wrapper {
-  max-width: $content-width;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+.home .page-cover .wrap,
+.home .page-banner .wrap,
+.home .page-header .wrap {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+  position: relative; /* stacking context for text */
+  z-index: 2;         /* text above the shader */
+  text-align: left !important;
 }
 
-/* Left align the heading/subheading to match link panels */
-.page-banner .page-banner-inner,
-.page-banner .page-banner-default { text-align: left; }
-
-/* Banner image container: we host the shader inside it */
-.page-banner .page-banner-img {
-  position: relative;
-  height: 38vh;        /* banner height; tweak if needed */
-  min-height: 240px;
-  overflow: hidden;
-}
-
-/* On HOME, hide any static background image so the shader remains visible */
-.home .page-banner .page-banner-img > div:not(.shader-fill) { display: none !important; }
-.home .page-banner .page-banner-img > img.img-placeholder { display: none !important; }
-
-/* Shader layer (inserted by _includes/shader-hero.html via banner include) */
-.page-banner .page-banner-img .shader-fill {
+/* Shader container lives behind the text */
+.shader-fill {
   position: absolute;
   inset: 0;
-  z-index: 0;              /* behind text */
-  pointer-events: none;
-}
-.page-banner .page-banner-img .shader-fill canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+  z-index: 1;           /* below text (z-index:2) */
+  pointer-events: none; /* never block clicks */
 }
 
-/* Keep the text above the shader */
-.page-banner .page-banner-inner { position: relative; z-index: 1; }
+/* =====================
+   Home content band
+   ===================== */
 
-/* ----------------------------------------------------------
-   HOME: hide feed widgets/TOC and unify widths
-   ---------------------------------------------------------- */
-.home .home-categories, .home .post-list, .home .index-panel, .home .list,
-.home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
-.home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
+/* Remove extra spacing so content starts right after the hero */
+.home .page-content {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+}
 
-.home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
-.home .toc-aside, .home .home-categories { display: none !important; }
+/* Make the content and footer share the same width as the hero text */
+.page-content > .wrap,
+.site-footer .wrap {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
 
-/* CV pages: hide any TOC */
+/* Normalize any lines/dividers to span the wrap width cleanly */
+.site-footer hr,
+.site-footer .divider,
+.page-content hr { width: 100%; max-width: none; }
+
+/* =====================
+   Kill home widgets & TOCs
+   ===================== */
+.home .home-categories,
+.home .post-list,
+.home .index-panel,
+.home .list,
+.home .post-item,
+.home .post-preview,
+.home .archive-list,
+.home .tag-list,
+.home .home-sidebar,
+.home .page-sidebar,
+.home .sidebar,
+.home .pagination { display: none !important; }
+
+.home #toc,
+.home .toc,
+.home .post-toc,
+.home .toc-wrap,
+.home .toc-container,
+.home .toc-aside,
+.home .home-categories { display: none !important; }
+
+/* Global tag widgets off */
+.sidebar .tag-list,
+.sidebar .tags,
+.sidebar .post-tags,
+.sidebar .common-list.tags { display: none !important; }
+
+/* =====================
+   CV pages: no TOC
+   ===================== */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
 .page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
-body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
-body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside { display: none !important; }
-body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
-body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* Hide tag widgets anywhere */
-.sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
+body[class*="cv"] #toc,
+body[class*="cv"] .toc,
+body[class*="cv"] .post-toc,
+body[class*="cv"] .toc-wrap,
+body[class*="cv"] .toc-container,
+body[class*="cv"] .toc-aside { display: none !important; }
 
-/* ----------------------------------------------------------
-   Circular link panels (flat + aligned to site width)
-   ---------------------------------------------------------- */
+body:has(main h1#cv-title) #toc,
+body:has(main h1#cv-title) .toc,
+body:has(main h1#cv-title) .post-toc,
+body:has(main h1#cv-title) .toc-wrap,
+body:has(main h1#cv-title) .toc-container,
+body:has(main h1#cv-title) .toc-aside { display: none !important; }
+
+/* =====================
+   Home link circles (panels)
+   ===================== */
+
 .link-circles {
-  max-width: $content-width;           /* same width as the site .wrapper */
-  margin-left: auto;
-  margin-right: auto;
+  max-width: min(94vw, var(--content-width));
+  margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
 
   display: grid;
-  grid-template-columns: repeat(4, minmax(200px, 1fr)); /* 4-up if space allows */
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
   gap: clamp(1rem, 2.5vw, 3rem);
   justify-items: center;
   align-items: start;
 }
 
-@media (max-width: 1100px) { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
-@media (max-width: 560px)  { .link-circles { grid-template-columns: 1fr; } }
+@media (max-width: 1200px) { /* 3-up */
+  .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); }
+}
+@media (max-width: 900px)  { /* 2-up */
+  .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+}
+@media (max-width: 520px)  { /* 1-up */
+  .link-circles { grid-template-columns: 1fr; }
+}
 
 .circle-card {
   width: 100%;
   text-decoration: none;
   color: inherit;
+
   display: grid;
   justify-items: center;
   align-content: start;
   gap: 0.85rem;
 }
 
-/* Flat circle (identical in dark-only) */
+/* Icon-only look: no fill, no border, no shadow on the circles */
 .circle-card .circle {
   width: min(260px, 100%);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #2a2a2a;
-  border: 2px solid rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transition: transform .2s ease, filter .2s ease;
 }
+
+/* Keep the same look in light mode (even though dark-only UI) */
+[data-theme="light"] .circle-card .circle {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
 .circle-card .circle svg {
   width: 50%;
   height: 50%;
+  color: #ffffff;
   opacity: .95;
-  color: #fff;
-}
-.circle-card:hover .circle {
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.22);
-  box-shadow: 0 20px 44px rgba(0,0,0,.35);
 }
 
-/* Accent pill uses the site's brand color */
+/* Subtle hover cue */
+.circle-card:hover .circle svg {
+  filter: drop-shadow(0 0 8px rgba(255,255,255,.25));
+  transform: translateZ(0);
+}
+
+/* Label pills keep the brand accent color */
 .circle-card .label-btn {
   display: inline-block;
   padding: .5rem 1.15rem;
@@ -200,15 +252,16 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   transition: filter .15s ease, transform .15s ease;
   margin-top: .1rem;
 }
-.circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-/* ----------------------------------------------------------
-   Optional: footer rule using the same width
-   ---------------------------------------------------------- */
-.home .page-content > hr {
-  max-width: $content-width;
-  margin-left: auto;
-  margin-right: auto;
-  border: 0;
-  border-top: 1px solid rgba(255,255,255,.12);
+.circle-card .label-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* =====================
+   Small-screen hero height keep
+   ===================== */
+@media (max-width: 720px) {
+  .home .page-cover,
+  .home .page-banner { min-height: 42vh; }
 }
