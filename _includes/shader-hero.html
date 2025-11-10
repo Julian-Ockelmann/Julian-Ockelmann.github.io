@@ -1,14 +1,25 @@
-<!-- _includes/shader-hero.html -->
-<section class="shader-hero" aria-label="Hero">
+<!-- Shader Hero (home only). Fixed, behind header+content. -->
+<style>
+  /* container that lives behind everything */
+  .shader-hero-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: -1;          /* behind site header and page content */
+    pointer-events: none; /* let clicks fall through */
+  }
+  .shader-hero-wrap canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+  }
+  /* optional: ensure the site header is transparent on home */
+  body.home .site-header { background: transparent !important; }
+</style>
+
+<div class="shader-hero-wrap" aria-hidden="true">
   <canvas id="webgl-canvas"></canvas>
 
-  <!-- Centered overlay text -->
-  <div class="shader-hero__overlay">
-    <h1 class="page-title">{{ site.title }}</h1>
-    <p class="page-subtitle">PhD Student, Cognitive Neuroscience</p>
-  </div>
-
-  <!-- vertex shader -->
+  <!-- vertexShader -->
   <script id="js-vertex-shader" type="x-shader/x-vertex">
   attribute vec3 position;
   void main() {
@@ -16,10 +27,10 @@
   }
   </script>
 
-  <!-- fragment shader -->
+  <!-- fragmentShader -->
   <script id="js-fragment-shader" type="x-shader/x-fragment">
   precision highp float;
-  uniform vec2 resolution;
+  uniform vec2  resolution;
   uniform float time;
   uniform float xScale;
   uniform float yScale;
@@ -27,7 +38,6 @@
 
   void main() {
     vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-
     float d = length(p) * distortion;
 
     float rx = p.x * (1.0 + d);
@@ -42,7 +52,88 @@
   }
   </script>
 
-  <!-- Three.js + shader driver -->
-  <script defer src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
-  <script defer src="{{ '/assets/js/shader-banner.js' | relative_url }}"></script>
-</section>
+  <!-- three.js from CDN (scoped to this include for portability) -->
+  <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+
+  <script>
+  (function () {
+    class Stage {
+      constructor() {
+        this.renderParam = {
+          clearColor: 0x000000,
+          width: window.innerWidth,
+          height: window.innerHeight
+        };
+        this.cameraParam = { left:-1, right:1, top:1, bottom:-1, near:0, far:1 };
+        this.scene = null; this.camera = null; this.renderer = null;
+      }
+      init() { this._setScene(); this._setRender(); this._setCamera(); }
+      _setScene(){ this.scene = new THREE.Scene(); }
+      _setRender(){
+        this.renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("webgl-canvas") });
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        this.renderer.setClearColor(new THREE.Color(this.renderParam.clearColor));
+        this.renderer.setSize(this.renderParam.width, this.renderParam.height, false);
+      }
+      _setCamera(){
+        if(!this.camera){
+          this.camera = new THREE.OrthographicCamera(
+            this.cameraParam.left, this.cameraParam.right,
+            this.cameraParam.top,  this.cameraParam.bottom,
+            this.cameraParam.near, this.cameraParam.far
+          );
+        }
+        const w = window.innerWidth, h = window.innerHeight;
+        this.renderer.setSize(w, h, false);
+        this.camera.updateProjectionMatrix();
+      }
+      render(){ this.renderer.render(this.scene, this.camera); }
+      onResize(){ this._setCamera(); }
+    }
+
+    class BannerMesh {
+      constructor(stage){
+        const c = document.getElementById("webgl-canvas");
+        this.uniforms = {
+          resolution: { value: new THREE.Vector2(c.clientWidth, c.clientHeight) },
+          time: { value: 0.0 },
+          xScale: { value: 1.1 },
+          yScale: { value: 0.55 },
+          distortion: { value: 0.050 }
+        };
+        this.stage = stage; this.mesh = null;
+      }
+      init(){
+        const pos = new Float32Array([
+          -1,-1,0,  1,-1,0,  -1,1,0,
+           1,-1,0,  1, 1,0,  -1,1,0
+        ]);
+        const geom = new THREE.BufferGeometry();
+        geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+        const mat = new THREE.RawShaderMaterial({
+          vertexShader:   document.getElementById("js-vertex-shader").textContent,
+          fragmentShader: document.getElementById("js-fragment-shader").textContent,
+          uniforms: this.uniforms, side: THREE.DoubleSide
+        });
+        this.mesh = new THREE.Mesh(geom, mat);
+        this.stage.scene.add(this.mesh);
+      }
+      onResize(){
+        this.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+      }
+      onRaf(){ this.uniforms.time.value += 0.01; }
+    }
+
+    // Boot (home page only)
+    if (!document.body.classList.contains('home')) return;
+
+    const stage = new Stage(); stage.init();
+    const banner = new BannerMesh(stage); banner.init();
+
+    const raf = () => { stage.render(); banner.onRaf(); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+
+    window.addEventListener('resize', () => { stage.onResize(); banner.onResize(); }, { passive:true });
+  })();
+  </script>
+</div>
