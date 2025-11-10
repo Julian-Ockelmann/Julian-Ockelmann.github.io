@@ -1,12 +1,11 @@
-# Minimal, safe config for a custom theme/local layouts (no gem theme override)
 title: "Julian Ockelmann"
 description: "Personal site"
 timezone: Europe/Zurich
 encoding: "utf-8"
 
-# IMPORTANT: remove theme override so gem themes don't shadow your layouts/includes
+# IMPORTANT: do not let a gem theme override your local layouts/includes
 # theme: jekyll-theme-primer
-# remote_theme:   # use only if you truly need a remote theme
+# remote_theme:
 
 permalink: pretty
 
@@ -20,20 +19,14 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-paginate
-  # - jekyll-spaceship     # enable only if you added it to Gemfile
+  # - jekyll-spaceship  # only if added in Gemfile
 
 paginate: 10
 paginate_path: "/page:num/"
 
-# SASS/SCSS (your assets/css/*.scss pipelines)
 sass:
   style: compressed
 
-# GitHub Pages will set your final URL at deploy; you can keep these blank locally.
-# url: "https://<user>.github.io"
-# baseurl: ""               # e.g., "/repo" if publishing to a project site
-
-# Keep the build clean
 exclude:
   - Gemfile
   - Gemfile.lock
@@ -45,7 +38,6 @@ exclude:
   - .gitignore
   - .github
 
-# Optional Liquid tweaks (less surprising defaults)
 liquid:
   error_mode: warn
   strict_filters: false
