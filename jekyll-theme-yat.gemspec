@@ -1,19 +1,28 @@
-# Gemfile — self-build with Jekyll 4
-source "https://rubygems.org"
-ruby "3.3"
+# frozen_string_literal: true
 
-gem "jekyll", "~> 4.3"
-gem "webrick", "~> 1.8"        # needed for `jekyll serve` on Ruby 3+
+Gem::Specification.new do |spec|
+  spec.name          = "jekyll-theme-yat"
+  spec.version       = "1.10.0"
+  spec.authors       = ["jeffreytse"]
+  spec.email         = ["hello@jeffreytse.net"]
 
-group :jekyll_plugins do
-  gem "jekyll-seo-tag", "~> 2.8"
-  gem "jekyll-feed", "~> 0.17"
-  gem "jekyll-sitemap", "~> 1.4"
-  gem "jekyll-paginate", "~> 1.1"
-  gem "jekyll-include-cache", "~> 0.2"
-  gem "jekyll-github-metadata", "~> 2.13"
-  gem "kramdown-parser-gfm", "~> 1.1"
-  gem "faraday-retry", "~> 2.2" # silences Faraday v2 retry warning
-  # Enable only if you actually use it:
-  # gem "jekyll-spaceship", "~> 0.2"
+  spec.summary       = ""
+  spec.homepage      = ""
+  spec.license       = "MIT"
+
+  spec.metadata["plugin_type"] = "theme"
+
+  spec.files         = `git ls-files -z`.split("\x0").select do |f|
+    f.match(%r!^(assets|_data|_layouts|_includes|_sass|LICENSE|README)!i)
+  end
+
+  spec.add_development_dependency "bundler", ">= 1.6", "< 3.0"
+  spec.add_development_dependency "rake", ">= 12.0", "< 13.0"
+
+  spec.add_runtime_dependency "jekyll", "> 3.5", "< 5.0"
+  spec.add_runtime_dependency "jekyll-feed", "~> 0.9"
+  spec.add_runtime_dependency "jekyll-seo-tag", "~> 2.1"
+  spec.add_runtime_dependency "jekyll-sitemap", "~> 1.3"
+  spec.add_runtime_dependency "jekyll-paginate", "~> 1.1"
+  spec.add_runtime_dependency "jekyll-spaceship", "~> 0.2"
 end
