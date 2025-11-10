@@ -2,6 +2,13 @@ title: Julian Ockelmann
 email: julian.ockelmann@gmail.com
 author: Julian Ockelmann
 
+# --- Display / theme ---
+night_mode: "on"           # force dark mode
+header_transparent: true   # keep transparent header over the hero
+content_width: "1120px"    # widen site content (used by main.scss)
+theme_color: coolblack
+brand_color: greenblue
+
 # Profile links used by the home panels
 scholar_url: "https://scholar.google.com/citations?user=HSduCL0AAAAJ&hl=en"
 orcid_id: "0000-0002-4780-8993"
@@ -10,8 +17,10 @@ linkedin_url: "https://www.linkedin.com/in/julian-ockelmann-977208170/"
 
 copyright: "Unpublished Work (cleft) 2017-{currentYear} {author}"
 description: "Ad Astra Per Aspera."
-baseurl: ""
-url: ""
+
+# Site URLs
+baseurl: ""   # keep empty for user/organization GitHub Pages
+url: "https://julian-ockelmann.github.io"
 favicon: ""
 
 yat:
