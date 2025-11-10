@@ -1,14 +1,7 @@
 {% comment %}
-  Custom page-cover for Yat: show the shader hero on the homepage instead of the default cover.
-  This file overrides the theme’s include used by _layouts/default.html BEFORE <main>.
+  Use shader hero on the home page in the header cover slot.
 {% endcomment %}
 
 {% if page.url == '/' or page.layout == 'home' %}
   {% include shader-hero.html %}
-{% else %}
-  {%- comment -%}
-    For non-home pages, render nothing here (no big banner).
-    If you want the original page cover on other pages, we can recreate it later,
-    but this keeps things simple and prevents duplicate bands.
-  {%- endcomment -%}
 {% endif %}
