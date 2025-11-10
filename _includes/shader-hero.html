@@ -1,25 +1,25 @@
-<!-- Shader Hero (home only). Fixed, behind header+content. -->
+<!-- Shader Hero (fixed, full-viewport, home-only) -->
 <style>
-  /* container that lives behind everything */
   .shader-hero-wrap {
     position: fixed;
     inset: 0;
-    z-index: -1;          /* behind site header and page content */
-    pointer-events: none; /* let clicks fall through */
+    z-index: -1;          /* behind header + content */
+    pointer-events: none; /* let clicks pass through */
+    background: #000;     /* fallback while WebGL warms */
   }
   .shader-hero-wrap canvas {
     width: 100vw;
     height: 100vh;
     display: block;
   }
-  /* optional: ensure the site header is transparent on home */
-  body.home .site-header { background: transparent !important; }
+  /* keep header above the shader */
+  .site-header { position: relative; z-index: 10; }
 </style>
 
 <div class="shader-hero-wrap" aria-hidden="true">
   <canvas id="webgl-canvas"></canvas>
 
-  <!-- vertexShader -->
+  <!-- vertex shader -->
   <script id="js-vertex-shader" type="x-shader/x-vertex">
   attribute vec3 position;
   void main() {
@@ -27,7 +27,7 @@
   }
   </script>
 
-  <!-- fragmentShader -->
+  <!-- fragment shader -->
   <script id="js-fragment-shader" type="x-shader/x-fragment">
   precision highp float;
   uniform vec2  resolution;
@@ -52,18 +52,19 @@
   }
   </script>
 
-  <!-- three.js from CDN (scoped to this include for portability) -->
+  <!-- three.js -->
   <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
 
   <script>
   (function () {
+    // Robust "is home" detection (works on GitHub Pages)
+    var isHome = !!document.querySelector('section.link-circles')
+               || window.location.pathname.replace(/\/+$/,'/') === '/';
+    if (!isHome) return;
+
     class Stage {
       constructor() {
-        this.renderParam = {
-          clearColor: 0x000000,
-          width: window.innerWidth,
-          height: window.innerHeight
-        };
+        this.renderParam = { clearColor: 0x000000, width: window.innerWidth, height: window.innerHeight };
         this.cameraParam = { left:-1, right:1, top:1, bottom:-1, near:0, far:1 };
         this.scene = null; this.camera = null; this.renderer = null;
       }
@@ -105,8 +106,8 @@
       }
       init(){
         const pos = new Float32Array([
-          -1,-1,0,  1,-1,0,  -1,1,0,
-           1,-1,0,  1, 1,0,  -1,1,0
+          -1,-1,0,  1,-1,0,  -1, 1,0,
+           1,-1,0,  1, 1,0,  -1, 1,0
         ]);
         const geom = new THREE.BufferGeometry();
         geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
@@ -118,19 +119,14 @@
         this.mesh = new THREE.Mesh(geom, mat);
         this.stage.scene.add(this.mesh);
       }
-      onResize(){
-        this.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
-      }
+      onResize(){ this.uniforms.resolution.value.set(window.innerWidth, window.innerHeight); }
       onRaf(){ this.uniforms.time.value += 0.01; }
     }
-
-    // Boot (home page only)
-    if (!document.body.classList.contains('home')) return;
 
     const stage = new Stage(); stage.init();
     const banner = new BannerMesh(stage); banner.init();
 
-    const raf = () => { stage.render(); banner.onRaf(); requestAnimationFrame(raf); };
+    function raf(){ stage.render(); banner.onRaf(); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
 
     window.addEventListener('resize', () => { stage.onResize(); banner.onResize(); }, { passive:true });
