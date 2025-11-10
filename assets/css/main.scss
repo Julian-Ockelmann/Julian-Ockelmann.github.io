@@ -26,7 +26,30 @@ $content-width: {{ site.content_width | default: '920px' }};
 @import "yat";
 
 /* =====================
-   Site overrides (ours)
+   Dark-only overrides
+   ===================== */
+
+/* Tell browsers to render controls in dark */
+:root { color-scheme: dark; }
+
+/* Hide any theme toggles the header might show */
+.mode-toggle,
+.theme-toggle,
+.color-theme-toggle,
+.night-toggle,
+.switch-night-mode { display: none !important; }
+
+/* Ensure body uses the dark palette */
+html[data-theme="dark"] body,
+html.dark body,
+body { background: #0b0c0e; color: #e9e9ea; }
+
+/* Links */
+a { color: $brand-color; }
+a:hover { filter: brightness(1.1); }
+
+/* =====================
+   Site layout overrides
    ===================== */
 
 /* 0) Never draw the theme's pseudo-banner; shader handles the hero */
@@ -39,9 +62,10 @@ $content-width: {{ site.content_width | default: '920px' }};
 .site-header { position: relative; z-index: 10; }
 .home .site-header { background: transparent !important; }
 
-/* ==========================================================
+/* ----------------------------------------------------------
    PAGE BANNER (shader confined to the banner on HOME)
-   ========================================================== */
+   ---------------------------------------------------------- */
+.page-banner { position: relative; }
 
 /* The banner wrapper aligns to site content width */
 .page-banner .wrapper {
@@ -57,15 +81,14 @@ $content-width: {{ site.content_width | default: '920px' }};
 .page-banner .page-banner-default { text-align: left; }
 
 /* Banner image container: we host the shader inside it */
-.page-banner { position: relative; }
 .page-banner .page-banner-img {
   position: relative;
-  height: 38vh;        /* banner height; adjust to taste */
+  height: 38vh;        /* banner height; tweak if needed */
   min-height: 240px;
   overflow: hidden;
 }
 
-/* On HOME, hide any static background image so the shader is visible */
+/* On HOME, hide any static background image so the shader remains visible */
 .home .page-banner .page-banner-img > div:not(.shader-fill) { display: none !important; }
 .home .page-banner .page-banner-img > img.img-placeholder { display: none !important; }
 
@@ -85,9 +108,9 @@ $content-width: {{ site.content_width | default: '920px' }};
 /* Keep the text above the shader */
 .page-banner .page-banner-inner { position: relative; z-index: 1; }
 
-/* ==========================================================
+/* ----------------------------------------------------------
    HOME: hide feed widgets/TOC and unify widths
-   ========================================================== */
+   ---------------------------------------------------------- */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
@@ -108,9 +131,9 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 /* Hide tag widgets anywhere */
 .sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
 
-/* ==========================================================
+/* ----------------------------------------------------------
    Circular link panels (flat + aligned to site width)
-   ========================================================== */
+   ---------------------------------------------------------- */
 .link-circles {
   max-width: $content-width;           /* same width as the site .wrapper */
   margin-left: auto;
@@ -137,7 +160,7 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   gap: 0.85rem;
 }
 
-/* Flat circle (same in light & dark) */
+/* Flat circle (identical in dark-only) */
 .circle-card .circle {
   width: min(260px, 100%);
   aspect-ratio: 1 / 1;
@@ -149,12 +172,6 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   box-shadow: 0 14px 30px rgba(0,0,0,.25);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-[data-theme="light"] .circle-card .circle {
-  background: #2a2a2a;                /* keep identical look in light mode */
-  border-color: rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
-}
-
 .circle-card .circle svg {
   width: 50%;
   height: 50%;
@@ -185,9 +202,9 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 }
 .circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-/* ==========================================================
-   Optional: make the footer rule use the same width
-   ========================================================== */
+/* ----------------------------------------------------------
+   Optional: footer rule using the same width
+   ---------------------------------------------------------- */
 .home .page-content > hr {
   max-width: $content-width;
   margin-left: auto;
@@ -195,4 +212,3 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   border: 0;
   border-top: 1px solid rgba(255,255,255,.12);
 }
-[data-theme="light"] .home .page-content > hr { border-top-color: rgba(0,0,0,.12); }
