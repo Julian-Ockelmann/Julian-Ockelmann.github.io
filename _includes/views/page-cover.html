@@ -1,8 +1,10 @@
 {%- comment -%}
-  Use shader hero on the home page in the header cover slot.
+  On the home page, render the shader hero inside the banner/cover slot.
+  On all other pages, let the theme render its normal cover (if any).
 {%- endcomment -%}
-{% if page.url == '/' or page.layout == 'home' %}
-  {% include shader-hero.html %}
-{% else %}
-  {% include views/page-cover.default.html %}
-{% endif %}
+
+{%- if page.url == '/' or page.layout == 'home' -%}
+  {%- include shader-hero.html -%}
+{%- else -%}
+  {#-- Fall through to the theme’s default cover rendering (do nothing here) --#}
+{%- endif -%}
