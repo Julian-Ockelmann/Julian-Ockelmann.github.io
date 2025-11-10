@@ -28,27 +28,63 @@ $content-width: {{ site.content_width | default: '920px' }};
    Site overrides (ours)
    ===================== */
 
-/* 0) Never draw the pseudo-banner; shader handles the hero */
+/* 0) Never draw the pseudo-banner; the shader fills the real banner */
 .site-header + main::before { display: none !important; content: ""; }
 
 /* Keep homepage content band flush */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* Kill the theme's 'page-banner' on the home page (band that blocks view) */
-.home .page-banner,
-.home .page-banner-img,
-.home .page-banner-inner { display: none !important; }
-/* Fallback: hide banner if the home has the link-circles */
-.page-banner:has(+ main .link-circles) { display: none !important; }
-
-/* Make sure header stays above the shader */
+/* Header always above the shader */
 .site-header { position: relative; z-index: 10; }
 .home .site-header { background: transparent !important; }
 
-/* Spacer: keep first fold reserved for hero */
-.home .shader-spacer { height: 100vh; }
+/* ==========================================================
+   5) Banner-scoped shader (confined to the header/banner band)
+   - Works with common Yat/minima variants: .page-banner / .page-cover / .page-header
+   ========================================================== */
 
-/* Hide TOC / widgets on home */
+/* The banner box on the HOME page behaves as the shader container */
+.home .page-banner,
+.home .page-cover,
+.home .page-header {
+  position: relative;
+  height: var(--hero-h, 48vh);   /* tweak height here */
+  min-height: 260px;
+  overflow: hidden;
+  background: transparent !important;  /* let the shader show through */
+  border: 0;
+}
+
+/* The shader canvas layer (injected as .shader-fill) fills that box */
+.home .page-banner .shader-fill,
+.home .page-cover  .shader-fill,
+.home .page-header .shader-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;          /* don’t block menu clicks */
+}
+
+/* Keep title/subtitle centered and above the shader */
+.home .page-banner .page-title,
+.home .page-banner .page-subtitle,
+.home .page-cover  .page-title,
+.home .page-cover  .page-subtitle,
+.home .page-header .page-title,
+.home .page-header .page-subtitle,
+.home .page-banner .page-cover-content,
+.home .page-cover  .page-cover-content,
+.home .page-header .page-cover-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ==========================================================
+   Home housekeeping (hide feed widgets/TOC)
+   ========================================================== */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
 .home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
 .home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
@@ -69,7 +105,9 @@ body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"]
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* Circular link panels (flat + responsive) */
+/* ==========================================================
+   Circular link panels (flat + responsive)
+   ========================================================== */
 .link-circles {
   max-width: min(94vw, 1440px);
   margin: 0 auto;
