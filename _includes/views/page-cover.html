@@ -1,7 +1,8 @@
-{% comment %}
+{%- comment -%}
   Use shader hero on the home page in the header cover slot.
-{% endcomment %}
-
+{%- endcomment -%}
 {% if page.url == '/' or page.layout == 'home' %}
   {% include shader-hero.html %}
+{% else %}
+  {% include views/page-cover.default.html %}
 {% endif %}
