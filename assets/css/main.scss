@@ -47,24 +47,18 @@ $content-width: {{ site.content_width | default: '920px' }};
    ===================== */
 
 /* ---- Controls ---- */
-:root { --header-banner-height: 45vh; } /* used elsewhere if needed */
+:root { --header-banner-height: 45vh; } /* available if needed */
 
-/* 1) Hero banner: OFF by default (all pages), ON only on the homepage */
+/* ----------------------------------------------------------
+   1) Kill theme's pseudo banner everywhere (old approach)
+   ---------------------------------------------------------- */
 .site-header + main::before {
-  display: none !important;  /* default = off */
+  display: none !important;
   content: "";
 }
 
-.home .site-header + main::before {
-  display: block !important;
-  content: "";
-  height: 100vh; /* full-screen landing */
-  background: #000
-    url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}')
-    center / cover no-repeat;
-  transform: translateZ(0);  /* prevent repaint jitter */
-  will-change: transform;
-}
+/* Do NOT re-enable it for .home anymore. The shader hero
+   now renders in the real header cover slot. */
 
 /* Remove default padding/margins under the hero on home */
 .home .page-content {
@@ -73,7 +67,55 @@ $content-width: {{ site.content_width | default: '920px' }};
   margin: 0 !important;
 }
 
-/* 2) Hide ALL home feed widgets (chips, lists, archives, sidebars) */
+/* ----------------------------------------------------------
+   2) Shader hero (real header cover)
+   ---------------------------------------------------------- */
+/* Header cover container that houses the WebGL canvas */
+.shader-hero {
+  position: relative;
+  height: clamp(56vh, 72vh, 92vh);
+  background: #0b0b0b;
+  overflow: hidden;
+}
+
+/* WebGL canvas should fill the header cover */
+.shader-hero #webgl-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Optional centered text overlay on top of the shader */
+.shader-hero .hero-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #fff;
+  padding: 1rem;
+  pointer-events: none; /* canvas captures interactions */
+}
+
+.shader-hero .hero-text .title {
+  font-size: clamp(28px, 6vw, 56px);
+  font-weight: 700;
+  margin: 0 0 .3rem;
+  text-shadow: 0 2px 18px rgba(0,0,0,.35);
+}
+
+.shader-hero .hero-text .subtitle {
+  font-size: clamp(14px, 2vw, 18px);
+  opacity: .85;
+  margin: 0;
+  text-shadow: 0 1px 12px rgba(0,0,0,.25);
+}
+
+/* ----------------------------------------------------------
+   3) Hide ALL home feed widgets (chips, lists, archives, sidebars)
+   ---------------------------------------------------------- */
 .home .home-categories,
 .home .post-list,
 .home .index-panel,
@@ -87,7 +129,9 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .sidebar,
 .home .pagination { display: none !important; }
 
-/* 3) Hide TOC / category sidebar on the HOME page */
+/* ----------------------------------------------------------
+   4) Hide TOC / category sidebar on the HOME page
+   ---------------------------------------------------------- */
 .home #toc,
 .home .toc,
 .home .post-toc,
@@ -96,13 +140,17 @@ $content-width: {{ site.content_width | default: '920px' }};
 .home .toc-aside,
 .home .home-categories { display: none !important; }
 
-/* 4) Hide tags widget anywhere */
+/* ----------------------------------------------------------
+   5) Hide tags widget anywhere
+   ---------------------------------------------------------- */
 .sidebar .tag-list,
 .sidebar .tags,
 .sidebar .post-tags,
 .sidebar .common-list.tags { display: none !important; }
 
-/* 5) Hide TOC on the CV page (robust selectors) */
+/* ----------------------------------------------------------
+   6) Hide TOC on the CV page (robust selectors)
+   ---------------------------------------------------------- */
 .layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
@@ -122,10 +170,9 @@ body:has(main h1#cv-title) .toc-wrap,
 body:has(main h1#cv-title) .toc-container,
 body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* ==========================================================
-   6) CENTER the banner title/subtitle on the HOME hero band
-   (covers most Yat/minima variants)
-   ========================================================== */
+/* ----------------------------------------------------------
+   7) Center any fallback cover text (for non-home pages)
+   ---------------------------------------------------------- */
 .home .page-cover,
 .home .page-header,
 .home .banner,
@@ -135,14 +182,13 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
 .home .page-header .page-title,
 .home .page-header .page-subtitle { margin-left: auto; margin-right: auto; }
 
-/* Keep compatibility if some markup still renders (but we hide it anyway) */
+/* Keep compatibility if old markup still renders */
 .home .home-landing { position: relative; min-height: 100vh; }
 .home .landing-hero { display: none !important; }
 
-/* ==========================================================
-   7) Circular link panels (FLAT + responsive)
-   - 4 columns on wide screens, collapsing to 3 / 2 / 1
-   ========================================================== */
+/* ----------------------------------------------------------
+   8) Circular link panels (FLAT + responsive)
+   ---------------------------------------------------------- */
 .link-circles {
   /* Wider canvas like the reference site */
   max-width: min(94vw, 1440px);
@@ -233,7 +279,7 @@ body:has(main h1#cv-title) .toc-aside { display: none !important; }
   transform: translateY(-1px);
 }
 
-/* keep hero full-screen on small screens too */
+/* keep hero full-screen on small screens too (shader hero handles height) */
 @media (max-width: 720px) {
-  .home .site-header + main::before { height: 100vh; }
+  .home .site-header + main::before { height: 100vh; } /* harmless now */
 }
