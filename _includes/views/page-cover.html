@@ -1,18 +1,7 @@
 {%- comment -%}
-Home banner (with shader) is handled by views/banner.html.
-Suppress extra cover on home to avoid duplicates.
-Non-home pages keep a simple cover with title/subtitle.
+Use the custom banner (with shader) only on the home page.
+On other pages, let the theme render its normal cover (no output here).
 {%- endcomment -%}
-
-{%- if page.url == '/' or page.layout == 'home' -%}
-  {# nothing here on home #}
-{%- else -%}
-  <div class="page-cover">
-    <div class="wrapper cover-inner">
-      <h1 class="page-title">{{ page.title }}</h1>
-      {%- if page.subtitle -%}
-        <p class="page-subtitle">{{ page.subtitle }}</p>
-      {%- endif -%}
-    </div>
-  </div>
-{%- endif -%}
+{% if page.url == '/' or page.layout == 'home' %}
+  {% include views/banner.html %}
+{% endif %}
