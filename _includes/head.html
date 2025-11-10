@@ -19,7 +19,7 @@
   {%- include extensions/photo-swipe.html -%}
   {%- include custom-head.html -%}
 
-  {# --- Shader hero: only load on home --- #}
+  {%- comment -%} Shader hero: only load on home {%- endcomment -%}
   {% if page.url == '/' or page.layout == 'home' %}
     <link rel="stylesheet" href="{{ '/assets/css/hero.css' | relative_url }}">
     <script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
