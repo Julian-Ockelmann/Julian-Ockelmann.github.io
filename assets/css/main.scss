@@ -5,37 +5,19 @@
 /* =====================
    Theme variables (yours)
    ===================== */
-
-/* Default theme colors */
-$theme-colors: (
-  "coolblack": #090a0b,
-  "spacegrey": #353535,
-  "snowwhite": #ffffff
-);
-
-/* Default brand colors */
-$brand-colors: (
-  "orangered": #ff5100,
-  "greatgold": #f2cb05,
-  "greenblue": #389092
-);
+$theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
+$brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
 
 $theme-name: "{{ site.theme_color }}";
 $brand-name: "{{ site.brand_color }}";
 $theme-color: map-get($theme-colors, "snowwhite");
 $brand-color: map-get($brand-colors, "greenblue");
 
-@if map-has-key($theme-colors, $theme-name) {
-  $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 {
-  $theme-color: {{ site.theme_color | default: '#ffffff' }};
-}
+@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
+} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
 
-@if map-has-key($brand-colors, $brand-name) {
-  $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 {
-  $brand-color: {{ site.brand_color | default: '#69b7aa' }};
-}
+@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
+} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
 
 $content-width: {{ site.content_width | default: '920px' }};
 
@@ -47,239 +29,82 @@ $content-width: {{ site.content_width | default: '920px' }};
    ===================== */
 
 /* ---- Controls ---- */
-:root { --header-banner-height: 45vh; } /* available if needed */
+:root { --header-banner-height: 45vh; }
 
-/* ----------------------------------------------------------
-   1) Kill theme's pseudo banner everywhere (old approach)
-   ---------------------------------------------------------- */
-.site-header + main::before {
-  display: none !important;
-  content: "";
+/* 1) Hero banner: OFF by default (all pages), ON only on the homepage */
+.site-header + main::before { display: none !important; content: ""; }
+.home .site-header + main::before {
+  display: block !important; content: ""; height: 100vh;
+  background: #000 url('{{ "/assets/images/banners/brain_banner.png" | relative_url }}') center/cover no-repeat;
+  transform: translateZ(0); will-change: transform;
 }
-
-/* Do NOT re-enable it for .home anymore. The shader hero
-   now renders in the real header cover slot. */
 
 /* Remove default padding/margins under the hero on home */
-.home .page-content {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin: 0 !important;
-}
+.home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* ----------------------------------------------------------
-   2) Shader hero (real header cover)
-   ---------------------------------------------------------- */
-/* Header cover container that houses the WebGL canvas */
-.shader-hero {
-  position: relative;
-  height: clamp(56vh, 72vh, 92vh);
-  background: #0b0b0b;
-  overflow: hidden;
-}
+/* 2) Hide ALL home feed widgets (chips, lists, archives, sidebars) */
+.home .home-categories, .home .post-list, .home .index-panel, .home .list,
+.home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
+.home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
 
-/* WebGL canvas should fill the header cover */
-.shader-hero #webgl-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+/* 3) Hide TOC / category sidebar on the HOME page */
+.home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
+.home .toc-aside, .home .home-categories { display: none !important; }
 
-/* Optional centered text overlay on top of the shader */
-.shader-hero .hero-text {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  color: #fff;
-  padding: 1rem;
-  pointer-events: none; /* canvas captures interactions */
-}
+/* 4) Hide tags widget anywhere */
+.sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
 
-.shader-hero .hero-text .title {
-  font-size: clamp(28px, 6vw, 56px);
-  font-weight: 700;
-  margin: 0 0 .3rem;
-  text-shadow: 0 2px 18px rgba(0,0,0,.35);
-}
+/* 5) Replace the theme’s default cover with the shader hero on HOME.
+      This hides any built-in cover blocks the theme injects. */
+.home .page-cover, .home .banner, .home .post-cover, .home .page-header { display: none !important; }
 
-.shader-hero .hero-text .subtitle {
-  font-size: clamp(14px, 2vw, 18px);
-  opacity: .85;
-  margin: 0;
-  text-shadow: 0 1px 12px rgba(0,0,0,.25);
-}
+/* 6) CENTER the banner title/subtitle on the HOME hero band (failsafe) */
+.home .page-cover, .home .page-header, .home .banner, .home .post-cover { text-align: center; }
+.home .page-cover .page-title, .home .page-cover .page-subtitle,
+.home .page-header .page-title, .home .page-header .page-subtitle { margin-left: auto; margin-right: auto; }
 
-/* ----------------------------------------------------------
-   3) Hide ALL home feed widgets (chips, lists, archives, sidebars)
-   ---------------------------------------------------------- */
-.home .home-categories,
-.home .post-list,
-.home .index-panel,
-.home .list,
-.home .post-item,
-.home .post-preview,
-.home .archive-list,
-.home .tag-list,
-.home .home-sidebar,
-.home .page-sidebar,
-.home .sidebar,
-.home .pagination { display: none !important; }
-
-/* ----------------------------------------------------------
-   4) Hide TOC / category sidebar on the HOME page
-   ---------------------------------------------------------- */
-.home #toc,
-.home .toc,
-.home .post-toc,
-.home .toc-wrap,
-.home .toc-container,
-.home .toc-aside,
-.home .home-categories { display: none !important; }
-
-/* ----------------------------------------------------------
-   5) Hide tags widget anywhere
-   ---------------------------------------------------------- */
-.sidebar .tag-list,
-.sidebar .tags,
-.sidebar .post-tags,
-.sidebar .common-list.tags { display: none !important; }
-
-/* ----------------------------------------------------------
-   6) Hide TOC on the CV page (robust selectors)
-   ---------------------------------------------------------- */
-.layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
-.layout-cv .toc-container, .layout-cv .toc-aside,
-.page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
-.page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
-
-body[class*="cv"] #toc,
-body[class*="cv"] .toc,
-body[class*="cv"] .post-toc,
-body[class*="cv"] .toc-wrap,
-body[class*="cv"] .toc-container,
-body[class*="cv"] .toc-aside { display: none !important; }
-
-body:has(main h1#cv-title) #toc,
-body:has(main h1#cv-title) .toc,
-body:has(main h1#cv-title) .post-toc,
-body:has(main h1#cv-title) .toc-wrap,
-body:has(main h1#cv-title) .toc-container,
-body:has(main h1#cv-title) .toc-aside { display: none !important; }
-
-/* ----------------------------------------------------------
-   7) Center any fallback cover text (for non-home pages)
-   ---------------------------------------------------------- */
-.home .page-cover,
-.home .page-header,
-.home .banner,
-.home .post-cover { text-align: center; }
-.home .page-cover .page-title,
-.home .page-cover .page-subtitle,
-.home .page-header .page-title,
-.home .page-header .page-subtitle { margin-left: auto; margin-right: auto; }
-
-/* Keep compatibility if old markup still renders */
+/* Keep compatibility if some markup still renders (but we hide it anyway) */
 .home .home-landing { position: relative; min-height: 100vh; }
 .home .landing-hero { display: none !important; }
 
-/* ----------------------------------------------------------
-   8) Circular link panels (FLAT + responsive)
-   ---------------------------------------------------------- */
+/* 7) Circular link panels (FLAT + responsive) */
 .link-circles {
-  /* Wider canvas like the reference site */
   max-width: min(94vw, 1440px);
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
-
   display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr)); /* 4-up by default */
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
   gap: clamp(1rem, 2.5vw, 3rem);
-
-  justify-items: center;
-  align-items: start;
+  justify-items: center; align-items: start;
 }
-
-@media (max-width: 1200px) { /* 3-up */
-  .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); }
-}
-@media (max-width: 900px) {  /* 2-up */
-  .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
-}
-@media (max-width: 520px) {  /* 1-up */
-  .link-circles { grid-template-columns: 1fr; }
-}
+@media (max-width: 1200px) { .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); } }
+@media (max-width: 900px)  { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
+@media (max-width: 520px)  { .link-circles { grid-template-columns: 1fr; } }
 
 .circle-card {
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 0.85rem;
+  width: 100%; text-decoration: none; color: inherit;
+  display: grid; justify-items: center; align-content: start; gap: 0.85rem;
 }
-
-/* FLAT circle (no gradient/inner shadows) sized to column width */
 .circle-card .circle {
-  width: min(260px, 100%);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #2a2a2a;           /* flat */
+  width: min(260px, 100%); aspect-ratio: 1/1; border-radius: 50%;
+  display: grid; place-items: center; background: #2a2a2a;
   border: 2px solid rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25); /* soft outer only */
+  box-shadow: 0 14px 30px rgba(0,0,0,.25);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-
-/* Force the SAME look in light mode (no color flip) */
+/* Force same look in light mode */
 [data-theme="light"] .circle-card .circle {
-  background: #2a2a2a;
-  border-color: rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
+  background: #2a2a2a; border-color: rgba(255,255,255,.10); box-shadow: 0 14px 30px rgba(0,0,0,.25);
 }
+.circle-card .circle svg { width: 50%; height: 50%; opacity: .95; color: #fff; }
+.circle-card:hover .circle { transform: translateY(-2px); border-color: rgba(255,255,255,.22); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
 
-.circle-card .circle svg {
-  width: 50%;
-  height: 50%;
-  opacity: .95;
-  color: #ffffff;
-}
-
-.circle-card:hover .circle {
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.22);
-  box-shadow: 0 20px 44px rgba(0,0,0,.35);
-}
-
-/* Pills use the site's brand accent color (same as link color) */
 .circle-card .label-btn {
-  display: inline-block;
-  padding: .5rem 1.15rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: uppercase;
-  font-size: .86rem;
-  color: #fff;
-  background: $brand-color;             /* <- accent color */
-  border: 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease;
-  margin-top: .1rem;
+  display: inline-block; padding: .5rem 1.15rem; border-radius: 999px; font-weight: 700;
+  letter-spacing: .02em; text-transform: uppercase; font-size: .86rem; color: #fff;
+  background: $brand-color; border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  transition: filter .15s ease, transform .15s ease; margin-top: .1rem;
 }
+.circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-.circle-card .label-btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-}
-
-/* keep hero full-screen on small screens too (shader hero handles height) */
-@media (max-width: 720px) {
-  .home .site-header + main::before { height: 100vh; } /* harmless now */
-}
+@media (max-width: 720px) { .home .site-header + main::before { height: 100vh; } }
