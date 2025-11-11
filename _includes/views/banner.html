@@ -1,6 +1,6 @@
 {% comment %}
-Home banner with shader confined to the banner box (stable wiring).
-Left-aligned title/subtitle using the same width as page content.
+Home banner with shader inside the banner area (proportional sizing).
+Stable version: shader behind, text in front and left-aligned to content.
 {% endcomment %}
 
 {% if page.url == '/' or page.layout == 'home' %}
@@ -10,12 +10,14 @@ Left-aligned title/subtitle using the same width as page content.
     <canvas id="webgl-canvas"></canvas>
   </div>
 
-  <!-- Banner text -->
+  <!-- Banner text (left-aligned to the normal content wrapper) -->
   <div class="page-banner-inner">
-    <h1 class="page-title">{{ site.title | default: page.title }}</h1>
-    {% if site.description %}
-      <p class="page-subtitle">{{ site.description }}</p>
-    {% endif %}
+    <div class="wrapper">
+      <h1 class="page-title">{{ site.title | default: page.title }}</h1>
+      {% if site.description %}
+        <p class="page-subtitle">{{ site.description }}</p>
+      {% endif %}
+    </div>
   </div>
 </section>
 {% endif %}
