@@ -6,9 +6,13 @@
   {%- seo -%}
 
   <link rel="icon" href="{{ site.favicon }}">
+
+  <!-- Base styles & fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
   <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+
+  <!-- Base scripts -->
   <script src="{{ "/assets/js/main.js" | relative_url }}"></script>
 
   {%- feed_meta -%}
@@ -19,10 +23,9 @@
   {%- include extensions/photo-swipe.html -%}
   {%- include custom-head.html -%}
 
-  {%- comment -%} Shader hero: only on the homepage {%- endcomment -%}
-  {% if page.url == '/' or page.layout == 'home' %}
-    <link rel="stylesheet" href="{{ '/assets/css/hero-shader.css' | relative_url }}">
-    <script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
-    <script src="{{ '/assets/js/hero-shader.js' | relative_url }}" defer></script>
-  {% endif %}
+  <!-- Shader hero assets (unconditional; JS safely no-ops if #shader-banner isn't present) -->
+  <link rel="stylesheet" href="{{ '/assets/css/hero-shader.css' | relative_url }}">
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
+  <script src="{{ '/assets/js/hero-shader.js' | relative_url }}" defer></script>
 </head>
