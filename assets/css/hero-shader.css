@@ -1,150 +1,55 @@
-/* ===============================
-   Global layout + dark theme
-   =============================== */
+/* ==============================
+   Shader banner (centered text)
+   ============================== */
 
-/* One content grid for everything (except the top menu) */
-:root{
-  --content-max: 1240px;            /* your site width */
-  --section-pad: clamp(16px, 2vw, 28px);
-  --bg: #0b0c0e;                    /* dark background */
-  --fg: #e9eef5;                    /* main text */
-  --muted: #b8c1cc;                 /* softer text */
-  --card: #15171a;                  /* panels/cards */
-  --border: rgba(255,255,255,.08);  /* subtle lines */
-  --link: #8ad0ff;                  /* link accent (tweak if you like) */
-}
-
-/* Force dark look everywhere regardless of the theme toggle */
-html { color-scheme: dark; }
-body {
-  background: var(--bg) !important;
-  color: var(--fg) !important;
-}
-a { color: var(--link); }
-a:hover { filter: brightness(1.15); }
-
-/* Constrain all “content” wrappers to the same width */
-.wrapper,
-main .wrapper,
-.page-content > .wrapper,
-.page-banner .wrapper,
-.site-footer .wrapper,
-.link-circles {
-  max-width: var(--content-max);
-  margin: 0 auto;
-  padding-left: var(--section-pad);
-  padding-right: var(--section-pad);
-}
-
-/* Top menu stays full-bleed; do NOT constrain header wrapper */
-.site-header{
-  position: sticky; top: 0; z-index: 300;
-  background: rgba(0,0,0,.55);
-  -webkit-backdrop-filter: saturate(1.1) blur(6px);
-  backdrop-filter: saturate(1.1) blur(6px);
-  border-bottom: 1px solid var(--border);
-}
-/* Ensure header links are legible on dark */
-.site-header a { color: #fff; }
-
-/* Footers and horizontal rules align with the grid */
-.site-footer { background: var(--bg); color: var(--muted); }
-.site-footer hr, .page-split{
-  max-width: var(--content-max);
-  margin: 0 auto;
-  border-color: var(--border);
-}
-
-/* ===============================
-   Shader banner (shader behind, text in front)
-   =============================== */
-
-.page-banner{
+.page-banner.hero-shader{
   position: relative;
-  min-height: clamp(38vh, 48vh, 60vh);
+  height: clamp(320px, 48vh, 560px);
   overflow: hidden;
-  background: transparent !important;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: clamp(16px, 4vw, 56px); /* space to prevent “clipping” into next section */
+  margin: 0; /* keep flush with header */
 }
 
-.page-banner .shader-fill{
-  position: absolute; inset: 0;
-  z-index: 0; pointer-events: none;
-  background: #000; /* safe fallback if WebGL can’t draw */
-}
-.page-banner .shader-fill canvas{ width:100%; height:100%; display:block; }
-
-/* Foreground banner content aligned to the same grid */
-.page-banner .page-banner-inner{
-  position: relative; z-index: 2;
-  display: flex; align-items: flex-end;
-  height: 100%;
-  color: #fff;
-  text-shadow: 0 2px 18px rgba(0,0,0,.35);
-}
-.page-banner .page-title     { margin: 0 0 .35rem 0; }
-.page-banner .page-subtitle  { margin: 0 0 2rem 0; opacity: .92; }
-
-/* ===============================
-   Link circles (same width grid)
-   =============================== */
-
-.link-circles{
-  /* wrapper sizing is already handled above */
-  padding-top: 2.25rem;
-  padding-bottom: 4.5rem;
-
-  display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
-  gap: clamp(1rem, 2.2vw, 2.5rem);
-  align-items: start; justify-items: center;
-}
-
-@media (max-width: 1200px){ .link-circles{ grid-template-columns: repeat(3, minmax(220px,1fr)); } }
-@media (max-width: 900px) { .link-circles{ grid-template-columns: repeat(2, minmax(220px,1fr)); } }
-@media (max-width: 520px) { .link-circles{ grid-template-columns: 1fr; } }
-
-.circle-card{
+.page-banner.hero-shader .shader-fill,
+.page-banner.hero-shader .shader-fill canvas{
+  position: absolute;
+  inset: 0;
   width: 100%;
-  text-decoration: none; color: inherit;
-  display: grid; justify-items: center; align-content: start; gap: .9rem;
-}
-.circle-card .circle{
-  width: min(260px, 100%); aspect-ratio: 1 / 1; border-radius: 50%;
-  display: grid; place-items: center;
-  background: #2a2a2a;                     /* flat, works in dark mode */
-  border: 2px solid var(--border);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
-  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-}
-.circle-card .circle svg{ width:50%; height:50%; color:#fff; opacity:.95; }
-.circle-card:hover .circle{
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.22);
-  box-shadow: 0 20px 44px rgba(0,0,0,.35);
+  height: 100%;
+  display: block;
 }
 
-/* Pills = translucent black, no borders */
-.circle-card .label-btn{
-  display:inline-block; padding:.5rem 1.1rem; border-radius:999px;
-  font-weight:700; letter-spacing:.02em; text-transform:uppercase;
-  font-size:.86rem; color:#fff;
-  background: rgba(0,0,0,.58);
-  border: 0;
-  box-shadow: 0 6px 18px rgba(0,0,0,.25);
-  transition: transform .15s ease, background-color .15s ease;
+/* subtle dark overlay to ensure readable text */
+.page-banner.hero-shader::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35));
+  pointer-events: none;
+  z-index: 1;
 }
-.circle-card .label-btn:hover{ transform: translateY(-1px); background: rgba(0,0,0,.66); }
 
-/* ===============================
-   Small theme chips / toggles (match header style)
-   =============================== */
-.mode-toggle, .theme-toggle, .toggle-theme, .night-mode-toggle, .nightshift,
-.color-scheme, .btn-theme, .toggle-switch {
-  background: rgba(0,0,0,.55) !important;
-  color: #fff !important;
-  border: 0 !important;
-  -webkit-backdrop-filter: saturate(1.1) blur(6px);
-  backdrop-filter: saturate(1.1) blur(6px);
+/* center the text over the shader */
+.page-banner.hero-shader .page-banner-inner.hero-center{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 0 1rem;
+  z-index: 2; /* above canvas + overlay */
+}
+
+/* typography */
+.page-banner .page-title{
+  margin: 0 0 .4rem 0;
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.15;
+  color: #fff;
+}
+.page-banner .page-subtitle{
+  margin: 0;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.3;
+  color: rgba(255,255,255,.92);
+  opacity: .95;
 }
