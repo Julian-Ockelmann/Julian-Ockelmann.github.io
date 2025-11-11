@@ -1,0 +1,68 @@
+:root{
+  /* Adjust these to taste */
+  --banner-height: 60vh;
+  --content-max: 1240px;
+}
+
+/* Header: translucent black strip, always readable on top of the shader */
+.site-header{
+  position: relative;
+  z-index: 30;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: saturate(130%) blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+/* Banner container and layering */
+.page-banner{
+  position: relative;
+  height: var(--banner-height);
+  overflow: hidden;
+  background: #000;
+}
+.page-banner .shader-fill{
+  position: absolute;
+  inset: 0;
+  z-index: 1;              /* behind the text */
+  pointer-events: none;    /* never blocks clicks/selection */
+}
+.page-banner .shader-fill canvas{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.page-banner .page-banner-inner{
+  position: relative;
+  z-index: 2;              /* above the shader */
+  display: flex;
+  align-items: flex-end;   /* put text near the bottom edge */
+  height: 100%;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,.35);
+}
+.page-banner .page-title{
+  margin: 0 0 .4rem 0;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+.page-banner .page-subtitle{
+  margin: 0 0 2rem 0;
+  opacity: .9;
+}
+
+/* Make the inner content width match the rest of the page */
+.page-banner .wrapper,
+.site-footer .wrapper,
+.link-circles{ max-width: var(--content-max); margin: 0 auto; }
+
+/* Pills & circles already defined elsewhere; ensure they sit below the banner */
+.home .page-content{ position: relative; z-index: 1; }
+
+/* Optional: make top-right theme toggle pill match the header */
+.theme-toggle, .site-nav .page-link{
+  background: rgba(0,0,0,.35);
+  border: 0;
+}
+
+/* Footer divider spans same width as content */
+.site-footer hr, .page-split{ max-width: var(--content-max); margin: 0 auto; }
