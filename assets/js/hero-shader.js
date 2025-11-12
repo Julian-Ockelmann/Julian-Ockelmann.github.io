@@ -1,13 +1,11 @@
 (function () {
+  // Only run if the banner container exists
   var container = document.getElementById('shader-banner');
-  if (!container) return;
+  var canvas = document.getElementById('webgl-canvas');
+  if (!container || !canvas || typeof THREE === 'undefined') return;
 
-  var canvas = container.querySelector('#webgl-canvas');
-  if (!canvas) return;
-
-  // THREE
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
   var scene = new THREE.Scene();
   var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -21,11 +19,26 @@
   };
 
   var vs = 'attribute vec3 position; void main(){ gl_Position = vec4(position,1.0); }';
-  var fs = 'precision highp float;uniform vec2 resolution;uniform float time;uniform float xScale;uniform float yScale;uniform float distortion;void main(){vec2 p=(gl_FragCoord.xy*2.0-resolution)/min(resolution.x,resolution.y);float d=length(p)*distortion;float rx=p.x*(1.0+d);float gx=p.x;float bx=p.x*(1.0-d);float r=0.05/abs(p.y+sin((rx+time)*xScale)*yScale);float g=0.05/abs(p.y+sin((gx+time)*xScale)*yScale);float b=0.05/abs(p.y+sin((bx+time)*xScale)*yScale);gl_FragColor=vec4(r,g,b,1.0);}';
+  var fs = [
+    'precision highp float;',
+    'uniform vec2 resolution; uniform float time;',
+    'uniform float xScale; uniform float yScale; uniform float distortion;',
+    'void main(){',
+    '  vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);',
+    '  float d = length(p) * distortion;',
+    '  float rx = p.x * (1.0 + d);',
+    '  float gx = p.x;',
+    '  float bx = p.x * (1.0 - d);',
+    '  float r = 0.05 / abs(p.y + sin((rx + time) * xScale) * yScale);',
+    '  float g = 0.05 / abs(p.y + sin((gx + time) * xScale) * yScale);',
+    '  float b = 0.05 / abs(p.y + sin((bx + time) * xScale) * yScale);',
+    '  gl_FragColor = vec4(r, g, b, 1.0);',
+    '}'
+  ].join('');
 
   var geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
-    -1,-1,0, 1,-1,0, -1, 1,0,
+    -1,-1,0,  1,-1,0, -1, 1,0,
      1,-1,0, -1, 1,0,  1, 1,0
   ]), 3));
 
@@ -36,25 +49,28 @@
     transparent: true
   });
 
-  scene.add(new THREE.Mesh(geometry, material));
+  var mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
 
   function resize() {
-    var w = container.clientWidth || 1;
-    var h = container.clientHeight || 1;
-    // No DOM growth: do not change layout; just resize the renderer buffer.
+    // Size the canvas to the banner container
+    var w = container.clientWidth || window.innerWidth || 1;
+    var h = container.clientHeight || Math.round(window.innerHeight * 0.6) || 1;
     renderer.setSize(w, h, false);
     uniforms.resolution.value.set(w, h);
   }
-  resize();
 
-  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(container);
-  window.addEventListener('resize', resize);
+  resize();
+  if ('ResizeObserver' in window) {
+    try { new ResizeObserver(resize).observe(container); } catch(e){ window.addEventListener('resize', resize); }
+  } else {
+    window.addEventListener('resize', resize);
+  }
 
   var clock = new THREE.Clock();
-  function raf() {
+  (function raf(){
     uniforms.time.value += clock.getDelta();
     renderer.render(scene, camera);
     requestAnimationFrame(raf);
-  }
-  raf();
+  })();
 })();
