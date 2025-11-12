@@ -1,34 +1,55 @@
 {%- comment -%}
   Home banner with shader filling the banner area.
-  Title/subtitle are aligned to the site content grid via .wrapper.
+  Title/subtitle left-aligned to the site grid with a safe top offset from the nav.
 {%- endcomment -%}
 
 {%- if page.url == '/' or page.layout == 'home' -%}
 <style>
   :root{
-    /* fall back to _config.yml → content_width */
+    /* pulls from _config.yml; falls back to 1240px */
     --content-max: {{ site.content_width | default: '1240px' }};
     --content-pad: clamp(12px, 2vw, 24px);
-    --banner-height: var(--banner-height, 60vh);
+
+    /* keep banner proportion the same as before */
+    --banner-height: 60vh;
+
+    /* distance from the nav; responsive clamp keeps it comfortable */
+    --banner-safe-top: clamp(56px, 10vh, 120px);
   }
-  .page-banner{ position: relative; height: var(--banner-height); overflow: hidden; background:#000; }
-  .page-banner .shader-fill{ position:absolute; inset:0; z-index:1; pointer-events:none; }
-  .page-banner .shader-fill canvas{ width:100%; height:100%; display:block; }
+
+  .page-banner{
+    position: relative;
+    height: var(--banner-height);
+    overflow: hidden;
+    background: #000;
+  }
+  .page-banner .shader-fill{
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  }
+  .page-banner .shader-fill canvas{
+    width: 100%; height: 100%; display: block;
+  }
+
   .page-banner .page-banner-inner{
-    position: relative; z-index: 2;
-    display: flex; align-items: flex-end; height: 100%;
+    position: relative; z-index: 2; height: 100%;
+    display: flex; align-items: flex-start; /* anchor to top, then offset with padding */
     color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.35);
   }
-  /* 🔒 Align to the same grid as the rest of the site */
+
+  /* 🔒 Align to site grid + add safe top spacing */
   .page-banner .page-banner-inner > .wrapper{
     max-width: var(--content-max);
     width: 100%;
     margin-left: auto; margin-right: auto;
-    padding-left: var(--content-pad); padding-right: var(--content-pad);
-    padding-bottom: 2rem; /* breathing room from bottom edge */
+    padding: var(--banner-safe-top) var(--content-pad) 2rem;
   }
+
   .page-banner .page-title{ margin: 0 0 .35rem 0; font-weight: 800; letter-spacing: .2px; }
   .page-banner .page-subtitle{ margin: 0; opacity: .92; }
+
+  @media (max-width: 700px){
+    :root{ --banner-safe-top: clamp(40px, 8vh, 90px); }
+  }
 </style>
 
 <section class="page-banner hero-shader" role="img" aria-label="Header">
@@ -37,7 +58,7 @@
     <canvas id="webgl-canvas"></canvas>
   </div>
 
-  <!-- Banner text aligned to content grid -->
+  <!-- Banner text aligned to content grid and offset from the nav -->
   <div class="page-banner-inner">
     <div class="wrapper">
       <h1 class="page-title">{{ site.title | default: page.title }}</h1>
