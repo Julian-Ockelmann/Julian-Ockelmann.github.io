@@ -3,14 +3,194 @@ layout: default
 title: Home
 ---
 
-{%- comment -%}
-Fixed full-viewport shader background (behind header + content),
-then a spacer to keep the first fold as the hero.
-{%- endcomment -%}
-{% include shader-hero.html %}
+<!-- Shader Hero (fixed, full-viewport background, home-only) -->
+<style>
+  :root{
+    /* fallbacks if not already provided in main.scss */
+    --content-max: var(--content-max, 1240px);
+    --content-pad: var(--content-pad, clamp(12px, 2vw, 24px));
+  }
 
-<div class="shader-spacer" aria-hidden="false"></div>
+  /* Fixed shader behind everything */
+  .shader-hero-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: -1;          /* behind header + content */
+    pointer-events: none; /* let clicks pass through */
+    background: #000;     /* fallback while WebGL warms up */
+  }
+  .shader-hero-wrap canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+  }
 
+  /* Keep header above the shader */
+  .site-header { position: relative; z-index: 10; }
+
+  /* Overlay section that reserves the first fold and aligns text to the grid */
+  .hero-headline{
+    position: relative;
+    height: 100vh;                /* reserves the first viewport */
+    display: flex;
+    align-items: flex-end;        /* put text near the bottom */
+    color: #fff;
+    text-shadow: 0 2px 18px rgba(0,0,0,.35);
+  }
+  .hero-headline > .wrapper{
+    max-width: var(--content-max);
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding-left: var(--content-pad);
+    padding-right: var(--content-pad);
+    padding-bottom: 2.2rem;       /* distance from bottom edge */
+  }
+  .hero-headline .page-title{
+    margin: 0 0 .35rem 0;
+    font-weight: 800;
+    letter-spacing: .2px;
+  }
+  .hero-headline .page-subtitle{
+    margin: 0;
+    opacity: .92;
+  }
+</style>
+
+<!-- Fixed shader background -->
+<div class="shader-hero-wrap" aria-hidden="true">
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- vertex shader -->
+  <script id="js-vertex-shader" type="x-shader/x-vertex">
+  attribute vec3 position;
+  void main() { gl_Position = vec4(position, 1.0); }
+  </script>
+
+  <!-- fragment shader -->
+  <script id="js-fragment-shader" type="x-shader/x-fragment">
+  precision highp float;
+  uniform vec2  resolution;
+  uniform float time;
+  uniform float xScale;
+  uniform float yScale;
+  uniform float distortion;
+
+  void main() {
+    vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+    float d = length(p) * distortion;
+
+    float rx = p.x * (1.0 + d);
+    float gx = p.x;
+    float bx = p.x * (1.0 - d);
+
+    float r = 0.05 / abs(p.y + sin((rx + time) * xScale) * yScale);
+    float g = 0.05 / abs(p.y + sin((gx + time) * xScale) * yScale);
+    float b = 0.05 / abs(p.y + sin((bx + time) * xScale) * yScale);
+
+    gl_FragColor = vec4(r, g, b, 1.0);
+  }
+  </script>
+
+  <!-- three.js (safe to keep even if also included in head) -->
+  <script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
+
+  <script>
+  (function () {
+    if (window.__homeShaderBooted) return;  // guard against double-run
+    window.__homeShaderBooted = true;
+
+    function boot() {
+      if (!window.THREE) { requestAnimationFrame(boot); return; }
+
+      class Stage {
+        constructor() {
+          this.renderParam = { clearColor: 0x000000, width: window.innerWidth, height: window.innerHeight };
+          this.cameraParam = { left:-1, right:1, top:1, bottom:-1, near:0, far:1 };
+          this.scene = null; this.camera = null; this.renderer = null;
+        }
+        init() { this._setScene(); this._setRender(); this._setCamera(); }
+        _setScene(){ this.scene = new THREE.Scene(); }
+        _setRender(){
+          this.renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("webgl-canvas") });
+          this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+          this.renderer.setClearColor(new THREE.Color(this.renderParam.clearColor));
+          this.renderer.setSize(this.renderParam.width, this.renderParam.height, false);
+        }
+        _setCamera(){
+          if(!this.camera){
+            this.camera = new THREE.OrthographicCamera(
+              this.cameraParam.left, this.cameraParam.right,
+              this.cameraParam.top,  this.cameraParam.bottom,
+              this.cameraParam.near, this.cameraParam.far
+            );
+          }
+          const w = window.innerWidth, h = window.innerHeight;
+          this.renderer.setSize(w, h, false);
+          this.camera.updateProjectionMatrix();
+        }
+        render(){ this.renderer.render(this.scene, this.camera); }
+        onResize(){ this._setCamera(); }
+      }
+
+      class BannerMesh {
+        constructor(stage){
+          const c = document.getElementById("webgl-canvas");
+          this.uniforms = {
+            resolution: { value: new THREE.Vector2(c.clientWidth, c.clientHeight) },
+            time: { value: 0.0 },
+            xScale: { value: 1.1 },
+            yScale: { value: 0.55 },
+            distortion: { value: 0.050 }
+          };
+          this.stage = stage; this.mesh = null;
+        }
+        init(){
+          const pos = new Float32Array([
+            -1,-1,0,  1,-1,0,  -1, 1,0,
+             1,-1,0,  1, 1,0,  -1, 1,0
+          ]);
+          const geom = new THREE.BufferGeometry();
+          geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+          const mat = new THREE.RawShaderMaterial({
+            vertexShader:   document.getElementById("js-vertex-shader").textContent,
+            fragmentShader: document.getElementById("js-fragment-shader").textContent,
+            uniforms: this.uniforms, side: THREE.DoubleSide
+          });
+          this.mesh = new THREE.Mesh(geom, mat);
+          this.stage.scene.add(this.mesh);
+        }
+        onResize(){ this.uniforms.resolution.value.set(window.innerWidth, window.innerHeight); }
+        onRaf(){ this.uniforms.time.value += 0.01; }
+      }
+
+      const stage = new Stage(); stage.init();
+      const banner = new BannerMesh(stage); banner.init();
+
+      function raf(){ stage.render(); banner.onRaf(); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+
+      window.addEventListener('resize', () => { stage.onResize(); banner.onResize(); }, { passive:true });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot, { once:true });
+    } else { boot(); }
+  })();
+  </script>
+</div>
+
+<!-- Aligned, left-edge headline overlay (reserves first fold) -->
+<section class="hero-headline" aria-label="Header">
+  <div class="wrapper">
+    <h1 class="page-title">{{ site.title | default: page.title }}</h1>
+    {% if site.description %}
+      <p class="page-subtitle">{{ site.description }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Buttons (2×2 or your current layout—unchanged) -->
 <section class="link-circles" aria-label="Profile links">
   <!-- Google Scholar -->
   <a class="fancy"
@@ -18,7 +198,6 @@ then a spacer to keep the first fold as the hero.
      target="_blank" rel="noopener noreferrer">
     <span class="top-key"></span>
     <span class="logo" aria-hidden="true">
-      <!-- simple book-ish icon (keeps your previous feel) -->
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path fill="currentColor"
           d="M6 4h9a3 3 0 0 1 3 3v12.5a.5.5 0 0 1-.8.4L15 18H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 2v10h9.6l1.4.9V7a1 1 0 0 0-1-1Z"/>
