@@ -108,102 +108,129 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 
 
 /* ============================================================
-   SIMPLE FLIP SQUARES — logo on front, text on back
+   SQUARE FLIP BUTTONS — full implementation (replaces circle-cards)
    ============================================================ */
 
-/* Sizing defaults (only if not already set earlier) */
-:root{
-  --btn-size: clamp(168px, 19vw, 210px);
-  --btn-radius: 14px;
-  --btn-border: 3px;
-  --btn-text: #111214;   /* dark text on white tile */
-  --btn-bg:   #ffffff;   /* white tile */
-}
-
-/* Row layout stays the same (horizontal with gaps + wrapping) */
+/* Horizontal row with gaps; wraps to new rows on small widths */
 .link-circles{
-  display: flex !important;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: flex !important;        /* replaces prior grid layout */
+  flex-wrap: wrap;                  /* collapse onto additional rows */
+  justify-content: center;          /* center the row within the content width */
   align-items: stretch;
-  gap: clamp(12px, 2.2vw, 24px);
-  margin: 0;
-  padding: 3rem 0 4.5rem;
+  gap: clamp(12px, 2.2vw, 24px);    /* “little space in between” */
+  margin: 0;                        /* gutters come from the .wrapper */
+  padding: 3rem 0 4.5rem;           /* vertical breathing room */
 }
 
-/* Button anchor acts as the tile */
-.flip-btn{
+/* overall tile */
+.button-icon{
   position: relative;
-  display: block;
+  display: grid;
+  grid-template-rows: 1fr auto;  /* icon area + label slab */
+  align-items: center;
+  justify-items: center;
+
   width: var(--btn-size);
   height: var(--btn-size);
-  border: var(--btn-border) solid #fff;     /* white frame for dark page */
+
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: var(--btn-border) solid #fff;     /* white frame against dark page */
   border-radius: var(--btn-radius);
   text-decoration: none;
-  color: var(--btn-text);
-  background: transparent;
+  cursor: pointer;
+
   box-shadow: 0 16px 36px rgba(0,0,0,.35);
-  perspective: 900px;                       /* give depth to inner flip */
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  perspective: 700px; /* depth for the cube */
+
+  /* smooth hover */
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
-.flip-btn:hover{
+
+.button-icon:hover{
+  border-color: #e9eef2;           /* subtle hover frame */
   transform: translateY(-2px);
   box-shadow: 0 20px 44px rgba(0,0,0,.42);
-  border-color: #e9eef2;
 }
-.flip-btn:focus-visible{
+
+.button-icon:focus-visible{
   outline: 2px solid #8fd2c6;
   outline-offset: 3px;
   border-color: #8fd2c6;
 }
 
-/* The flipping wrapper */
-.flip-btn .flip-inner{
-  position: relative;
+/* icon (fills the top area of the square) */
+.button-icon .icon{
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  transition: transform .5s ease;
-  border-radius: inherit;
-  overflow: hidden;                          /* keep faces clipped to radius */
-}
-
-/* Flip on hover */
-.flip-btn:hover .flip-inner{ transform: rotateY(180deg); }
-/* If you'd rather flip vertically, use: rotateX(180deg) and update .back transform below */
-
-/* The two faces */
-.flip-btn .face{
-  position: absolute;
-  inset: 0;
+  padding: 28px 28px 18px;
+  background: transparent;     /* tile itself is white */
   display: grid;
   place-items: center;
-  padding: 24px;                             /* breath for icons/text */
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border-radius: inherit;
-  backface-visibility: hidden;
+  box-sizing: border-box;
 }
 
-/* Front face shows the icon/logo */
-.flip-btn .face.front svg{
+.button-icon .icon svg{
   width: clamp(40px, 28%, 64px);
   height: auto;
-  color: currentColor; /* your SVGs use fill='currentColor' */
+  color: var(--btn-text);      /* uses currentColor in your SVGs */
 }
 
-/* Back face shows the label */
-.flip-btn .face.back{
-  transform: rotateY(180deg);                /* match rotateY above */
+/* label cube (bottom slab) */
+.button-icon .cube{
+  position: relative;
+  width: 100%;
+  height: 56px;                /* slab height */
+  transform-style: preserve-3d;
+  transition: transform .4s ease;
+}
+
+.button-icon:hover .cube{ transform: rotateX(90deg); }
+
+.button-icon .side{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .9rem;
   font-weight: 800;
-  text-transform: uppercase;
   letter-spacing: .5px;
-  text-align: center;
-  line-height: 1.25;
+  text-transform: uppercase;
+  backface-visibility: hidden;
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom-left-radius: calc(var(--btn-radius) - 2px);
+  border-bottom-right-radius: calc(var(--btn-radius) - 2px);
 }
 
-/* Reduced motion accessibility */
-@media (prefers-reduced-motion: reduce){
-  .flip-btn .flip-inner{ transition: none; }
-  .flip-btn:hover .flip-inner{ transform: none; }
+/* front face (default) — white with dark text */
+.button-icon .front{
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  transform: translate3d(0,0,1em);
 }
+
+/* top face (revealed on hover) — slightly tinted but still “white” */
+.button-icon .top{
+  background: var(--btn-top);
+  color: var(--btn-text);
+  transform: rotateX(-90deg) translate3d(0, 18px, 2em);
+}
+
+/* Small screens: shrink tiles & slab height a bit */
+@media (max-width: 520px){
+  :root{ --btn-size: 180px; }
+  .button-icon .cube,
+  .button-icon .side{ height: 50px; }
+}
+
+/* ===========================
+   Removed/Deprecated (cleanup)
+   ===========================
+   - .circle-card
+   - .circle-card .circle / .label-btn
+   - .link-circles grid template & media queries
+   (Replaced by .button-icon + flex-based .link-circles)
+*/
