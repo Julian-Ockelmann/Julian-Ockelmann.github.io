@@ -1,10 +1,17 @@
 ---
 layout: default
-title: Julian Ockelmann
+title: Home
 ---
 
-<section class="link-circles" aria-label="Profile links">
+{%- comment -%}
+Fixed full-viewport shader background (behind header + content),
+then a spacer to keep the first fold as the hero.
+{%- endcomment -%}
+{% include shader-hero.html %}
 
+<div class="shader-spacer" aria-hidden="true"></div>
+
+<section class="link-circles" aria-label="Profile links">
   <!-- Google Scholar -->
   <a class="circle-card"
      href="{{ site.scholar_url | default: 'https://scholar.google.com/' }}"
@@ -60,5 +67,4 @@ title: Julian Ockelmann
     </span>
     <span class="label-btn">LinkedIn</span>
   </a>
-
 </section>
