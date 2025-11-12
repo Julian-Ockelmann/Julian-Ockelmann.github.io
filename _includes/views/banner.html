@@ -3,4 +3,21 @@ Home banner with shader inside the banner area (proportional sizing).
 Stable version: shader behind, text in front and left-aligned to content.
 {% endcomment %}
 
+{% if page.url == '/' or page.layout == 'home' %}
+<section class="page-banner" role="img" aria-label="Shader hero">
+  <!-- Shader canvas fills the banner box -->
+  <div class="shader-fill" id="shader-banner" aria-hidden="true">
+    <canvas id="webgl-canvas"></canvas>
+  </div>
 
+  <!-- Banner text (left-aligned to the normal content wrapper) -->
+  <div class="page-banner-inner">
+    <div class="wrapper">
+      <h1 class="page-title">{{ site.title | default: page.title }}</h1>
+      {% if site.description %}
+        <p class="page-subtitle">{{ site.description }}</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
