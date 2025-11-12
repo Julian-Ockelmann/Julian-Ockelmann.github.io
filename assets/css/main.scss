@@ -28,25 +28,21 @@ $content-width: {{ site.content_width | default: '920px' }};
    Site overrides (ours)
    ===================== */
 
-/* 0) Never draw the pseudo-banner; shader handles the hero */
+/* 0) Never draw the pseudo-banner; the shader handles the hero. */
 .site-header + main::before { display: none !important; content: ""; }
 
-/* Keep homepage content band flush */
+/* Keep homepage content band flush with the banner. */
 .home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* Kill the theme's 'page-banner' on the home page (band that blocks view) */
-.home .page-banner,
-.home .page-banner-img,
-.home .page-banner-inner { display: none !important; }
-/* Fallback: hide banner if the home has the link-circles */
-.page-banner:has(+ main .link-circles) { display: none !important; }
+/* IMPORTANT:
+   Previously we hid ALL home banners. That breaks the shader hero.
+   Only hide a home banner if it is NOT the shader hero. */
+.home .page-banner:not(.hero-shader),
+.home .page-banner-img { display: none !important; }
 
 /* Make sure header stays above the shader */
 .site-header { position: relative; z-index: 10; }
 .home .site-header { background: transparent !important; }
-
-/* Spacer: keep first fold reserved for hero */
-.home .shader-spacer { height: 100vh; }
 
 /* Hide TOC / widgets on home */
 .home .home-categories, .home .post-list, .home .index-panel, .home .list,
@@ -64,14 +60,38 @@ $content-width: {{ site.content_width | default: '920px' }};
 .layout-cv .toc-container, .layout-cv .toc-aside,
 .page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
 .page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
+
 body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
 body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside { display: none !important; }
+
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
+/* ========= Unified content width (site-wide) ========= */
+:root { --page-width: 900px; }                 /* desktop target width */
+@media (max-width: 1200px) { :root { --page-width: 86vw; } }
+@media (max-width: 720px)  { :root { --page-width: 92vw; } }
+
+/* Apply the same width to hero text, main content, link grid, and footer */
+.page-banner .page-banner-inner.hero-center,
+.page-content > .wrapper,
+.link-circles,
+.site-footer > .wrapper,
+.site-footer .site-footer-inner {
+  max-width: var(--page-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Keep the top menu full-width */
+.site-header,
+.site-header .wrapper { max-width: none !important; width: 100% !important; }
+
 /* Circular link panels (flat + responsive) */
 .link-circles {
-  max-width: min(94vw, 1440px);
+  /* max-width is now unified above; keep layout only */
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
   display: grid;
