@@ -88,92 +88,118 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 
 
 /* ===============================
-   3D Flip Button (.button-icon)
+   Square Flip Buttons (white/dark)
    =============================== */
-.button-icon {
-  display: flex;
-  align-items: stretch;
-  border: 3px #fff solid;
-  width: fit-content;
-  height: fit-content;
+
+/* responsive side length for the square tile */
+:root{
+  --btn-size: clamp(200px, 22vw, 240px);
+  --btn-radius: 14px;
+  --btn-border: 3px;
+  --btn-text: #111214;   /* dark text */
+  --btn-bg:   #ffffff;   /* white tile */
+  --btn-top:  #f2f4f7;   /* subtle hover face */
+}
+
+/* overall tile */
+.button-icon{
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;  /* icon area + label slab */
+  align-items: center;
+  justify-items: center;
+
+  width: var(--btn-size);
+  height: var(--btn-size);
+
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: var(--btn-border) solid #fff;     /* white frame against dark page */
+  border-radius: var(--btn-radius);
+  text-decoration: none;
   cursor: pointer;
-  text-decoration: none;   /* <a> reset */
-  perspective: 700px;      /* gives the cube depth */
-  border-radius: 6px;      /* optional: soften the frame */
+
+  box-shadow: 0 16px 36px rgba(0,0,0,.35);
+  perspective: 700px; /* depth for the cube */
 }
 
-.button-icon:focus-visible {
-  outline: 2px solid #ff98a2;
+.button-icon:hover{ border-color: #e9eef2; }   /* subtle hover frame */
+.button-icon:focus-visible{
+  outline: 2px solid #8fd2c6;
   outline-offset: 3px;
+  border-color: #8fd2c6;
 }
 
-.button-icon:hover { border-color: #ff98a2; }
-
-/* icon tile on the left */
-.button-icon .icon {
-  background-color: #fff;
-  padding: 10px 10px 5px 10px;
+/* icon (fills the top area of the square) */
+.button-icon .icon{
+  width: 100%;
+  height: 100%;
+  padding: 28px 28px 18px;
+  background: transparent;     /* tile itself is white */
   display: grid;
   place-items: center;
+  box-sizing: border-box;
 }
 
-.button-icon .icon svg {
-  width: 25px;
-  height: 25px;
-  color: #222229;   /* svg uses currentColor; ensures contrast on white */
+.button-icon .icon svg{
+  width: clamp(40px, 28%, 64px);
+  height: auto;
+  color: var(--btn-text);      /* uses currentColor in your SVGs */
 }
 
-/* text cube on the right */
-.button-icon .cube {
+/* label cube (bottom slab) */
+.button-icon .cube{
   position: relative;
-  transition: all 0.4s;
+  width: 100%;
+  height: 56px;                /* slab height */
   transform-style: preserve-3d;
-  width: 200px;
-  height: 20px;   /* visual height is controlled by the .side (47px) below */
+  transition: transform .4s ease;
 }
 
-.button-icon:hover .cube { transform: rotateX(90deg); }
+.button-icon:hover .cube{ transform: rotateX(90deg); }
 
-.button-icon .side {
+.button-icon .side{
   position: absolute;
-  height: 47px;
-  width: 200px;
+  inset: 0;
+  width: 100%;
+  height: 56px;
   display: flex;
-  font-size: 0.8em;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  font-size: .9rem;
+  font-weight: 800;
+  letter-spacing: .5px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: bold;
-  left: 0; top: 0;
   backface-visibility: hidden;
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom-left-radius: calc(var(--btn-radius) - 2px);
+  border-bottom-right-radius: calc(var(--btn-radius) - 2px);
 }
 
-/* front face (default) */
-.button-icon .front {
-  background: #222229;
-  color: #fff;
-  transform: translate3d(0, 0, 1em);
-  border-left: 1px solid rgba(255,255,255,.06);
+/* front face (default) — white with dark text */
+.button-icon .front{
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  transform: translate3d(0,0,1em);
 }
 
-/* top face (revealed on hover) */
-.button-icon .top {
-  background: #ff98a2;
-  color: #fff;
-  transform: rotateX(-90deg) translate3d(0, 13.5px, 2em);
+/* top face (revealed on hover) — slightly tinted but still “white” */
+.button-icon .top{
+  background: var(--btn-top);
+  color: var(--btn-text);
+  transform: rotateX(-90deg) translate3d(0, 18px, 2em);
 }
 
-/* grid tweaks so the new buttons center nicely in the existing layout */
-.link-circles {
-  justify-items: center;
-  align-items: start;
+/* grid spacing stays neat */
+.link-circles{
   gap: clamp(1rem, 2.5vw, 2rem);
+  justify-items: center;
 }
 
-/* small screens: allow the text slab to shrink a bit */
-@media (max-width: 520px) {
+/* small screens: let the tile size shrink gracefully */
+@media (max-width: 520px){
+  :root{ --btn-size: 200px; }
   .button-icon .cube,
-  .button-icon .side { width: 180px; }
+  .button-icon .side{ height: 52px; }
 }
 
