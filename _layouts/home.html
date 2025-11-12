@@ -1,10 +1,51 @@
 ---
 layout: default
-title: Home
+title: Julian Ockelmann
 ---
 
-<section class="link-circles" aria-label="Profile links">
+<!-- Translucent overlay sits above the background but below all content -->
+<div class="global-dark-overlay" aria-hidden="true"></div>
 
+<style>
+  /* ---------- One width to rule them all ---------- */
+  :root { --page-width: 900px; }
+  @media (max-width: 1200px){ :root { --page-width: 86vw; } }
+  @media (max-width: 720px) { :root { --page-width: 92vw; } }
+
+  /* Normalize inner widths (hero text, content, link grid, footer) */
+  .page-content > .wrapper,
+  .page-banner .page-banner-inner,
+  .link-circles,
+  .site-footer > .wrapper,
+  .site-footer .site-footer-inner {
+    max-width: var(--page-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Keep header full width (independent) */
+  .site-header,
+  .site-header .wrapper { max-width: none !important; width: 100% !important; }
+
+  /* ---------- Overlay & stacking ---------- */
+  .global-dark-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.38);
+    pointer-events: none;
+    z-index: 1;      /* below all content */
+  }
+  /* Lift all actual content above overlay */
+  .site-header,
+  .page-content,
+  .page-content > .wrapper,
+  .link-circles,
+  .site-footer { position: relative; z-index: 2; }
+</style>
+
+<section class="link-circles" aria-label="Profile links">
   <!-- Google Scholar -->
   <a class="circle-card"
      href="{{ site.scholar_url | default: 'https://scholar.google.com/' }}"
@@ -60,5 +101,4 @@ title: Home
     </span>
     <span class="label-btn">LinkedIn</span>
   </a>
-
 </section>
