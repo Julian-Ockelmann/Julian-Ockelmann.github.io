@@ -33,10 +33,10 @@
   position: absolute;
   inset: 0;
   display: grid;
-  place-content: center;         /* vertical + horizontal centering */
+  place-content: center;
   text-align: center;
   padding: 0 1rem;
-  z-index: 2;                    /* above canvas + overlay */
+  z-index: 2; /* above canvas + overlay */
 }
 
 /* typography */
@@ -52,39 +52,4 @@
   line-height: 1.3;
   color: rgba(255,255,255,.92);
   opacity: .95;
-}
-
-/* ===========================================================
-   Unified content width (NOT the top menu)
-   - Sets one page width and applies it to banner text,
-     link-circles, main .wrapper and footer .wrapper
-   =========================================================== */
-
-/* Desktop target width ≈900px (tweak to taste) */
-:root { --page-width: 900px; }
-
-/* Scale down on smaller screens */
-@media (max-width: 1200px) { :root { --page-width: 86vw; } }
-@media (max-width: 720px)  { :root { --page-width: 92vw; } }
-
-/* Apply the same max-width everywhere (except the top header) */
-.page-banner .page-banner-inner.hero-center,
-.link-circles,
-.page-content > .wrapper,
-.site-footer > .wrapper {
-  max-width: var(--page-width) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-/* Ensure the link-circles section obeys the unified width */
-.link-circles { width: 100%; }
-
-/* Keep the top menu full-width */
-.site-header,
-.site-header .wrapper {
-  max-width: none !important;
-  width: 100% !important;
 }
