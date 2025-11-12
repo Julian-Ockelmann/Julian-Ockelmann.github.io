@@ -1,21 +1,21 @@
-{%- comment -%}
-  Home banner with shader inside the banner area (proportional sizing),
-  with the title/subtitle centered both vertically and horizontally.
-{%- endcomment -%}
+{% comment %}
+Home banner with shader inside the banner area (background) + centered text.
+This version avoids any non-Liquid comment syntax so nothing prints on the page.
+{% endcomment %}
 
-{%- if page.url == '/' or page.layout == 'home' -%}
-<section class="page-banner hero-shader" role="img" aria-label="Header">
-  <!-- Shader canvas fills the banner box -->
+{% if page.url == '/' or page.layout == 'home' %}
+<section class="page-banner shader-banner" role="img" aria-label="Shader hero">
+  <!-- Shader canvas fills the banner box (background layer) -->
   <div class="shader-fill" id="shader-banner" aria-hidden="true">
     <canvas id="webgl-canvas"></canvas>
   </div>
 
-  <!-- Centered banner text -->
-  <div class="page-banner-inner hero-center">
+  <!-- Foreground banner text, centered and width-aligned with content -->
+  <div class="page-banner-inner">
     <h1 class="page-title">{{ site.title | default: page.title }}</h1>
-    {%- if site.description -%}
+    {% if site.description %}
       <p class="page-subtitle">{{ site.description }}</p>
-    {%- endif -%}
+    {% endif %}
   </div>
 </section>
-{%- endif -%}
+{% endif %}
