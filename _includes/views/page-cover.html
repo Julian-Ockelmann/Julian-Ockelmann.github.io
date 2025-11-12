@@ -1,10 +1,9 @@
-{%- comment -%}
-On the home page the cover is handled by views/banner.html.
-Do nothing here so we don’t inject a second hero or stray text.
-{%- endcomment -%}
+{% comment %}
+The theme calls this include for the "cover/banner" slot.
+On the home page we render our shader banner.
+On other pages we let the theme’s default cover render (do nothing here).
+{% endcomment %}
 
-{%- if page.url == '/' or page.layout == 'home' -%}
-  {# handled by views/banner.html #}
-{%- else -%}
-  {# fall back to theme cover (no-op here) #}
-{%- endif -%}
+{% if page.url == '/' or page.layout == 'home' %}
+  {% include views/banner.html %}
+{% endif %}
