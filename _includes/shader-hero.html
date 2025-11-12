@@ -1,5 +1,12 @@
-<!-- Shader Hero (fixed, full-viewport, home-only) -->
+<!-- Shader Hero (fixed, full-viewport background, home-only) -->
 <style>
+  :root{
+    /* falls back if not set in main.scss */
+    --content-max: var(--content-max, 1240px);
+    --content-pad: var(--content-pad, clamp(12px, 2vw, 24px));
+  }
+
+  /* Fixed shader behind everything */
   .shader-hero-wrap {
     position: fixed;
     inset: 0;
@@ -12,8 +19,37 @@
     height: 100vh;
     display: block;
   }
-  /* keep header above the shader */
+
+  /* Keep header above the shader */
   .site-header { position: relative; z-index: 10; }
+
+  /* Overlay section that reserves the first fold and aligns text to grid */
+  .hero-headline{
+    position: relative;
+    height: 100vh;                /* reserves the first viewport */
+    display: flex;
+    align-items: flex-end;        /* put text near bottom */
+    color: #fff;
+    text-shadow: 0 2px 18px rgba(0,0,0,.35);
+  }
+  .hero-headline > .wrapper{
+    max-width: var(--content-max);
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding-left: var(--content-pad);
+    padding-right: var(--content-pad);
+    padding-bottom: 2.2rem;       /* distance from bottom edge */
+  }
+  .hero-headline .page-title{
+    margin: 0 0 .35rem 0;
+    font-weight: 800;
+    letter-spacing: .2px;
+  }
+  .hero-headline .page-subtitle{
+    margin: 0;
+    opacity: .92;
+  }
 </style>
 
 <div class="shader-hero-wrap" aria-hidden="true">
@@ -133,3 +169,13 @@
   })();
   </script>
 </div>
+
+<!-- Aligned, left-edge headline overlay (reserves first fold) -->
+<section class="hero-headline" aria-label="Header">
+  <div class="wrapper">
+    <h1 class="page-title">{{ site.title | default: page.title }}</h1>
+    {% if site.description %}
+      <p class="page-subtitle">{{ site.description }}</p>
+    {% endif %}
+  </div>
+</section>
