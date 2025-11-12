@@ -1,21 +1,23 @@
-{%- comment -%}
-  Home banner with shader inside the banner area (proportional sizing),
-  with the title/subtitle centered both vertically and horizontally.
-{%- endcomment -%}
+{% comment %}
+Home banner with shader inside the banner area (proportional sizing).
+Stable version: shader behind, text in front and left-aligned to content.
+{% endcomment %}
 
-{%- if page.url == '/' or page.layout == 'home' -%}
-<section class="page-banner hero-shader" role="img" aria-label="Header">
+{% if page.url == '/' or page.layout == 'home' %}
+<section class="page-banner" role="img" aria-label="Shader hero">
   <!-- Shader canvas fills the banner box -->
   <div class="shader-fill" id="shader-banner" aria-hidden="true">
     <canvas id="webgl-canvas"></canvas>
   </div>
 
-  <!-- Centered banner text -->
-  <div class="page-banner-inner hero-center">
-    <h1 class="page-title">{{ site.title | default: page.title }}</h1>
-    {%- if site.description -%}
-      <p class="page-subtitle">{{ site.description }}</p>
-    {%- endif -%}
+  <!-- Banner text (left-aligned to the normal content wrapper) -->
+  <div class="page-banner-inner">
+    <div class="wrapper">
+      <h1 class="page-title">{{ site.title | default: page.title }}</h1>
+      {% if site.description %}
+        <p class="page-subtitle">{{ site.description }}</p>
+      {% endif %}
+    </div>
   </div>
 </section>
-{%- endif -%}
+{% endif %}
