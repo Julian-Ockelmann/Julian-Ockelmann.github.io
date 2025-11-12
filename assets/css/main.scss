@@ -1,121 +1,98 @@
----
-# Only the main Sass file needs front matter (the dashes are enough)
----
-
-/* =====================
-   Theme variables (yours)
-   ===================== */
-$theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
-$brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
-
-$theme-name: "{{ site.theme_color }}";
-$brand-name: "{{ site.brand_color }}";
-$theme-color: map-get($theme-colors, "snowwhite");
-$brand-color: map-get($brand-colors, "greenblue");
-
-@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
-
-@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
-
-$content-width: {{ site.content_width | default: '920px' }};
-
-/* Load base Yat styles */
-@import "yat";
-
-/* =====================
-   Site overrides (ours)
-   ===================== */
-
-/* Keep homepage content band tidy */
-.home .page-content { padding-top: 0 !important; }
-
-/* Hide Yat feed widgets on the home */
-.home .home-categories,
-.home .post-list,
-.home .index-panel,
-.home .list,
-.home .post-item,
-.home .post-preview,
-.home .archive-list,
-.home .tag-list,
-.home .home-sidebar,
-.home .page-sidebar,
-.home .sidebar,
-.home .pagination { display: none !important; }
-
-/* Hide TOC blocks */
-.home #toc, .home .toc, .home .post-toc, .home .toc-wrap,
-.home .toc-container, .home .toc-aside { display: none !important; }
-
-/* ------- Circular link panels (flat + responsive) ------- */
-.link-circles {
-  max-width: min(94vw, 1440px);
-  margin: 0 auto;
-  padding: 3.25rem 1rem 5rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
-  gap: clamp(1rem, 2.5vw, 3rem);
-  justify-items: center;
-  align-items: start;
+/* ==========================================================
+   STOP infinite growth: pin the home banner height (no ratio)
+   ========================================================== */
+.home .page-banner {
+  /* kill any padding-ratio the theme applies */
+  padding: 0 !important;
+  height: clamp(320px, 48vh, 560px) !important;
+  position: relative;
+  overflow: hidden;
 }
-@media (max-width: 1200px) { .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); } }
-@media (max-width: 900px)  { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
-@media (max-width: 520px)  { .link-circles { grid-template-columns: 1fr; } }
 
-.circle-card {
+/* Our shader must not affect layout */
+.home .page-banner .shader-fill,
+.home .page-banner .shader-fill canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  text-decoration: none;
-  color: inherit;
+  height: 100%;
+  display: block; /* no inline baseline gap */
+  pointer-events: none;
+  z-index: 0; /* stays behind text */
+}
+
+/* Centered banner text stays above the canvas */
+.home .page-banner .page-banner-inner {
+  position: absolute;
+  inset: 0;
   display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 0.85rem;
+  place-content: center;
+  text-align: center;
+  padding: 0 clamp(16px, 2.5vw, 24px);
+  z-index: 2;
+}
+.home .page-banner .page-title   { color: #fff; margin: 0 0 .4rem; }
+.home .page-banner .page-subtitle{ color: rgba(255,255,255,.92); margin: 0; }
+
+/* Subtle dark overlay on top of shader (under text) */
+.home .page-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35));
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* FLAT circle */
-.circle-card .circle {
-  width: min(260px, 100%);
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #2a2a2a;
-  border: 2px solid rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+/* ==========================================================
+   Unify inner widths across header / banner / content / footer
+   ========================================================== */
+:root {
+  --site-max: 1200px;                   /* tweak as you like */
+  --site-pad: clamp(16px, 2.5vw, 24px); /* page side padding */
 }
 
-/* Keep same look in light mode */
-[data-theme="light"] .circle-card .circle {
-  background: #2a2a2a;
-  border-color: rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
+/* Header bar */
+.site-header .wrapper {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--site-pad);
 }
 
-.circle-card .circle svg { width: 50%; height: 50%; opacity: .95; color: #fff; }
-
-.circle-card:hover .circle {
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.22);
-  box-shadow: 0 20px 44px rgba(0,0,0,.35);
+/* Banner inner */
+.page-banner .page-banner-inner {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--site-pad);
 }
 
-/* Pills use the site's brand accent color */
-.circle-card .label-btn {
-  display: inline-block;
-  padding: .5rem 1.15rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: uppercase;
-  font-size: .86rem;
-  color: #fff;
-  background: $brand-color;
-  border: 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease;
-  margin-top: .1rem;
+/* Main content containers Yat uses */
+.page-content > .wrapper,
+.page-content .page-title, /* some themes wrap titles differently */
+.link-circles {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--site-pad);
 }
-.circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+/* Footer */
+.site-footer .wrapper,
+.site-footer-inner {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--site-pad);
+}
+
+/* ==========================================================
+   Optional: global translucent black over background only
+   (keeps text/UI above; doesn’t block clicks)
+   ========================================================== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.10); /* adjust intensity */
+  pointer-events: none;
+  z-index: 0;
+}
+header, .page-banner, main, footer { position: relative; z-index: 1; }
