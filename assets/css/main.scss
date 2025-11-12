@@ -5,53 +5,145 @@
 /* =====================
    Theme variables (yours)
    ===================== */
-$theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
-$brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
 
-$theme-name: "{{ site.theme_color }}";
+/* Palettes */
+$theme-colors: (
+  "coolblack": #090a0b,
+  "spacegrey": #353535,
+  "snowwhite": #ffffff
+);
+$brand-colors: (
+  "orangered": #ff5100,
+  "greatgold": #f2cb05,
+  "greenblue": #389092
+);
+
+/* ---- FORCE DARK THEME ----
+   Ignore any site toggle and always use our dark palette.
+*/
+$theme-name: "coolblack";                   /* was: "{{ site.theme_color }}" */
 $brand-name: "{{ site.brand_color }}";
-$theme-color: map-get($theme-colors, "snowwhite");
-$brand-color: map-get($brand-colors, "greenblue");
 
-@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
+$theme-color: map-get($theme-colors, "coolblack");
+$brand-color: if(
+  map-has-key($brand-colors, $brand-name),
+  map-get($brand-colors, $brand-name),
+  map-get($brand-colors, "greenblue")
+);
 
-@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
-
+/* Site content target width (used for all sections) */
 $content-width: {{ site.content_width | default: '920px' }};
 
-/* Load base Yat styles */
+/* Load base Yat styles with our palette already chosen */
 @import "yat";
+
+/* =====================
+   Global dark styling
+   ===================== */
+
+/* Unify dark color tokens for both data-theme states */
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+  --bg:        #0b0c0d;     /* page background */
+  --panel:     #111315;     /* panels/footer */
+  --text:      #e8edf2;
+  --muted:     #b3bcc7;
+  --border:    rgba(255,255,255,.08);
+  --accent:    #{$brand-color};
+  --page-width: 900px;
+}
+
+@media (max-width: 1200px) { :root { --page-width: 86vw; } }
+@media (max-width: 720px)  { :root { --page-width: 92vw; } }
+
+html { color-scheme: dark; }
+body { background: var(--bg) !important; color: var(--text) !important; }
+a { color: var(--accent); }
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  max-width: var(--page-width);
+  margin: 2rem auto;
+}
+
+/* Top menu: keep full width (you asked to keep the header independent) */
+.site-header,
+.site-header .wrapper {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Main background for content sections/panels */
+.page-content { background: var(--bg); }
+.site-footer  { background: var(--panel); color: var(--muted); }
 
 /* =====================
    Site overrides (ours)
    ===================== */
 
-/* Keep homepage content band tidy */
-.home .page-content { padding-top: 0 !important; }
+/* 0) Never draw the pseudo-banner; the shader handles the hero. */
+.site-header + main::before { display: none !important; content: ""; }
 
-/* Hide Yat feed widgets on the home */
-.home .home-categories,
-.home .post-list,
-.home .index-panel,
-.home .list,
-.home .post-item,
-.home .post-preview,
-.home .archive-list,
-.home .tag-list,
-.home .home-sidebar,
-.home .page-sidebar,
-.home .sidebar,
-.home .pagination { display: none !important; }
+/* Keep homepage content band flush with the banner. */
+.home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
 
-/* Hide TOC blocks */
-.home #toc, .home .toc, .home .post-toc, .home .toc-wrap,
-.home .toc-container, .home .toc-aside { display: none !important; }
+/* IMPORTANT: only hide a home banner if it is NOT the shader hero. */
+.home .page-banner:not(.hero-shader),
+.home .page-banner-img { display: none !important; }
 
-/* ------- Circular link panels (flat + responsive) ------- */
+/* Make sure header stays above the shader */
+.site-header { position: relative; z-index: 10; }
+.home .site-header { background: transparent !important; }
+
+/* ===== Unified content width across sections =====
+   Apply the same max width to hero text, main content wrappers,
+   the link grid section, and the footer wrapper.
+*/
+.page-banner .page-banner-inner.hero-center,
+.page-content > .wrapper,
+.link-circles,
+.site-footer > .wrapper,
+.site-footer .site-footer-inner {
+  max-width: var(--page-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Footer border/top spacing matches width as well */
+.site-footer .site-footer-inner {
+  border-top: 1px solid var(--border);
+  padding-top: 9px;
+}
+
+/* Hide TOC / widgets on home */
+.home .home-categories, .home .post-list, .home .index-panel, .home .list,
+.home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
+.home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
+
+.home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
+.home .toc-aside, .home .home-categories { display: none !important; }
+
+/* Hide tag widget anywhere */
+.sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
+
+/* Hide TOC on CV pages */
+.layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
+.layout-cv .toc-container, .layout-cv .toc-aside,
+.page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
+.page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
+
+body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
+body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside { display: none !important; }
+
+body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
+body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
+
+/* ========== Circular link panels (flat + responsive) ========== */
 .link-circles {
-  max-width: min(94vw, 1440px);
+  /* width is normalized above; layout only here */
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
   display: grid;
@@ -73,8 +165,6 @@ $content-width: {{ site.content_width | default: '920px' }};
   align-content: start;
   gap: 0.85rem;
 }
-
-/* FLAT circle */
 .circle-card .circle {
   width: min(260px, 100%);
   aspect-ratio: 1/1;
@@ -82,40 +172,23 @@ $content-width: {{ site.content_width | default: '920px' }};
   display: grid;
   place-items: center;
   background: #2a2a2a;
-  border: 2px solid rgba(255,255,255,.10);
+  border: 2px solid var(--border);
   box-shadow: 0 14px 30px rgba(0,0,0,.25);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-
-/* Keep same look in light mode */
+/* force same look even if a 'light' theme is toggled */
 [data-theme="light"] .circle-card .circle {
   background: #2a2a2a;
-  border-color: rgba(255,255,255,.10);
+  border-color: var(--border);
   box-shadow: 0 14px 30px rgba(0,0,0,.25);
 }
-
 .circle-card .circle svg { width: 50%; height: 50%; opacity: .95; color: #fff; }
+.circle-card:hover .circle { transform: translateY(-2px); border-color: rgba(255,255,255,.22); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
 
-.circle-card:hover .circle {
-  transform: translateY(-2px);
-  border-color: rgba(255,255,255,.22);
-  box-shadow: 0 20px 44px rgba(0,0,0,.35);
-}
-
-/* Pills use the site's brand accent color */
 .circle-card .label-btn {
-  display: inline-block;
-  padding: .5rem 1.15rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: uppercase;
-  font-size: .86rem;
-  color: #fff;
-  background: $brand-color;
-  border: 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease;
-  margin-top: .1rem;
+  display: inline-block; padding: .5rem 1.15rem; border-radius: 999px; font-weight: 700;
+  letter-spacing: .02em; text-transform: uppercase; font-size: .86rem; color: #fff;
+  background: var(--accent); border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  transition: filter .15s ease, transform .15s ease; margin-top: .1rem;
 }
 .circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
