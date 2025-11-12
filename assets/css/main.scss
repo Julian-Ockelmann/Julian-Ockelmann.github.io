@@ -1,138 +1,87 @@
----
-# Only the main Sass file needs front matter (the dashes are enough)
----
+/* ============================================================
+   Dark theme: single palette used across pages & articles
+   ============================================================ */
 
-/* =====================
-   Theme variables (yours)
-   ===================== */
-$theme-colors: ("coolblack": #090a0b, "spacegrey": #353535, "snowwhite": #ffffff);
-$brand-colors: ("orangered": #ff5100, "greatgold": #f2cb05, "greenblue": #389092);
-
-$theme-name: "{{ site.theme_color }}";
-$brand-name: "{{ site.brand_color }}";
-$theme-color: map-get($theme-colors, "snowwhite");
-$brand-color: map-get($brand-colors, "greenblue");
-
-@if map-has-key($theme-colors, $theme-name) { $theme-color: map-get($theme-colors, $theme-name);
-} @else if str-index($theme-name, "#") == 1 { $theme-color: {{ site.theme_color | default: '#ffffff' }}; }
-
-@if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
-} @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
-
-/* This is read from _config.yml → content_width */
-$content-width: {{ site.content_width | default: '920px' }};
-
-/* Load base Yat styles (will pick up $content-width) */
-@import "yat";
-
-/* =====================
-   Site overrides (ours)
-   ===================== */
-
-/* 0) Never draw the pseudo-banner; shader handles the hero */
-.site-header + main::before { display: none !important; content: ""; }
-
-/* Keep homepage content band flush */
-.home .page-content { padding-top: 0 !important; padding-bottom: 0 !important; margin: 0 !important; }
-
-/* Kill the theme's 'page-banner' on the home page (band that blocks view) */
-.home .page-banner,
-.home .page-banner-img,
-.home .page-banner-inner { display: none !important; }
-/* Fallback: hide banner if the home has the link-circles */
-.page-banner:has(+ main .link-circles) { display: none !important; }
-
-/* Make sure header stays above the shader */
-.site-header { position: relative; z-index: 10; }
-.home .site-header { background: transparent !important; }
-
-/* Spacer: keep first fold reserved for hero */
-.home .shader-spacer { height: 100vh; }
-
-/* Hide TOC / widgets on home */
-.home .home-categories, .home .post-list, .home .index-panel, .home .list,
-.home .post-item, .home .post-preview, .home .archive-list, .home .tag-list,
-.home .home-sidebar, .home .page-sidebar, .home .sidebar, .home .pagination { display: none !important; }
-
-.home #toc, .home .toc, .home .post-toc, .home .toc-wrap, .home .toc-container,
-.home .toc-aside, .home .home-categories { display: none !important; }
-
-/* Hide tag widget anywhere */
-.sidebar .tag-list, .sidebar .tags, .sidebar .post-tags, .sidebar .common-list.tags { display: none !important; }
-
-/* Hide TOC on CV pages */
-.layout-cv #toc, .layout-cv .toc, .layout-cv .post-toc, .layout-cv .toc-wrap,
-.layout-cv .toc-container, .layout-cv .toc-aside,
-.page-cv   #toc, .page-cv   .toc, .page-cv   .post-toc, .page-cv   .toc-wrap,
-.page-cv   .toc-container, .page-cv   .toc-aside { display: none !important; }
-body[class*="cv"] #toc, body[class*="cv"] .toc, body[class*="cv"] .post-toc,
-body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"] .toc-aside { display: none !important; }
-body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
-body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
-
-/* ---------- Global content alignment (1240px grid) ---------- */
-
-/* Constrain standard content wrappers inside <main> */
-.page-content > .wrapper {
-  max-width: $content-width;
-  margin: 0 auto;
+:root {
+  /* Core dark palette */
+  --bg:        #0b0c0e;  /* page background */
+  --bg-1:      #111315;  /* elevated surface (cards/boxes) */
+  --bg-2:      #16181b;  /* higher elevation */
+  --text:      #e6e8ed;  /* primary text */
+  --text-dim:  #b3bac5;  /* secondary text */
+  --border:    #1e2227;  /* subtle borders/dividers */
+  --code-bg:   #0f1216;  /* code/pre background */
+  --link:      #69b7aa;  /* brand link */
+  --link-hov:  #8fd2c6;
 }
 
-/* Align header contents (buttons/links) to the same grid while bg stays full-bleed */
-.site-header > .wrapper {
-  max-width: $content-width;
-  margin: 0 auto;
+/* Force a consistent dark page canvas */
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
 }
 
-/* Footer already uses .wrapper via theme; no change needed here */
+/* Make all main containers inherit the same canvas/text */
+.page-content,
+.page-content .wrapper,
+.post,
+.page,
+.post-content,
+.markdown-body,
+.entry,
+.content,
+.article,
+.archive,
+.about {
+  background: transparent !important;   /* let body bg show through */
+  color: var(--text) !important;
+}
 
+/* Headings & muted text */
+h1, h2, h3, h4, h5, h6 { color: var(--text) !important; }
+small, .muted, .meta, .sub, .subtitle, .post-meta { color: var(--text-dim) !important; }
 
-/* ---------- Circular link panels (flat + responsive) ---------- */
-.link-circles {
-  max-width: $content-width;      /* was min(94vw, 1440px); now unified to grid */
-  margin: 0 auto;
-  padding: 3.25rem 1rem 5rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
-  gap: clamp(1rem, 2.5vw, 3rem);
-  justify-items: center;
-  align-items: start;
-}
-@media (max-width: 1200px) { .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); } }
-@media (max-width: 900px)  { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
-@media (max-width: 520px)  { .link-circles { grid-template-columns: 1fr; } }
+/* Links */
+a       { color: var(--link) !important; }
+a:hover { color: var(--link-hov) !important; }
 
-.circle-card {
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 0.85rem;
-}
-.circle-card .circle {
-  width: min(260px, 100%);
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #2a2a2a;
-  border: 2px solid rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
-}
-/* keep the same look in light mode */
-[data-theme="light"] .circle-card .circle {
-  background: #2a2a2a; border-color: rgba(255,255,255,.10); box-shadow: 0 14px 30px rgba(0,0,0,.25);
-}
-.circle-card .circle svg { width: 50%; height: 50%; opacity: .95; color: #fff; }
-.circle-card:hover .circle { transform: translateY(-2px); border-color: rgba(255,255,255,.22); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
+/* Rules, borders, tables */
+hr, .page-split { border-color: var(--border) !important; }
+table           { border-color: var(--border) !important; }
+table th, table td { border-color: var(--border) !important; }
 
-.circle-card .label-btn {
-  display: inline-block; padding: .5rem 1.15rem; border-radius: 999px; font-weight: 700;
-  letter-spacing: .02em; text-transform: uppercase; font-size: .86rem; color: #fff;
-  background: $brand-color; border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease; margin-top: .1rem;
+/* Code blocks & inline code */
+pre, code, kbd, samp {
+  background: var(--code-bg) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border);
 }
-.circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+/* Blockquotes */
+blockquote {
+  color: var(--text-dim) !important;
+  border-left: 4px solid var(--border) !important;
+  background: transparent !important;
+}
+
+/* Cards / elevated blocks that the theme might style differently */
+.post-card, .card, .panel, .box {
+  background: var(--bg-1) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* Input elements (contact forms, search, etc.) */
+input, textarea, select {
+  background: var(--bg-1) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+input::placeholder, textarea::placeholder { color: var(--text-dim) !important; }
+
+/* Ensure pagination widgets follow the same palette */
+.pagination a, .pagination span {
+  background: var(--bg-1) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
