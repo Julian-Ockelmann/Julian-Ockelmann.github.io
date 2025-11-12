@@ -12,7 +12,7 @@
   <!-- Base theme CSS -->
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
-  <!-- Global site overrides (ALWAYS load) + cache-buster -->
+  <!-- Our hero/banner + layout overrides (load AFTER main.css) -->
   <link rel="stylesheet"
         href="{{ '/assets/css/hero-shader.css' | relative_url }}?v={{ site.github.build_revision | default: site.time | date: '%s' }}">
 
@@ -26,7 +26,7 @@
   {%- include extensions/photo-swipe.html -%}
   {%- include custom-head.html -%}
 
-  {#-- Shader hero scripts: only on the homepage --#}
+  {%- comment -%} Shader hero scripts: only on the homepage {%- endcomment -%}
   {% if page.url == '/' or page.layout == 'home' %}
     <link rel="preconnect" href="https://unpkg.com" crossorigin>
     <script src="https://unpkg.com/three@0.157.0/build/three.min.js" defer></script>
