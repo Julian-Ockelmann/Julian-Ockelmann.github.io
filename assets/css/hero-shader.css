@@ -1,12 +1,14 @@
-/* Shader hero band */
+/* ==============================
+   Shader banner (centered text)
+   ============================== */
+
 .page-banner.hero-shader{
   position: relative;
   height: clamp(320px, 48vh, 560px);
   overflow: hidden;
-  margin: 0;
+  margin: 0; /* keep flush with header */
 }
 
-/* Shader fills the band */
 .page-banner.hero-shader .shader-fill,
 .page-banner.hero-shader .shader-fill canvas{
   position: absolute;
@@ -16,54 +18,38 @@
   display: block;
 }
 
-/* Subtle dark veil so white text is readable */
+/* subtle dark overlay to ensure readable text */
 .page-banner.hero-shader::after{
   content: "";
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35));
   pointer-events: none;
   z-index: 1;
 }
 
-/* Text layer above the canvas */
-.page-banner.hero-shader .page-banner-inner{
-  position: relative;
-  z-index: 2;
-  color: #fff;
-  padding: 2.0rem 0;
+/* center the text over the shader */
+.page-banner.hero-shader .page-banner-inner.hero-center{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: left;
+  text-align: left;
+  padding: 0 1rem;
+  z-index: 2; /* above canvas + overlay */
 }
 
-/* Typography */
-.page-banner.hero-shader .page-title{
+/* typography */
+.page-banner .page-title{
   margin: 0 0 .4rem 0;
   font-size: clamp(28px, 3.2vw, 42px);
   line-height: 1.15;
   color: #fff;
 }
-.page-banner.hero-shader .page-subtitle{
+.page-banner .page-subtitle{
   margin: 0;
   font-size: clamp(14px, 1.2vw, 18px);
   line-height: 1.3;
   color: rgba(255,255,255,.92);
-}
-
-/* Ensure menus/buttons are readable over video/canvas */
-.site-header{
-  position: relative;
-  z-index: 3;
-  background: rgba(0,0,0,.45); /* subtle translucent black strip */
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
-}
-
-/* Optional: unify inner widths everywhere */
-.wrapper{
-  max-width: {{ site.content_width | default: '920px' }};
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Make link panel grid use the same inner width (no full-bleed mismatch) */
-.link-circles{
-  max-width: {{ site.content_width | default: '920px' }};
+  opacity: .95;
 }
