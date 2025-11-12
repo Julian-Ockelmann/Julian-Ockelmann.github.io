@@ -87,52 +87,93 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 /* Footer already uses .wrapper via theme; no change needed here */
 
 
-/* ---------- Circular link panels (flat + responsive) ---------- */
-.link-circles {
-  max-width: $content-width;      /* was min(94vw, 1440px); now unified to grid */
-  margin: 0 auto;
-  padding: 3.25rem 1rem 5rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
-  gap: clamp(1rem, 2.5vw, 3rem);
-  justify-items: center;
-  align-items: start;
+/* ===============================
+   3D Flip Button (.button-icon)
+   =============================== */
+.button-icon {
+  display: flex;
+  align-items: stretch;
+  border: 3px #fff solid;
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+  text-decoration: none;   /* <a> reset */
+  perspective: 700px;      /* gives the cube depth */
+  border-radius: 6px;      /* optional: soften the frame */
 }
-@media (max-width: 1200px) { .link-circles { grid-template-columns: repeat(3, minmax(240px, 1fr)); } }
-@media (max-width: 900px)  { .link-circles { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
-@media (max-width: 520px)  { .link-circles { grid-template-columns: 1fr; } }
 
-.circle-card {
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 0.85rem;
+.button-icon:focus-visible {
+  outline: 2px solid #ff98a2;
+  outline-offset: 3px;
 }
-.circle-card .circle {
-  width: min(260px, 100%);
-  aspect-ratio: 1/1;
-  border-radius: 50%;
+
+.button-icon:hover { border-color: #ff98a2; }
+
+/* icon tile on the left */
+.button-icon .icon {
+  background-color: #fff;
+  padding: 10px 10px 5px 10px;
   display: grid;
   place-items: center;
-  background: #2a2a2a;
-  border: 2px solid rgba(255,255,255,.10);
-  box-shadow: 0 14px 30px rgba(0,0,0,.25);
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-/* keep the same look in light mode */
-[data-theme="light"] .circle-card .circle {
-  background: #2a2a2a; border-color: rgba(255,255,255,.10); box-shadow: 0 14px 30px rgba(0,0,0,.25);
-}
-.circle-card .circle svg { width: 50%; height: 50%; opacity: .95; color: #fff; }
-.circle-card:hover .circle { transform: translateY(-2px); border-color: rgba(255,255,255,.22); box-shadow: 0 20px 44px rgba(0,0,0,.35); }
 
-.circle-card .label-btn {
-  display: inline-block; padding: .5rem 1.15rem; border-radius: 999px; font-weight: 700;
-  letter-spacing: .02em; text-transform: uppercase; font-size: .86rem; color: #fff;
-  background: $brand-color; border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.25);
-  transition: filter .15s ease, transform .15s ease; margin-top: .1rem;
+.button-icon .icon svg {
+  width: 25px;
+  height: 25px;
+  color: #222229;   /* svg uses currentColor; ensures contrast on white */
 }
-.circle-card .label-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+/* text cube on the right */
+.button-icon .cube {
+  position: relative;
+  transition: all 0.4s;
+  transform-style: preserve-3d;
+  width: 200px;
+  height: 20px;   /* visual height is controlled by the .side (47px) below */
+}
+
+.button-icon:hover .cube { transform: rotateX(90deg); }
+
+.button-icon .side {
+  position: absolute;
+  height: 47px;
+  width: 200px;
+  display: flex;
+  font-size: 0.8em;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  left: 0; top: 0;
+  backface-visibility: hidden;
+}
+
+/* front face (default) */
+.button-icon .front {
+  background: #222229;
+  color: #fff;
+  transform: translate3d(0, 0, 1em);
+  border-left: 1px solid rgba(255,255,255,.06);
+}
+
+/* top face (revealed on hover) */
+.button-icon .top {
+  background: #ff98a2;
+  color: #fff;
+  transform: rotateX(-90deg) translate3d(0, 13.5px, 2em);
+}
+
+/* grid tweaks so the new buttons center nicely in the existing layout */
+.link-circles {
+  justify-items: center;
+  align-items: start;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+/* small screens: allow the text slab to shrink a bit */
+@media (max-width: 520px) {
+  .button-icon .cube,
+  .button-icon .side { width: 180px; }
+}
+
