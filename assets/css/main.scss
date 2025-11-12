@@ -108,129 +108,130 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 
 
 /* ============================================================
-   SQUARE FLIP BUTTONS — full implementation (replaces circle-cards)
+   FANCY BUTTONS (dark-friendly) — inline, row-aligned, responsive
    ============================================================ */
 
-/* Horizontal row with gaps; wraps to new rows on small widths */
+/* Lay out the button row with spacing and wrapping */
 .link-circles{
-  display: flex !important;        /* replaces prior grid layout */
-  flex-wrap: wrap;                  /* collapse onto additional rows */
-  justify-content: center;          /* center the row within the content width */
-  align-items: stretch;
-  gap: clamp(12px, 2.2vw, 24px);    /* “little space in between” */
-  margin: 0;                        /* gutters come from the .wrapper */
-  padding: 3rem 0 4.5rem;           /* vertical breathing room */
-}
-
-/* overall tile */
-.button-icon{
-  position: relative;
-  display: grid;
-  grid-template-rows: 1fr auto;  /* icon area + label slab */
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  justify-items: center;
+  gap: clamp(12px, 2.2vw, 24px);
+  margin: 0;
+  padding: 3rem 0 4.5rem;
+}
 
-  width: var(--btn-size);
-  height: var(--btn-size);
-
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: var(--btn-border) solid #fff;     /* white frame against dark page */
-  border-radius: var(--btn-radius);
-  text-decoration: none;
+/* Base button */
+.fancy {
+  background-color: transparent;
+  border: 2px solid #fff;          /* was #000 */
+  border-radius: 0;
+  box-sizing: border-box;
+  color: #fff;                      /* link color fallback */
   cursor: pointer;
-
-  box-shadow: 0 16px 36px rgba(0,0,0,.35);
-  perspective: 700px; /* depth for the cube */
-
-  /* smooth hover */
-  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  display: inline-block;
+  /* float: right;  <-- remove to allow row alignment */
+  float: none;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 1.25em 2em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  transition: all 0.3s ease-in-out;
+  user-select: none;
+  font-size: 13px;
 }
 
-.button-icon:hover{
-  border-color: #e9eef2;           /* subtle hover frame */
-  transform: translateY(-2px);
-  box-shadow: 0 20px 44px rgba(0,0,0,.42);
+/* The short line to the left of the label */
+.fancy::before {
+  content: " ";
+  width: 1.5625rem;
+  height: 2px;
+  background: #fff;                 /* was black */
+  top: 50%;
+  left: 1.5em;
+  position: absolute;
+  transform: translateY(-50%);
+  transform-origin: center;
+  transition: background 0.3s linear, width 0.3s linear;
 }
 
-.button-icon:focus-visible{
+/* The text */
+.fancy .text {
+  font-size: 1.125em;
+  line-height: 1.33333em;
+  padding-left: 2em;
+  display: block;
+  text-align: left;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;                      /* was black */
+}
+
+/* Keys (little accent lines) */
+.fancy .top-key,
+.fancy .bottom-key-1,
+.fancy .bottom-key-2 {
+  background: rgba(255,255,255,.8); /* was #e8e8e8 */
+  height: 2px;
+  position: absolute;
+  transition: width 0.5s ease-out, left 0.3s ease-out, right 0.3s ease-out;
+}
+
+.fancy .top-key {
+  width: 1.5625rem;
+  top: -2px;
+  left: 0.625rem;
+}
+
+.fancy .bottom-key-1 {
+  width: 1.5625rem;
+  right: 1.875rem;
+  bottom: -2px;
+}
+
+.fancy .bottom-key-2 {
+  width: 0.625rem;
+  right: 0.625rem;
+  bottom: -2px;
+}
+
+/* Hover: invert to white bg + dark text for contrast */
+.fancy:hover {
+  color: #000;
+  background: #fff;                 /* was black */
+  border-color: #fff;
+}
+
+.fancy:hover::before {
+  width: 0.9375rem;
+  background: #000;                 /* was white on black; invert here */
+}
+
+.fancy:hover .text {
+  color: #000;                      /* was white on black; invert */
+  padding-left: 1.5em;
+}
+
+.fancy:hover .top-key { left: -2px; width: 0px; }
+.fancy:hover .bottom-key-1,
+.fancy:hover .bottom-key-2 { right: 0; width: 0; }
+
+/* Keyboard/Accessibility focus */
+.fancy:focus-visible{
   outline: 2px solid #8fd2c6;
   outline-offset: 3px;
-  border-color: #8fd2c6;
 }
 
-/* icon (fills the top area of the square) */
-.button-icon .icon{
-  width: 100%;
-  height: 100%;
-  padding: 28px 28px 18px;
-  background: transparent;     /* tile itself is white */
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
-}
-
-.button-icon .icon svg{
-  width: clamp(40px, 28%, 64px);
-  height: auto;
-  color: var(--btn-text);      /* uses currentColor in your SVGs */
-}
-
-/* label cube (bottom slab) */
-.button-icon .cube{
-  position: relative;
-  width: 100%;
-  height: 56px;                /* slab height */
-  transform-style: preserve-3d;
-  transition: transform .4s ease;
-}
-
-.button-icon:hover .cube{ transform: rotateX(90deg); }
-
-.button-icon .side{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .9rem;
-  font-weight: 800;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  backface-visibility: hidden;
-  border-top: 1px solid rgba(0,0,0,.06);
-  border-bottom-left-radius: calc(var(--btn-radius) - 2px);
-  border-bottom-right-radius: calc(var(--btn-radius) - 2px);
-}
-
-/* front face (default) — white with dark text */
-.button-icon .front{
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  transform: translate3d(0,0,1em);
-}
-
-/* top face (revealed on hover) — slightly tinted but still “white” */
-.button-icon .top{
-  background: var(--btn-top);
-  color: var(--btn-text);
-  transform: rotateX(-90deg) translate3d(0, 18px, 2em);
-}
-
-/* Small screens: shrink tiles & slab height a bit */
+/* Optional: compact sizing on narrow screens so the row wraps nicely */
 @media (max-width: 520px){
-  :root{ --btn-size: 180px; }
-  .button-icon .cube,
-  .button-icon .side{ height: 50px; }
+  .fancy{ padding: 1.05em 1.6em; font-size: 12px; }
+  .fancy .text{ font-size: 1.05em; }
 }
-
-/* ===========================
-   Removed/Deprecated (cleanup)
-   ===========================
-   - .circle-card
-   - .circle-card .circle / .label-btn
-   - .link-circles grid template & media queries
-   (Replaced by .button-icon + flex-based .link-circles)
-*/
