@@ -19,9 +19,10 @@ $brand-color: map-get($brand-colors, "greenblue");
 @if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
 } @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
 
+/* This is read from _config.yml → content_width */
 $content-width: {{ site.content_width | default: '920px' }};
 
-/* Load base Yat styles */
+/* Load base Yat styles (will pick up $content-width) */
 @import "yat";
 
 /* =====================
@@ -69,9 +70,26 @@ body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"]
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* Circular link panels (flat + responsive) */
+/* ---------- Global content alignment (1240px grid) ---------- */
+
+/* Constrain standard content wrappers inside <main> */
+.page-content > .wrapper {
+  max-width: $content-width;
+  margin: 0 auto;
+}
+
+/* Align header contents (buttons/links) to the same grid while bg stays full-bleed */
+.site-header > .wrapper {
+  max-width: $content-width;
+  margin: 0 auto;
+}
+
+/* Footer already uses .wrapper via theme; no change needed here */
+
+
+/* ---------- Circular link panels (flat + responsive) ---------- */
 .link-circles {
-  max-width: min(94vw, 1440px);
+  max-width: $content-width;      /* was min(94vw, 1440px); now unified to grid */
   margin: 0 auto;
   padding: 3.25rem 1rem 5rem;
   display: grid;
