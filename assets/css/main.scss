@@ -19,8 +19,22 @@ $brand-color: map-get($brand-colors, "greenblue");
 @if map-has-key($brand-colors, $brand-name) { $brand-color: map-get($brand-colors, $brand-name);
 } @else if str-index($brand-name, "#") == 1 { $brand-color: {{ site.brand_color | default: '#69b7aa' }}; }
 
-/* This is read from _config.yml → content_width */
+/* Read from _config.yml → content_width */
 $content-width: {{ site.content_width | default: '920px' }};
+
+/* Expose content sizing as CSS vars for plain CSS files */
+:root{
+  --content-max: #{$content-width};
+  --content-pad: clamp(12px, 2vw, 24px);
+
+  /* Square Flip Button sizing (overrideable) */
+  --btn-size: clamp(168px, 19vw, 210px);
+  --btn-radius: 14px;
+  --btn-border: 3px;
+  --btn-text: #111214;   /* dark text on white tile */
+  --btn-bg:   #ffffff;   /* white tile */
+  --btn-top:  #f2f4f7;   /* subtle hover face */
+}
 
 /* Load base Yat styles (will pick up $content-width) */
 @import "yat";
@@ -70,35 +84,42 @@ body[class*="cv"] .toc-wrap, body[class*="cv"] .toc-container, body[class*="cv"]
 body:has(main h1#cv-title) #toc, body:has(main h1#cv-title) .toc, body:has(main h1#cv-title) .post-toc,
 body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container, body:has(main h1#cv-title) .toc-aside { display: none !important; }
 
-/* ---------- Global content alignment (1240px grid) ---------- */
+/* ---------- Global content alignment (content grid) ---------- */
 
 /* Constrain standard content wrappers inside <main> */
 .page-content > .wrapper {
   max-width: $content-width;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--content-pad);
+  padding-right: var(--content-pad);
 }
 
 /* Align header contents (buttons/links) to the same grid while bg stays full-bleed */
-.site-header > .wrapper {
-  max-width: $content-width;
-  margin: 0 auto;
+.site-header > .wrapper{
+  max-width: var(--content-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--content-pad);
+  padding-right: var(--content-pad);
 }
 
 /* Footer already uses .wrapper via theme; no change needed here */
 
 
-/* ===============================
-   Square Flip Buttons (white/dark)
-   =============================== */
+/* ============================================================
+   SQUARE FLIP BUTTONS — full implementation (replaces circle-cards)
+   ============================================================ */
 
-/* responsive side length for the square tile */
-:root{
-  --btn-size: clamp(200px, 22vw, 240px);
-  --btn-radius: 14px;
-  --btn-border: 3px;
-  --btn-text: #111214;   /* dark text */
-  --btn-bg:   #ffffff;   /* white tile */
-  --btn-top:  #f2f4f7;   /* subtle hover face */
+/* Horizontal row with gaps; wraps to new rows on small widths */
+.link-circles{
+  display: flex !important;        /* replaces prior grid layout */
+  flex-wrap: wrap;                  /* collapse onto additional rows */
+  justify-content: center;          /* center the row within the content width */
+  align-items: stretch;
+  gap: clamp(12px, 2.2vw, 24px);    /* “little space in between” */
+  margin: 0;                        /* gutters come from the .wrapper */
+  padding: 3rem 0 4.5rem;           /* vertical breathing room */
 }
 
 /* overall tile */
@@ -121,9 +142,17 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
 
   box-shadow: 0 16px 36px rgba(0,0,0,.35);
   perspective: 700px; /* depth for the cube */
+
+  /* smooth hover */
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
-.button-icon:hover{ border-color: #e9eef2; }   /* subtle hover frame */
+.button-icon:hover{
+  border-color: #e9eef2;           /* subtle hover frame */
+  transform: translateY(-2px);
+  box-shadow: 0 20px 44px rgba(0,0,0,.42);
+}
+
 .button-icon:focus-visible{
   outline: 2px solid #8fd2c6;
   outline-offset: 3px;
@@ -190,16 +219,18 @@ body:has(main h1#cv-title) .toc-wrap, body:has(main h1#cv-title) .toc-container,
   transform: rotateX(-90deg) translate3d(0, 18px, 2em);
 }
 
-/* grid spacing stays neat */
-.link-circles{
-  gap: clamp(1rem, 2.5vw, 2rem);
-  justify-items: center;
-}
-
-/* small screens: let the tile size shrink gracefully */
+/* Small screens: shrink tiles & slab height a bit */
 @media (max-width: 520px){
-  :root{ --btn-size: 200px; }
+  :root{ --btn-size: 180px; }
   .button-icon .cube,
-  .button-icon .side{ height: 52px; }
+  .button-icon .side{ height: 50px; }
 }
 
+/* ===========================
+   Removed/Deprecated (cleanup)
+   ===========================
+   - .circle-card
+   - .circle-card .circle / .label-btn
+   - .link-circles grid template & media queries
+   (Replaced by .button-icon + flex-based .link-circles)
+*/
