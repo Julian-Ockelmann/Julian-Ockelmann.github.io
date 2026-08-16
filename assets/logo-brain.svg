@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Julian Ockelmann brain mark</title>
+  <desc id="desc">A minimal, symmetrical brain drawn in white on a red square.</desc>
+  <rect x="3" y="3" width="58" height="58" rx="12" fill="#c83f32"/>
+  <g fill="none" stroke="#fffaf3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 18C27 13.5 20.5 14.5 19.5 20C14.5 20.2 12.5 26 15.5 30C11 33 12.5 39.5 17.5 41.5C16.5 47.5 23 51 27.5 47.5C29.3 46.1 30 43.5 30 40Z" stroke-width="3.4"/>
+    <path d="M34 18C37 13.5 43.5 14.5 44.5 20C49.5 20.2 51.5 26 48.5 30C53 33 51.5 39.5 46.5 41.5C47.5 47.5 41 51 36.5 47.5C34.7 46.1 34 43.5 34 40Z" stroke-width="3.4"/>
+    <path d="M24 22C20.5 25 25.5 28 22 31.5C19.5 34 23 37.5 26 39.5M40 22C43.5 25 38.5 28 42 31.5C44.5 34 41 37.5 38 39.5" stroke-width="2.2"/>
+  </g>
+</svg>

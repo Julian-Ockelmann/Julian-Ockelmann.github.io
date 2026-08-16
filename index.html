@@ -1,7 +1,126 @@
----
-layout: home
-title: Home
-toc: false
-sidebar: false
-banner: null
----
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Julian Ockelmann — cognitive neuroscientist researching hearing, cognition, and brain plasticity.">
+  <meta name="color-scheme" content="dark">
+  <title>Julian Ockelmann — Cognitive Neuroscience</title>
+  <link rel="icon" href="assets/logo-brain.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Julian Ockelmann, home">
+        <img class="brand-mark" src="assets/logo-brain.svg" alt=""><span class="brand-name">Julian Ockelmann</span>
+      </a>
+      <div class="nav-links">
+        <a href="#research">Research</a>
+        <a href="writing.html">Blog</a>
+        <a href="cv.html">CV</a>
+      </div>
+      <span class="language-badge" aria-label="Site language: English" title="English">EN</span>
+    </nav>
+  </header>
+
+  <main id="content">
+    <section class="eeg-banner" aria-labelledby="eeg-banner-title">
+      <h2 class="sr-only" id="eeg-banner-title">Classic EEG frequency bands</h2>
+      <canvas class="eeg-canvas" data-eeg-canvas aria-hidden="true"></canvas>
+    </section>
+
+    <!-- EDIT: Homepage introduction -->
+    <section class="container home-intro">
+      <div>
+        <p class="eyebrow">Cognitive neuroscience</p>
+        <h1>Hearing, cognition, and ageing.</h1>
+        <p class="lede">I study the cognitive and neural mechanisms of speech perception in older adults with hearing loss.</p>
+        <div class="actions">
+          <a class="button" href="#research">Explore the research <span aria-hidden="true">↓</span></a>
+          <a class="button secondary" href="cv.html">View CV</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDIT: Short academic profile and external links -->
+    <section class="section" id="profile">
+      <div class="container split-panel about-panel">
+        <div>
+          <p class="eyebrow">Current focus</p>
+          <dl class="focus-list">
+            <div><dt>01</dt><dd>Speech in noise</dd></div>
+            <div><dt>02</dt><dd>Cognitive aging</dd></div>
+            <div><dt>03</dt><dd>Neural oscillations</dd></div>
+            <div><dt>04</dt><dd>Open research tools</dd></div>
+          </dl>
+        </div>
+        <div class="about-copy">
+          <p class="eyebrow">About</p>
+          <h2>Profile</h2>
+          <p>I hold a PhD in Cognitive Neuroscience and was a fellow of the Max Planck International Research School LIFE.</p>
+          <p>My research examines auditory-cognitive training, working memory, and neural dynamics in older adults with hearing loss.</p>
+          <div class="link-row">
+            <a href="https://scholar.google.com/citations?user=HSduCL0AAAAJ">Google Scholar ↗</a>
+            <a href="https://orcid.org/0000-0002-4780-8993">ORCID ↗</a>
+            <a href="https://osf.io/92fa4/">OSF ↗</a>
+            <a href="https://www.linkedin.com/in/julian-ockelmann-977208170/">LinkedIn ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDIT: Selected research projects -->
+    <section class="section" id="research">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Selected research</p><h2>Research</h2></div>
+          <p>Behavioral experiments, EEG, and open research tools for the study of speech perception and cognitive ageing.</p>
+        </div>
+        <div class="project-grid project-list">
+          <article class="project-card">
+            <p class="meta">npj Science of Learning · 2025</p>
+            <h3>Personalized auditory-cognitive training</h3>
+            <p>A randomized study of personalized, gamified training and naturalistic speech-in-noise comprehension in older adults with hearing loss.</p>
+            <a class="card-link" href="papers/auditory-cognitive-training.html">Read the project summary</a>
+          </article>
+          <article class="project-card">
+            <p class="meta">Open science · Software</p>
+            <h3>WOMBAT: working-memory tests, opened up.</h3>
+            <p>A multilingual, open-access working memory test battery designed for flexible research use in Python and online studies.</p>
+            <a class="card-link" href="papers/wombat.html">Explore WOMBAT</a>
+          </article>
+          <article class="project-card">
+            <p class="meta">EEG · Under revision</p>
+            <h3>Neural alpha and speech-in-noise outcomes</h3>
+            <p>Research on the role of cognition in the relationship between neural alpha activity and speech-in-noise performance.</p>
+            <a class="card-link" href="papers/neural-alpha.html">Read the project summary</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDIT: Homepage blog preview. Add note rows here when publishing begins. -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Blog</p><h2>Blog</h2></div>
+          <p>Research notes will be published here.</p>
+        </div>
+        <div class="notes-list">
+          <p class="blog-placeholder">No posts yet.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <span>© <span data-year></span> Julian Ockelmann</span>
+      <div class="footer-links"><a href="mailto:julian.ockelmann@uzh.ch">Email</a><a href="cv.html">CV</a><a href="writing.html">Blog</a></div>
+    </div>
+  </footer>
+</body>
+</html>
