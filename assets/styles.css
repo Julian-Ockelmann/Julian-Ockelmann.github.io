@@ -170,15 +170,14 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
   content-visibility: auto;
   contain-intrinsic-size: auto 760px;
 }
-.section-head { display: grid; grid-template-columns: 0.55fr 1.45fr; gap: 2rem; margin-bottom: 3rem; }
+.section-head { margin-bottom: 3rem; }
 .section-head h2 { max-width: 14ch; margin: 0; font-size: clamp(2.3rem, 5vw, 4.4rem); }
-.section-head p:last-child { max-width: 36rem; margin: 0; color: var(--muted); align-self: end; }
 
 .project-grid { display: grid; }
 .project-card {
   display: grid;
-  grid-template-columns: minmax(9rem, 0.45fr) minmax(15rem, 1fr) minmax(17rem, 1fr);
-  gap: clamp(1rem, 4vw, 4rem);
+  grid-template-columns: minmax(10rem, 0.42fr) minmax(0, 1.58fr) auto;
+  gap: clamp(1rem, 3.5vw, 3.5rem);
   min-height: auto;
   padding: 2.1rem 0;
   align-items: start;
@@ -188,8 +187,8 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
 
 .project-card:last-child { border-bottom: 1px solid var(--line); }
 .project-card .meta { margin: 0; color: var(--muted); font-size: 0.72rem; font-weight: 720; text-transform: uppercase; letter-spacing: 0.1em; }
-.project-card h3 { max-width: 20ch; margin: 0; font-family: Georgia, serif; font-size: clamp(1.5rem, 2.4vw, 2.25rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.03em; }
-.project-card p { margin-bottom: 0.7rem; color: var(--muted); }
+.project-card h3 { max-width: 44ch; margin: 0; font-family: Georgia, serif; font-size: clamp(1.3rem, 1.9vw, 1.8rem); font-weight: 500; line-height: 1.18; letter-spacing: -0.025em; text-wrap: pretty; }
+.project-card p { margin-bottom: 0; color: var(--muted); }
 .card-link { width: fit-content; font-weight: 740; text-decoration: none; }
 .card-link::after { content: " ↗"; }
 
