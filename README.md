@@ -23,7 +23,7 @@ The site works both at a user URL (`username.github.io`) and in a project reposi
 - Project summaries: `papers/`
 - Colors, type, and layout: `assets/styles.css`
 
-To add a post, duplicate `posts/speech-in-noise.html`, change the title and article content, then add a matching card in `writing.html` and (optionally) a row on `index.html`.
+To add a post, duplicate `posts/speech-in-noise.html`, change the title and article content, then add a matching card in `writing.html`.
 
 ## Before publishing
 

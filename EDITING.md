@@ -15,9 +15,8 @@ This is a plain static website. There is no framework, database, package manager
 | Change | File | What to search for |
 | --- | --- | --- |
 | Homepage introduction | `index.html` | `EDIT: Homepage introduction` |
-| Research cards | `index.html` | `EDIT: Selected research projects` |
-| Short profile and links | `index.html` | `EDIT: Short academic profile` |
-| Homepage blog preview | `index.html` | `EDIT: Homepage blog preview` |
+| Research list | `index.html` | `EDIT: Published and submitted research` |
+| Profile, research areas, methods, and links | `index.html` | `EDIT: Short academic profile` |
 | Web CV | `cv.html` | `EDIT: Web CV sections` |
 | Downloadable CV | `assets/julian-ockelmann-cv.pdf` | Replace the file but keep this exact filename |
 | Blog index | `writing.html` | `EDIT: Blog cards` |
@@ -41,7 +40,7 @@ Use relative links (`papers/example.html`, not `/papers/example.html`) so the si
 1. Duplicate `posts/speech-in-noise.html`.
 2. Edit the title, description, date, and article text.
 3. Add a card to `writing.html`.
-4. Optionally add the newest note to the blog preview on `index.html`.
+4. The Blog link in the main navigation already points to `writing.html`.
 
 ## Replace the CV
 
