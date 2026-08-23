@@ -197,15 +197,16 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
 .profile-summary h2 { margin: 0; font-size: clamp(2.5rem, 5vw, 4.8rem); }
 .profile-summary-copy p { max-width: 42rem; color: var(--muted); font-size: 1.06rem; }
 .profile-group h3 { margin: 0; color: var(--accent); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; }
-.focus-list { margin: 0; border-top: 1px solid var(--line); }
-.focus-list div { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--line); }
-.focus-list dt { color: var(--accent); font-size: 0.72rem; font-weight: 760; }
-.focus-list dd { margin: 0; font-size: 0.95rem; }
-.profile-area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.profile-area-grid div:nth-child(odd) { padding-right: 1.25rem; }
-.profile-area-grid div:nth-child(even) { padding-left: 1.25rem; border-left: 1px solid var(--line); }
-.method-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; margin: 0; padding: 0; list-style: none; }
-.method-grid li { min-height: 3.25rem; display: flex; align-items: center; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: 0.35rem; background: rgba(241, 243, 238, 0.025); font-size: 0.9rem; }
+.profile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; margin: 0; padding: 0; list-style: none; }
+.profile-grid li { min-height: 3.25rem; display: flex; align-items: center; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: 0.35rem; background: rgba(241, 243, 238, 0.025); font-size: 0.9rem; }
+.software-skill { --level-color: var(--muted); gap: 0.7rem; }
+.software-skill::before { content: ""; width: 0.45rem; height: 0.45rem; flex: 0 0 auto; border-radius: 50%; background: var(--level-color); }
+.software-skill span { margin-right: auto; }
+.software-skill small { color: var(--level-color); font-size: 0.67rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.software-skill.level-expert { --level-color: #ef8a80; }
+.software-skill.level-advanced { --level-color: #e1ad68; }
+.software-skill.level-proficient { --level-color: #78b5a4; }
+.software-skill.level-intermediate { --level-color: #809ab8; }
 .link-row { display: flex; flex-wrap: wrap; gap: 0.7rem 1.2rem; margin-top: 2rem; }
 .link-row a { font-weight: 680; }
 
@@ -316,8 +317,7 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
   .home-intro h1 { font-size: clamp(3rem, 15vw, 4.6rem); }
   .eeg-banner { height: 280px; }
   .section { padding-block: 3.75rem; }
-  .profile-area-grid, .method-grid { grid-template-columns: 1fr; }
-  .profile-area-grid div:nth-child(odd), .profile-area-grid div:nth-child(even) { padding-inline: 0; border-left: 0; }
+  .profile-grid { grid-template-columns: 1fr; }
   .page-hero { padding-block: 4rem 3.25rem; }
   .page-hero h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
   .research-hero h1 { font-size: clamp(2.25rem, 9.8vw, 3.1rem); }
