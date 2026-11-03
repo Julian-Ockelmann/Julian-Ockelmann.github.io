@@ -16,6 +16,7 @@ This is a plain static website. There is no framework, database, package manager
 | --- | --- | --- |
 | Homepage introduction | `index.html` | `EDIT: Homepage introduction` |
 | Research list | `index.html` | `EDIT: Published and submitted research` |
+| Peer-review activity | `index.html` | `EDIT: Public peer-review activity` |
 | Profile, research areas, methods, and links | `index.html` | `EDIT: Short academic profile` |
 | Web CV | `cv.html` | `EDIT: Web CV sections` |
 | Downloadable CV | `assets/julian-ockelmann-cv.pdf` | Replace the file but keep this exact filename |
@@ -58,6 +59,12 @@ The readers stream remote PDFs from the publisher or preprint server; the manusc
 4. Always retain the normal publisher link as a fallback because publishers can change their framing policy or PDF address.
 
 Do not treat public web access alone as permission to label a manuscript open access. The SSRN record currently remains link-only for this reason, and ScienceDirect currently prevents its PDF from being framed by another site.
+
+## ORCID and Web of Science sync
+
+The homepage refreshes public works and peer-review activity from ORCID when it loads. New public journal articles and preprints are added to the research list automatically. Published versions take precedence over matching preprints.
+
+Public Web of Science review records appear after they have been synced to ORCID. The two review rows in `index.html` are readable fallbacks for visitors whose browser blocks the live request. The sync logic and journal-name lookup are in `assets/site.js`.
 
 ## Preview before publishing
 

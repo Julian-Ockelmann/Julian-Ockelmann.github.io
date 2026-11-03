@@ -172,6 +172,9 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
 }
 .section-head { margin-bottom: 3rem; }
 .section-head h2 { max-width: 14ch; margin: 0; font-size: clamp(2.3rem, 5vw, 4.4rem); }
+.section-head.with-status { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+.sync-badge { flex: 0 0 auto; padding: 0.45rem 0.7rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 0.68rem; font-weight: 760; letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase; }
+.sync-badge:hover { border-color: var(--accent); color: var(--ink); }
 
 .project-grid { display: grid; }
 .project-card {
@@ -191,6 +194,13 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
 .project-card p { margin-bottom: 0; color: var(--muted); }
 .card-link { width: fit-content; font-weight: 740; text-decoration: none; }
 .card-link::after { content: " ↗"; }
+
+.service-list { border-top: 1px solid var(--line); }
+.service-card { display: grid; grid-template-columns: minmax(10rem, 0.42fr) minmax(0, 1.58fr) auto; gap: clamp(1rem, 3.5vw, 3.5rem); align-items: start; padding: 1.7rem 0; border-bottom: 1px solid var(--line); }
+.service-card .meta { margin: 0; color: var(--muted); font-size: 0.72rem; font-weight: 720; letter-spacing: 0.1em; text-transform: uppercase; }
+.service-card h3 { max-width: 44ch; margin: 0; font-family: Georgia, serif; font-size: clamp(1.2rem, 1.7vw, 1.55rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; }
+.service-source { color: var(--muted); font-size: 0.84rem; font-weight: 680; text-decoration: none; }
+a.service-source:hover { color: var(--accent); }
 
 .profile-panel { display: grid; gap: clamp(2.75rem, 5vw, 4.5rem); }
 .profile-summary, .profile-group { display: grid; grid-template-columns: minmax(11rem, 0.38fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
@@ -296,10 +306,12 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
   .nav-links { gap: 0.8rem; }
   .nav-links a { font-size: 0.82rem; }
   .section-head, .cv-layout { grid-template-columns: 1fr; }
+  .section-head.with-status { align-items: flex-start; }
   .profile-summary, .profile-group { grid-template-columns: 1fr; gap: 1.4rem; }
   .eeg-banner { height: 320px; }
   .section-head { gap: 1rem; }
   .project-card { grid-template-columns: 1fr; gap: 0.7rem; }
+  .service-card { grid-template-columns: 1fr; gap: 0.55rem; }
   .cv-aside { position: static; }
   .cv-aside nav { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; }
   .article-card, .article-card:first-child { grid-template-columns: 1fr; gap: 0.7rem; }
@@ -317,6 +329,7 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
   .home-intro h1 { font-size: clamp(3rem, 15vw, 4.6rem); }
   .eeg-banner { height: 280px; }
   .section { padding-block: 3.75rem; }
+  .section-head.with-status { flex-direction: column; }
   .profile-grid { grid-template-columns: 1fr; }
   .page-hero { padding-block: 4rem 3.25rem; }
   .page-hero h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
