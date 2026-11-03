@@ -31,14 +31,12 @@ const publicationDateKey = (record) => [
   publicationDay(record).padStart(2, '0')
 ].join('-');
 
-const workPriority = (work) => work.type === 'journal-article' ? 2 : 1;
-
 const extractOrcidWorks = (payload) => {
   const uniqueWorks = new Map();
 
   (payload?.group || []).forEach((group) => {
     (group['work-summary'] || []).forEach((summary) => {
-      if (!['journal-article', 'preprint'].includes(summary.type)) return;
+      if (summary.type !== 'journal-article') return;
 
       const title = decodeOrcidText(summary.title?.title?.value || '');
       const key = normalizeTitle(title);
@@ -57,8 +55,7 @@ const extractOrcidWorks = (payload) => {
       };
 
       const current = uniqueWorks.get(key);
-      if (!current || workPriority(work) > workPriority(current) ||
-          (workPriority(work) === workPriority(current) && work.date > current.date)) {
+      if (!current || work.date > current.date) {
         uniqueWorks.set(key, work);
       }
     });
@@ -68,10 +65,7 @@ const extractOrcidWorks = (payload) => {
 };
 
 const workMeta = (work) => {
-  if (work.type === 'journal-article') {
-    return ['Published', work.journal, work.year].filter(Boolean).join(' · ');
-  }
-  return ['Preprint', work.year].filter(Boolean).join(' · ');
+  return ['Published', work.journal, work.year].filter(Boolean).join(' · ');
 };
 
 const createProjectCard = (work) => {
@@ -88,7 +82,7 @@ const createProjectCard = (work) => {
   const link = document.createElement('a');
   link.className = 'card-link';
   link.href = work.url;
-  link.textContent = work.type === 'journal-article' ? 'DOI' : 'Preprint';
+  link.textContent = 'DOI';
 
   article.append(meta, title, link);
   return article;
@@ -111,20 +105,20 @@ const syncOrcidWorks = async () => {
       card
     ]));
 
-    works
+    const syncedCards = works
       .sort((a, b) => b.date.localeCompare(a.date))
-      .forEach((work) => {
+      .map((work) => {
         const card = cardsByTitle.get(work.key);
 
         if (!card) {
-          container.append(createProjectCard(work));
-          return;
+          return createProjectCard(work);
         }
-
-        if (work.type !== 'journal-article') return;
 
         const meta = card.querySelector('.meta');
         if (meta) meta.textContent = workMeta(work);
+
+        const title = card.querySelector('h3');
+        if (title) title.textContent = work.title;
 
         const link = card.querySelector('.card-link');
         const localDetails = link?.getAttribute('href')?.startsWith('papers/');
@@ -132,11 +126,15 @@ const syncOrcidWorks = async () => {
           link.href = work.url;
           link.textContent = 'DOI';
         }
+
+        return card;
       });
+
+    if (syncedCards.length) container.replaceChildren(...syncedCards);
 
     if (status) {
       status.textContent = 'ORCID synced ↗';
-      status.title = `${works.length} public paper projects synchronized from ORCID`;
+      status.title = `${works.length} published works synchronized from ORCID`;
     }
   } catch (error) {
     console.info('ORCID works sync unavailable; using the saved publication list.', error);
@@ -171,7 +169,10 @@ const extractPeerReviews = async (payload) => {
   const reviews = [];
 
   for (const group of payload?.group || []) {
-    const groupId = group?.['external-ids']?.['external-id']?.[0]?.['external-id-value'] || '';
+    const identifiers = group?.['external-ids']?.['external-id'] || [];
+    const groupId = identifiers.find((identifier) =>
+      /^issn:/i.test(identifier?.['external-id-value'] || '')
+    )?.['external-id-value'] || '';
     const issn = groupId.replace(/^issn:/i, '');
     const journal = await resolveJournalTitle(issn);
 
@@ -202,12 +203,19 @@ const createServiceCard = (review) => {
   const title = document.createElement('h3');
   title.textContent = review.journal;
 
+  const journal = document.createElement('div');
+  journal.className = 'service-journal';
+
+  const journalLabel = document.createElement('span');
+  journalLabel.textContent = 'Journal';
+  journal.append(journalLabel, title);
+
   const source = review.url ? document.createElement('a') : document.createElement('span');
   source.className = 'service-source';
   source.textContent = review.url ? `${review.source} ↗` : review.source;
   if (review.url) source.href = review.url;
 
-  article.append(meta, title, source);
+  article.append(meta, journal, source);
   return article;
 };
 

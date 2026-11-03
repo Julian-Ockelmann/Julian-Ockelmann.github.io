@@ -15,7 +15,7 @@ This is a plain static website. There is no framework, database, package manager
 | Change | File | What to search for |
 | --- | --- | --- |
 | Homepage introduction | `index.html` | `EDIT: Homepage introduction` |
-| Research list | `index.html` | `EDIT: Published and submitted research` |
+| Ongoing research list | `index.html` | `EDIT: Published fallback records and manually maintained ongoing research` |
 | Peer-review activity | `index.html` | `EDIT: Public peer-review activity` |
 | Profile, research areas, methods, and links | `index.html` | `EDIT: Short academic profile` |
 | Web CV | `cv.html` | `EDIT: Web CV sections` |
@@ -60,11 +60,14 @@ The readers stream remote PDFs from the publisher or preprint server; the manusc
 
 Do not treat public web access alone as permission to label a manuscript open access. The SSRN record currently remains link-only for this reason, and ScienceDirect currently prevents its PDF from being framed by another site.
 
-## ORCID and Web of Science sync
+## Published, ongoing, and reviewer activity
 
-The homepage refreshes public works and peer-review activity from ORCID when it loads. New public journal articles and preprints are added to the research list automatically. Published versions take precedence over matching preprints.
+The homepage separates research into two sources:
 
-Public Web of Science review records appear after they have been synced to ORCID. The two review rows in `index.html` are readable fallbacks for visitors whose browser blocks the live request. The sync logic and journal-name lookup are in `assets/site.js`.
+- **Published** refreshes automatically from the public ORCID works record. Only journal articles appear here. The saved rows in `index.html` are fallbacks for visitors whose browser blocks the live request.
+- **Ongoing** is maintained manually in `index.html`, so submitted and in-preparation projects remain visible without being treated as publications.
+
+Public Web of Science review records appear after they have been synced to ORCID. Each review row names the journal as well as the record source. The two saved review rows in `index.html` are fallbacks for visitors whose browser blocks the live request. The sync logic and journal-name lookup are in `assets/site.js`.
 
 ## Preview before publishing
 

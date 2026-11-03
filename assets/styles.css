@@ -177,6 +177,9 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
 .sync-badge:hover { border-color: var(--accent); color: var(--ink); }
 
 .project-grid { display: grid; }
+.research-group + .research-group { margin-top: clamp(3.5rem, 7vw, 6rem); }
+.research-subhead { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; margin-bottom: 1rem; }
+.research-subhead > h3 { margin: 0; font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 720; letter-spacing: -0.015em; }
 .project-card {
   display: grid;
   grid-template-columns: minmax(10rem, 0.42fr) minmax(0, 1.58fr) auto;
@@ -198,6 +201,7 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
 .service-list { border-top: 1px solid var(--line); }
 .service-card { display: grid; grid-template-columns: minmax(10rem, 0.42fr) minmax(0, 1.58fr) auto; gap: clamp(1rem, 3.5vw, 3.5rem); align-items: start; padding: 1.7rem 0; border-bottom: 1px solid var(--line); }
 .service-card .meta { margin: 0; color: var(--muted); font-size: 0.72rem; font-weight: 720; letter-spacing: 0.1em; text-transform: uppercase; }
+.service-journal > span { display: block; margin-bottom: 0.35rem; color: var(--muted); font-size: 0.65rem; font-weight: 760; letter-spacing: 0.1em; text-transform: uppercase; }
 .service-card h3 { max-width: 44ch; margin: 0; font-family: Georgia, serif; font-size: clamp(1.2rem, 1.7vw, 1.55rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; }
 .service-source { color: var(--muted); font-size: 0.84rem; font-weight: 680; text-decoration: none; }
 a.service-source:hover { color: var(--accent); }
