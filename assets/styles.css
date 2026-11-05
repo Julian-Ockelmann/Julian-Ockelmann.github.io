@@ -117,10 +117,33 @@ button { font: inherit; }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: -0.045em; line-height: 1.02; }
 
-.home-intro { padding-block: clamp(4.5rem, 9vw, 8rem); }
-.home-intro > div { max-width: 900px; }
-.home-intro h1 { max-width: 15ch; margin-bottom: 1.5rem; font-size: clamp(3.2rem, 7vw, 6.4rem); }
+.home-intro { padding-block: clamp(4.5rem, 8vw, 7.5rem); }
+.home-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  align-items: stretch;
+  gap: clamp(2.25rem, 4.5vw, 5rem);
+}
+.home-intro-copy { min-width: 0; }
+.home-intro h1 { max-width: 16ch; margin-bottom: 1.5rem; font-size: clamp(3.2rem, 5.4vw, 5.25rem); text-wrap: balance; }
 .home-intro .lede { max-width: 44rem; margin-bottom: 2rem; color: var(--muted); font-size: clamp(1.05rem, 1.7vw, 1.3rem); }
+.home-intro-portrait {
+  position: relative;
+  width: min(100%, 31rem);
+  margin: 0;
+  align-self: stretch;
+  justify-self: end;
+  line-height: 0;
+  isolation: isolate;
+}
+.home-intro-portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
 
 .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
 .button {
@@ -315,6 +338,10 @@ a.service-source:hover { color: var(--accent); }
   .section-head, .cv-layout { grid-template-columns: 1fr; }
   .section-head.with-status { align-items: flex-start; }
   .profile-summary, .profile-group { grid-template-columns: 1fr; gap: 1.4rem; }
+  .home-intro-grid { grid-template-columns: 1fr; align-items: start; gap: 3rem; }
+  .home-intro h1 { max-width: 14ch; }
+  .home-intro-portrait { width: min(88vw, 28rem); height: auto; aspect-ratio: 1139 / 986; align-self: auto; justify-self: center; }
+  .home-intro-portrait img { position: static; height: auto; object-position: center; }
   .eeg-banner { height: 320px; }
   .section-head { gap: 1rem; }
   .project-card { grid-template-columns: 1fr; gap: 0.7rem; }
@@ -334,7 +361,9 @@ a.service-source:hover { color: var(--accent); }
   .nav-links { gap: 0.7rem; }
   .language-badge { min-width: 2.25rem; height: 1.85rem; padding-inline: 0.5rem; }
   .home-intro { padding-block: 3.75rem; }
-  .home-intro h1 { font-size: clamp(3rem, 15vw, 4.6rem); }
+  .home-intro-grid { gap: 2.5rem; }
+  .home-intro h1 { font-size: clamp(2.85rem, 13.5vw, 4rem); }
+  .home-intro-portrait { width: min(94vw, 24rem); }
   .eeg-banner { height: 280px; }
   .section { padding-block: 3.75rem; }
   .section-head.with-status { flex-direction: column; }
