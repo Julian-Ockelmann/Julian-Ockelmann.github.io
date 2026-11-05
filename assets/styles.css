@@ -143,6 +143,14 @@ h1, h2, .display { font-family: Georgia, "Times New Roman", serif; font-weight: 
   height: 100%;
   object-fit: contain;
   object-position: center;
+  transform-origin: 50% 82%;
+  animation: portrait-sway 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes portrait-sway {
+  0%, 100% { transform: translate3d(-0.3rem, 0, 0) rotate(-0.45deg); }
+  50% { transform: translate3d(0.3rem, -0.08rem, 0) rotate(0.45deg); }
 }
 
 .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
@@ -381,6 +389,7 @@ a.service-source:hover { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  .home-intro-portrait img { animation: none; transform: none; }
 }
 
 @media print {
