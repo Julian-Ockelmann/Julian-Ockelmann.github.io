@@ -104,6 +104,7 @@ const syncOrcidWorks = async () => {
       normalizeTitle(card.querySelector('h3')?.textContent),
       card
     ]));
+    const preservedCards = cards.filter((card) => card.hasAttribute('data-preserve-publication'));
 
     const syncedCards = works
       .sort((a, b) => b.date.localeCompare(a.date))
@@ -130,11 +131,17 @@ const syncOrcidWorks = async () => {
         return card;
       });
 
-    if (syncedCards.length) container.replaceChildren(...syncedCards);
+    const syncedKeys = new Set(works.map((work) => work.key));
+    const publisherCards = preservedCards.filter((card) =>
+      !syncedKeys.has(normalizeTitle(card.querySelector('h3')?.textContent))
+    );
+    const displayedCards = [...publisherCards, ...syncedCards];
+
+    if (displayedCards.length) container.replaceChildren(...displayedCards);
 
     if (status) {
-      status.textContent = 'ORCID synced ↗';
-      status.title = `${works.length} published works synchronized from ORCID`;
+      status.textContent = 'ORCID linked ↗';
+      status.title = `${works.length} works synchronized from ORCID${publisherCards.length ? `; ${publisherCards.length} newly published work retained from the publisher record` : ''}`;
     }
   } catch (error) {
     console.info('ORCID works sync unavailable; using the saved publication list.', error);

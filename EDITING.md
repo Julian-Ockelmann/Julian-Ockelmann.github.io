@@ -64,7 +64,7 @@ Do not treat public web access alone as permission to label a manuscript open ac
 
 The homepage separates research into two sources:
 
-- **Published** refreshes automatically from the public ORCID works record. Only journal articles appear here. The saved rows in `index.html` are fallbacks for visitors whose browser blocks the live request.
+- **Published** refreshes from the public ORCID works record. Only journal articles appear here. A newly published article that has not reached ORCID yet can be marked with `data-preserve-publication`; the website retains that publisher-verified row while still refreshing the remaining list from ORCID.
 - **Ongoing** is maintained manually in `index.html`, so submitted and in-preparation projects remain visible without being treated as publications.
 
 Peer-review records are maintained manually in the **Academic service** section of `index.html` and the **Peer review experience** section of `cv.html`. This prevents a partial ORCID response from replacing the more complete Web of Science list. Each row names the journal, date or year, record source, and verification link. When a new review is added to Web of Science or ORCID, copy an existing row in both files and update those fields.
